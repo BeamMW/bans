@@ -7,6 +7,9 @@ import {
   Dispatch,
 } from 'redux';
 
+import createSagaMiddleware from 'redux-saga';
+
+import appSagas from './saga';
 import rootReducer from './reducer';
 
 const sagaMiddleware = createSagaMiddleware({
@@ -72,7 +75,7 @@ const enhancer = composeEnhancers(
 export default function configureStore() {
   const store = createStore(rootReducer(), undefined, enhancer);
 
-  
+  sagaMiddleware.run(appSagas);
 
   // eslint-disable-next-line
   if ((module as any).hot) {

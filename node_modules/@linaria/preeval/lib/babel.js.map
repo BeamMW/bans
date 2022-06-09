@@ -1,0 +1,1 @@
+{"version":3,"file":"babel.js","names":[],"sources":["../src/babel.ts"],"sourcesContent":["import type core from '@babel/core';\n\nexport type Core = typeof core;\n"],"mappings":""}
