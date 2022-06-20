@@ -1,3 +1,7 @@
+import UtilsError from "./utilsError";
+import UtilsShader from "./shader/utilsShader";
+import { delay, id } from "./appUtils";
+
 const MIN_AMOUNT = 0.00000001;
 const MAX_AMOUNT = 254000000;
 
@@ -9,6 +13,13 @@ let headlessNode = "eu-node01.masternet.beam.mw:8200"
 let InitParams = undefined
 
 export default class Utils {
+
+    /**
+     * This variable specify which shader is currently loaded by wallet (using in case of multi-shader application)
+     * Utilize to change wallet shader mechanism 
+     */
+    static currentShaderBytesCid = null;
+
     static isMobile() {
         const ua = navigator.userAgent;
         return (/android/i.test(ua) || /iPad|iPhone|iPod/.test(ua));
@@ -233,13 +244,12 @@ export default class Utils {
             Utils.invokeContract(args, (err, res, full) => {
                 if (err) return reject(err)
                 return resolve({ res, full })
-            },
-                bytes)
+            }, bytes)
         })
     }
 
-    static async invokeContractAsyncAndMakeTx(args) {
-        let { full } = await Utils.invokeContractAsync(args)
+    static async invokeContractAsyncAndMakeTx(args, bytes) {
+        let { full } = await Utils.invokeContractAsync(args, bytes)
         Utils.ensureField(full.result, 'raw_data', 'array')
 
         try {
@@ -267,6 +277,18 @@ export default class Utils {
         }
 
         if (bytes) {
+
+            /**
+             * Retrive cid from params string
+             */
+            /* let cidReg = /cid\=([A-Za-z0-9]+)\,/
+            const cid = (params.match(cidReg)).pop(); */
+
+            /**
+             * Set current initilized cintract
+             */
+            //Utils.currentShaderBytesCid = cid;
+
             params = Object.assign({
                 "contract": bytes
             }, params)
@@ -486,6 +508,35 @@ export default class Utils {
         xhr.responseType = "arraybuffer";
         xhr.send(null);
     }
+
+    static async bulkShaderDownload(shadersData, cback) {
+        if (!Array.isArray(shadersData)) {
+            throw new UtilsError(-101);
+        }
+
+        const sortedShadersData = shadersData.sort((a, b) => (a.order < b.order) ? 1 : ((a.order > b.order) ? -1 : 0));
+
+        for (const shaderData of sortedShadersData) {
+            if (!(shaderData instanceof UtilsShader)) {
+                throw new UtilsError(-102);
+            }
+
+            //if (shaderData.isLazy()) continue;
+
+            await Utils.fetchShaderBytes(shaderData);
+        }
+
+        return cback(null, sortedShadersData);
+    }
+
+    static async fetchShaderBytes(shaderData) {
+        return await fetch(shaderData.path).then(response =>
+            response.arrayBuffer()
+        ).then(bytes =>
+            shaderData.prepareAndSetShaderBytes(bytes)
+        );
+    }
+
 
     static handleString(next) {
         let result = true;

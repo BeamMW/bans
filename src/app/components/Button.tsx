@@ -1,11 +1,15 @@
 import React from 'react';
-import { styled } from '@linaria/react';
-import { ButtonVariant, Pallete } from '@core/types';
+import styled from "styled-components"
+import { ButtonVariant, Pallete } from '../core/types';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.FC;
   pallete?: Pallete;
   variant?: ButtonVariant;
+  width?: string;
+  height?: string;
+  borderRadius?: string;
+  padding?: string;
 }
 
 const BaseButtonStyled = styled.button<ButtonProps>`
@@ -97,15 +101,20 @@ const BlockButtonStyled = styled(GhostButtonStyled)`
 `;
 
 const IconButtonStyled = styled(BaseButtonStyled)`
+  font-family: 'SFProDisplay', sans-serif;
   display: inline-block;
   vertical-align: sub;
-  margin: 0 10px;
-  padding: 0;
-  background-color: transparent;
+  margin: ${({ pallete }) => `0 0 0 ${pallete === 'transparent' ? '0px' : '10px'}`};
+  font-size: 14px;
   border: none;
   cursor: pointer;
+  user-select: none;
+  background-color: ${({ pallete }) => `var(--color-${pallete})`};
   color: ${({ pallete }) => `var(--color-${pallete})`};
-
+  padding: 0;
+  height: 33px;
+  width: 33px;
+  border-radius: 10px;
   > svg {
     vertical-align: middle;
   }
@@ -123,6 +132,40 @@ const LinkButtonStyled = styled(IconButtonStyled)`
   }
 `;
 
+const CustomButtonStyled = styled(BaseButtonStyled)`
+  font-family: 'SFProDisplay', sans-serif;
+  white-space: nowrap;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  color: white;
+  width: ${({ width }) => `${width}`};
+  height: ${({ height }) => `${height}`};
+  padding: ${({ padding }) => `${padding}`};
+  border-radius: ${({ borderRadius }) => `${borderRadius}`};
+  background-color: ${({ pallete }) => `var(--color-${pallete})`};
+
+  &:not(.disabled):hover {
+    box-shadow: 0 0 8px white;
+    background-color: ${({ pallete }) => `var(--color-${pallete})`};
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: auto;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`
+
 const VARIANTS = {
   regular: ButtonStyled,
   ghost: GhostButtonStyled,
@@ -130,12 +173,17 @@ const VARIANTS = {
   link: LinkButtonStyled,
   icon: IconButtonStyled,
   block: BlockButtonStyled,
+  custom: CustomButtonStyled,
 };
 
 const Button: React.FC<ButtonProps> = ({
   type = 'button',
   pallete = 'green',
   variant = 'regular',
+  width = 'fit-content',
+  height = '38px',
+  borderRadius = '50px',
+  padding = '11px 25px 11px 22px',
   icon: IconComponent,
   children,
   ...rest
@@ -143,7 +191,15 @@ const Button: React.FC<ButtonProps> = ({
   const ButtonComponent = VARIANTS[variant];
 
   return (
-    <ButtonComponent type={type} pallete={pallete} {...rest}>
+    <ButtonComponent 
+      type={type}
+      pallete={pallete}
+      width={width}
+      height={height}
+      padding={padding}
+      borderRadius={borderRadius}
+      {...rest}
+    >
       {!!IconComponent && <IconComponent />}
       {children}
     </ButtonComponent>

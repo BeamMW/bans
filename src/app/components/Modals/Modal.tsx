@@ -1,8 +1,29 @@
-import React from "react";
-import { Container } from "theme-ui";
+import React, { FC } from 'react';
+import ReactDOM from 'react-dom';
 
-export const Modal: React.FC = ({ children }) => (
-  <Container variant="modalOverlay">
-    <Container variant="modal" sx={{background:"blue"}}>{children}</Container>
-  </Container>
-);
+import {
+  Wrapper,
+  ModalContent,
+} from './modal.style';
+
+export interface ModalProps {
+  isShown: boolean;
+  children: JSX.Element;
+}
+
+export const Modal: FC<ModalProps> = ({
+  isShown,
+  children
+}) => {
+  const modal = (
+    <React.Fragment>
+      <Wrapper>
+        <ModalContent>
+          { children }
+        </ModalContent>
+      </Wrapper>
+    </React.Fragment>
+  );
+
+  return isShown ? ReactDOM.createPortal(modal, document.body) : null;
+};

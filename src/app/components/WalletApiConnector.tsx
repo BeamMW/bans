@@ -1,32 +1,43 @@
 import React, { useEffect, useReducer, useState, useCallback, useMemo } from "react";
 import Utils from '../library/base/utils';
-import store from "index";
-import { setSystemState } from '@app/store/SharedStore//actions';
-import { loadAppParams, loadRate } from '@app/store/BansStore/actions';
-import { selectIsLoaded } from '@app/store/SharedStore/selectors';
-import { selectRate } from '@app/store/BansStore/selectors';
+import UtilsShader from '../library/base/shader/utilsShader';
+
+//import store from "index";
+//import { setSystemState } from '@app/store/SharedStore//actions';
+//import { loadAppParams, loadRate } from '@app/store/BansStore/actions';
+//import { selectIsLoaded } from '@app/store/SharedStore/selectors';
+//import { selectRate } from '@app/store/BansStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDappVersion, loadAdminKey } from '@app/store/SharedStore/actions';
+//import { setDappVersion, loadAdminKey } from '@app/store/SharedStore/actions';
 import { isObject } from "formik";
-import { setTransactionsRequest } from '@app/store/SharedStore/actions';
+//import { setTransactionsRequest } from '@app/store/SharedStore/actions';
 import { Loader } from './BeamLoader';
 import Window from "./Window";
+import ShaderApi, { ShaderStore } from "../library/base/api/ShaderApi";
+import methods from "@library/bans/methods";
+import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/WalletApiConnector/WalletApiConnectorProvider";
+
+
+const shadersData = Array.from([
+  ["bans", "6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4", "./bansAppShader.wasm", 0],
+  ["dao-vault", "2ac05e912e03e8f75cd8bd1a7bd03ccaef94dd1e9d2d80e0b54f906b9aae0911", "./daoVaultAppShader.wasm", 1]
+], params => new UtilsShader(...params));
+
 
 const walletEventhandler = ({ walletEventPayload }) => {
-
   if (walletEventPayload) {
     try {
       switch (walletEventPayload.id) {
         case 'ev_system_state':
-          store.dispatch(setSystemState(walletEventPayload.result));
-          store.dispatch(loadAppParams.request(null));
+          //store.dispatch(setSystemState(walletEventPayload.result));
+          //store.dispatch(loadAppParams.request(null));
 
           break;
 
-        case 'ev_txs_changed':
+        /* case 'ev_txs_changed':
           isObject(walletEventPayload.result) &&
             walletEventPayload.result &&
-            store.dispatch(setTransactionsRequest(walletEventPayload.result.txs));
+            store.dispatch(setTransactionsRequest(walletEventPayload.result.txs)); */
 
         default:
           break;
@@ -40,8 +51,15 @@ const walletEventhandler = ({ walletEventPayload }) => {
 export const WalletApiConnector = ({ children, }) => {
   const dispatch = useDispatch();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const isLoaded = useSelector(selectIsLoaded());
-  const rate = useSelector(selectRate());
+
+  /**
+   * Duplicate ShaderStore logic! In the future have to  resolve to keep one of shaders 'stores'
+   */
+  const [walletShaders, setWalletShaders] = useState<Array<UtilsShader>>(null);
+
+  //const isLoaded = useSelector(selectIsLoaded());
+  //const rate = useSelector(selectRate());
+  const isLoaded = true;
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -55,9 +73,23 @@ export const WalletApiConnector = ({ children, }) => {
             result && walletEventhandler({ walletEventPayload: full });
           }
         }, (err) => {
-          Utils.download("./bansAppShader.wasm", (err, bytes) => {
+          Utils.bulkShaderDownload(shadersData, (err, shadersData: Array<UtilsShader>) => {
 
-            err ? (() => {throw new err})() : setIsAuthorized(true);
+            err ? (() => { throw new err })() : setIsAuthorized(true);
+
+            const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
+
+            /**
+             * Put shadersData in ShaderStore
+             */
+            shadersData.forEach(
+              (shaderData) => apiShaderRegester.addShaderToStore(shaderData)
+            );
+
+            /**
+             * Duplicate put shaders data in wallet provider
+             */
+            setWalletShaders(shadersData)
 
             Utils.callApi("ev_subunsub", {
               /* "ev_sync_progress": true, */
@@ -71,7 +103,7 @@ export const WalletApiConnector = ({ children, }) => {
             },
               (error, result, full) => {
                 if (result) {
-                  store.dispatch(loadAppParams.request(bytes));
+                  //store.dispatch(loadAppParams.request(bytes));
                 }
               }
             );
@@ -83,44 +115,12 @@ export const WalletApiConnector = ({ children, }) => {
                 }
 
                 if (result) {
-                  store.dispatch(setDappVersion(result));
+                  //store.dispatch(setDappVersion(result));
                 }
               }
             );
-
-            /* Utils.callApi("create_address", {
-              "type": "regular_new",
-              "expiration": "auto",
-              "comment": "Beam Dao BANS",
-              "new_style_regular": true
-            },
-              (error, result, full) => {
-                if (error) {
-                  throw new Error("version could't fetch!");
-                }
-
-                if (result) {
-                  console.log("create_address", result);
-                }
-              }
-            ); */
-
-            /* Utils.callApi("addr_list", {
-              "own": true
-            },
-              (error, result, full) => {
-                if (error) {
-                  throw new Error("version could't fetch!");
-                }
-
-                if (result) {
-                  console.log("create_address", result);
-                }
-              }
-            ); */
-
           });
-          
+
 
         });
       } catch (e) {
@@ -129,13 +129,11 @@ export const WalletApiConnector = ({ children, }) => {
     }
   }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
 
-  if (isAuthorized && isLoaded) {
-    return <>{children}</>;
-  }
-
-  // In case wallet do not load
-  if (isAuthorized && !isLoaded) {
-    return <Window><Loader /></Window>;
+  if (isLoaded) {
+    return <WalletApiConnectorProvider
+      loader={<Window><Loader /></Window>}
+      isAuthorized={isAuthorized}
+      connectorWalletShaders={walletShaders}>{children}</WalletApiConnectorProvider>;
   }
 
   return <></>

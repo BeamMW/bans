@@ -62,8 +62,8 @@ module.exports = {
           context: 'public',
         },
         {
-          from: path.join(__dirname, 'src/assets'),
-          to: path.join(__dirname, 'html/assets'),
+          from: path.join(__dirname, 'src/app/assets/icons'),
+          to: path.join(__dirname, 'html/app/assets/icons'),
           context: 'public',
         },
         {

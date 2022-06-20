@@ -1,5 +1,5 @@
 import { TransactionContext, useTransactionState } from "@app/library/transaction-react/context/TransactionContext";
-import { selectContractHeight } from "@app/store/BansStore/selectors";
+//import { selectContractHeight } from "@app/store/BansStore/selectors";
 import { selectTransactions } from "@app/store/SharedStore/selectors";
 import React, { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";

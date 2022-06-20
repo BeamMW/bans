@@ -57,3 +57,22 @@ export function Base64DecodeUrl(str){
 export function Base64EncodeUrl(str){
   return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
 }
+
+export const delay = async (delay) => {
+  return new Promise(function(resolve) {
+      setTimeout(resolve, delay);
+  });
+}
+
+export const id = (() => {
+  let currentId = 0;
+  const map = new WeakMap();
+
+  return (object) => {
+      if (!map.has(object)) {
+          map.set(object, ++currentId);
+      }
+
+      return map.get(object);
+  };
+})();

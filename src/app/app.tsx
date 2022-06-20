@@ -10,11 +10,21 @@ import { ThemeProvider } from '@theme-ui/core';
 import theme from '@app/theme';
 import { Loader } from '@app/components/BeamLoader';
 import { Version } from '@app/pages/Version';
-import { Window } from '@app/components';
+import Window from '@app/components/Window';
 import { Container } from 'theme-ui';
 import { RouterLink } from '@app/components/RouterLink';
 import { TransactionProvider } from '@app/library/transaction-react/context/TransactionProvider';
 import { TransactionMonitor } from './library/transaction-react/TransactionMonitor';
+
+
+import { BansLayout } from './components/BansLayout/BansLayout';
+import Main from './pages/Main/Main';
+import About from './pages/About/About';
+import Faq from './pages/Faq/Faq';
+import MyPage from './pages/MyPage/MyPage';
+import Transactions from './pages/Transactions/Transactions';
+import './styles.css';
+import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 
 const App = () => {
   const navigate = useNavigate();
@@ -24,26 +34,32 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <WalletApiConnector>
-        {/* <BansProvider loader={loader}> */}
-          <TransactionProvider>
-            <Window>
+        <BansApiProvider>
+        <TransactionProvider>
 
-              {/* Temp */}
-              {/* <Container>
-                <RouterLink sx={{ "color": "#fff", "border": "1px solid #fff", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
-                <RouterLink sx={{ "color": "#fff", "border": "1px solid #fff", p: "2px 4px" }} to="/version">Version</RouterLink>
-              </Container> */}
-              {/* Temp */}
+            {/* Temp */}
+            <Container sx={{background:"red"}}>
+              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
+              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/about">ABOUT</RouterLink>
+              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/faq">FAQ</RouterLink>
+              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/my-page">MyPage</RouterLink>
+              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/transactions">Transactions</RouterLink>
+            </Container>
+            {/* Temp */}
 
-              {/* <BansLayout> */}
-                <Routes>
-                  <Route path="/version" element={<Version />} />
-                </Routes>
-              {/* </BansLayout> */}
-            </Window>
-            <TransactionMonitor /* transactions={transactions} */ />
-          </TransactionProvider>
-        {/* </BansProvider> */}
+            <BansLayout>
+              <Routes>
+                <Route index element={<Main />} />
+                <Route path="/" element={<Main />} />
+                <Route path="about" element={<About />} />
+                <Route path="faq" element={<Faq />} />
+                <Route path="my-page" element={<MyPage />} />
+                <Route path="transactions" element={<Transactions />} />
+              </Routes>
+            </BansLayout>
+          <TransactionMonitor transactions={[]} />
+        </TransactionProvider>
+        </BansApiProvider>
       </WalletApiConnector>
     </ThemeProvider>
   );
