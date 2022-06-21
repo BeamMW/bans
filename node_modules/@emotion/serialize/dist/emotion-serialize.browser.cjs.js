@@ -55,7 +55,7 @@ var processStyleValue = function processStyleValue(key, value) {
 };
 
 if (process.env.NODE_ENV !== 'production') {
-  var contentValuePattern = /(attr|counters?|url|(((repeating-)?(linear|radial))|conic)-gradient)\(|(no-)?(open|close)-quote/;
+  var contentValuePattern = /(var|attr|counters?|url|(((repeating-)?(linear|radial))|conic)-gradient)\(|(no-)?(open|close)-quote/;
   var contentValues = ['normal', 'none', 'initial', 'inherit', 'unset'];
   var oldProcessStyleValue = processStyleValue;
   var msPattern = /^-ms-/;
@@ -82,6 +82,8 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
+var noComponentSelectorMessage = 'Component selectors can only be used in conjunction with ' + '@emotion/babel-plugin, the swc Emotion plugin, or another Emotion-aware ' + 'compiler transform.';
+
 function handleInterpolation(mergedProps, registered, interpolation) {
   if (interpolation == null) {
     return '';
@@ -89,7 +91,7 @@ function handleInterpolation(mergedProps, registered, interpolation) {
 
   if (interpolation.__emotion_styles !== undefined) {
     if (process.env.NODE_ENV !== 'production' && interpolation.toString() === 'NO_COMPONENT_SELECTOR') {
-      throw new Error('Component selectors can only be used in conjunction with @emotion/babel-plugin.');
+      throw new Error(noComponentSelectorMessage);
     }
 
     return interpolation;
@@ -199,7 +201,7 @@ function createStringFromObject(mergedProps, registered, obj) {
         }
       } else {
         if (_key === 'NO_COMPONENT_SELECTOR' && process.env.NODE_ENV !== 'production') {
-          throw new Error('Component selectors can only be used in conjunction with @emotion/babel-plugin.');
+          throw new Error(noComponentSelectorMessage);
         }
 
         if (Array.isArray(value) && typeof value[0] === 'string' && (registered == null || registered[value[0]] === undefined)) {

@@ -129,8 +129,13 @@ export class MethodReadable<ShaderActions> extends MethodAbstract<ShaderActions>
             this.convertContractParams(params),
             this.processInvokeParamsToWalletShader()
         );
+        
+        //temp solution for res error responses
+        if(result?.error) {
+            throw new ApiError(0, result?.error, false);
+        }
 
-        return result;
+        return result?.res ? result.res : result;
     }
 }
 

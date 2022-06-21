@@ -241,8 +241,7 @@ var createCache = function createCache(options) {
     }
   }
 
-  var inserted = {}; // $FlowFixMe
-
+  var inserted = {};
   var container;
   var nodesToHydrate = [];
 

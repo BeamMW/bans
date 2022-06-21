@@ -39,11 +39,11 @@ const App = () => {
 
             {/* Temp */}
             <Container sx={{background:"red"}}>
-              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
-              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/about">ABOUT</RouterLink>
-              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/faq">FAQ</RouterLink>
-              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/my-page">MyPage</RouterLink>
-              <RouterLink sx={{ "color": "#fff", p: "2px 4px" }} to="/transactions">Transactions</RouterLink>
+              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
+              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/about">ABOUT</RouterLink>
+              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/faq">FAQ</RouterLink>
+              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/my-page">MyPage</RouterLink>
+              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/transactions">Transactions</RouterLink>
             </Container>
             {/* Temp */}
 

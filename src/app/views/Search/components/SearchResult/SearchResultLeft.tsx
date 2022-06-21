@@ -7,14 +7,15 @@ import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult
 interface SearchResultLeftProps extends SearchResultStyleProps {
   value: string;
   isValid: boolean;
+  expireBlock: number;
 }
 export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
-  const { value, isAvailable, isValid } = props;
+  const { value, isAvailable, isValid, expireBlock} = props;
   return (
     <Flex sx={containerStyles(props)}>
       <Text>{value}</Text>
       { !isAvailable && isValid && (
-          <SubText>Expires on August 29, 2022</SubText>
+          <SubText>Expires on {expireBlock} block</SubText>
       )}
     </Flex>
   )

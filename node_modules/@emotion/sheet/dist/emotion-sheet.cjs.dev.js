@@ -56,6 +56,7 @@ function createStyleElement(options) {
 }
 
 var StyleSheet = /*#__PURE__*/function () {
+  // Using Node instead of HTMLElement since container may be a ShadowRoot
   function StyleSheet(options) {
     var _this = this;
 

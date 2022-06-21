@@ -10,19 +10,20 @@ export interface SearchResultProps
     isValid: boolean;
     value: string;
     isAvailable: boolean;
+    expireBlock: number;
   };
 
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
-  const { isValid, isAvailable, value } = props;
-  const isNotValid = false;
+  const { isValid, isAvailable, expireBlock, value } = props;
+  const isNotValid = !isValid;
   return ( 
     <>
    { value && (
         <>
       <Paragraph variant="header">Results</Paragraph>
       <SplitContainer leftWeight={2} rightWeight={1}>
-        <SearchResultLeft  value={value} isAvailable={false} isValid={true}/>
-        <SearchResultRight isAvailable={true} isValid={true}/>
+        <SearchResultLeft  value={value} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid}/>
+        <SearchResultRight isAvailable={isAvailable} isValid={isValid}/>
          </SplitContainer>
          <Flex>
       {
