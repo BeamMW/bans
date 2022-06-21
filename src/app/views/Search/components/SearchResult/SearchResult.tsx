@@ -4,6 +4,7 @@ import {  SearchResultStyleProps, SubText } from './SearchResult.styles';
 import { SplitContainer } from './../../../../components/SplitContainer/SplitContainer';
 import { SearchResultLeft } from "./SearchResultLeft";
 import { SearchResultRight } from './SearchResultRight';
+import { useBansView } from "@app/contexts/Bans/BansContexts";
 
 export interface SearchResultProps
   extends SearchResultStyleProps {
@@ -16,12 +17,14 @@ export interface SearchResultProps
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { isValid, isAvailable, expireBlock, value } = props;
   const isNotValid = !isValid;
+  const {setView, setSearch} = useBansView();
+
   return ( 
     <>
    { value && (
         <>
       <Paragraph variant="header">Results</Paragraph>
-      <SplitContainer leftWeight={2} rightWeight={1}>
+      <SplitContainer leftWeight={2} rightWeight={1} handleClick={() => {setView("REGISTER"), setSearch(value)}}>
         <SearchResultLeft  value={value + ".beam"} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid}/>
         <SearchResultRight isAvailable={isAvailable} isValid={isValid}/>
          </SplitContainer>

@@ -4,7 +4,7 @@ import { useWalletApiConnector } from "@app/library/wallet-react/context/WalletA
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BansApiContext } from "./BansApiContext";
+import { BansApiContext } from "./BansContexts";
 
 
 export const BansApiProvider: React.FC = props => {

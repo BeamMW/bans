@@ -7,6 +7,8 @@ import Heart from '../../assets/icons/heart.svg';
 import Plus from '../../assets/icons/blue-plus.svg';
 import YearMinus from '../../assets/icons/year-minus.svg';
 import YearPlus from '../../assets/icons/year-plus.svg';
+import { useBansApi, useBansView } from "@app/contexts/Bans/BansContexts";
+import { RegisterAction } from "./RegisterAction";
 const Container = styled.div`
   max-width: 630px;
   display: flex;
@@ -22,39 +24,44 @@ const iconStyle = {
 };
 
 export const Register: React.FC = () => {
+  const { search } = useBansView();
+
   return (
     <Container>
       <Flex >
         <Text variant="panelHeader">
-        mastersplinter
+          {search}.beam
         </Text>
-        <Button variant='icon' pallete='opacity' style={{ margin:0 }}>
-              <Heart />
-        </Button> 
+        <Button variant='icon' pallete='opacity' style={{ margin: 0 }}>
+          <Heart />
+        </Button>
       </Flex>
-      <Divider sx={{my:5}} />
+      <Divider sx={{ my: 5 }} />
       <Flex>
         <Text variant="panelHeader">
           Registration period
         </Text>
-          <YearMinus style={iconStyle}/>
-          <Text sx={{ mx: '12px' }}>1 year</Text>
-          <YearPlus style={iconStyle}/>
+        <YearMinus style={iconStyle} />
+        <Text sx={{ mx: '12px' }}>1 year</Text>
+        <YearPlus style={iconStyle} />
       </Flex>
-      <Flex sx={{mt:24, mb:5}}>
+      <Flex sx={{ mt: 24, mb: 5 }}>
         <Text variant="panelHeader">
           Registration price
         </Text>
-        <Amount value='200' size="14px"/>
+        <Amount value='TBD' size="14px" />
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
-        <Text variant="panelHeader"> 
-        Current domain will be available from June 30, 2022 till June 29, 2023.
+        <Text variant="panelHeader">
+          Current domain will be available from TBD till TBD.
         </Text>
-        <Button pallete="green" style={{ marginTop: '32px' }}>
-          <Plus/>
+        <RegisterAction
+          transactionId={"DOMAIN_REGISTER"}
+          change={"registerDomain"}
+        >
+          <Plus />
           register
-        </Button>
+        </RegisterAction>
       </Flex>
     </Container>
   )

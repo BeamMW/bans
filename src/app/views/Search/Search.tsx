@@ -6,7 +6,7 @@ import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '../../components/Input';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
-import { useBansApi } from '@app/contexts/Bans/BansApiContext';
+import { useBansApi } from '@app/contexts/Bans/BansContexts';
 
 
 

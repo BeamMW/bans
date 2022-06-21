@@ -25,6 +25,7 @@ import MyPage from './pages/MyPage/MyPage';
 import Transactions from './pages/Transactions/Transactions';
 import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
+import { BansViewProvider } from './contexts/Bans/BansViewProvider';
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,30 +36,32 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <WalletApiConnector>
         <BansApiProvider>
-        <TransactionProvider>
+          <BansViewProvider>
+            <TransactionProvider>
 
-            {/* Temp */}
-            <Container sx={{background:"red"}}>
-              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
-              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/about">ABOUT</RouterLink>
-              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/faq">FAQ</RouterLink>
-              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/my-page">MyPage</RouterLink>
-              <RouterLink sx={{ "color": "#fff", fontWeight:"300", p: "2px 4px" }} to="/transactions">Transactions</RouterLink>
-            </Container>
-            {/* Temp */}
+              {/* Temp */}
+              <Container sx={{ background: "red" }}>
+                <RouterLink sx={{ "color": "#fff", fontWeight: "300", p: "2px 4px" }} to="/">BANS</RouterLink> {" "}
+                <RouterLink sx={{ "color": "#fff", fontWeight: "300", p: "2px 4px" }} to="/about">ABOUT</RouterLink>
+                <RouterLink sx={{ "color": "#fff", fontWeight: "300", p: "2px 4px" }} to="/faq">FAQ</RouterLink>
+                <RouterLink sx={{ "color": "#fff", fontWeight: "300", p: "2px 4px" }} to="/my-page">MyPage</RouterLink>
+                <RouterLink sx={{ "color": "#fff", fontWeight: "300", p: "2px 4px" }} to="/transactions">Transactions</RouterLink>
+              </Container>
+              {/* Temp */}
 
-            <BansLayout>
-              <Routes>
-                <Route index element={<Main />} />
-                <Route path="/" element={<Main />} />
-                <Route path="about" element={<About />} />
-                <Route path="faq" element={<Faq />} />
-                <Route path="my-page" element={<MyPage />} />
-                <Route path="transactions" element={<Transactions />} />
-              </Routes>
-            </BansLayout>
-          <TransactionMonitor transactions={[]} />
-        </TransactionProvider>
+              <BansLayout>
+                <Routes>
+                  <Route index element={<Main />} />
+                  <Route path="/" element={<Main />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="faq" element={<Faq />} />
+                  <Route path="my-page" element={<MyPage />} />
+                  <Route path="transactions" element={<Transactions />} />
+                </Routes>
+              </BansLayout>
+              <TransactionMonitor transactions={[]} />
+            </TransactionProvider>
+          </BansViewProvider>
         </BansApiProvider>
       </WalletApiConnector>
     </ThemeProvider>

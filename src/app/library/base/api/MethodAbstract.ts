@@ -70,7 +70,7 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
 
     protected checkRequiredParams(params: object | null) {
         if (this.requiredParams.length) return;
-
+        //Implement cid pass logic
         let requiredChecker = (passParams, requiredParams) => requiredParams.every(param => passParams.includes(param));
 
         if (params && !requiredChecker(Object.keys(params), this.requiredParams))
@@ -170,7 +170,7 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
 
             console.log(txId);
             //@TODO:looK!
-            return /* () =>  */this.waitTransactionStatusUntil(txId, "")
+            return () => this.waitTransactionStatusUntil(txId, "")
 
         } catch (e) {
             console.log(e);
