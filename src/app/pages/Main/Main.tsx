@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Flex } from 'theme-ui';
 import { Register } from '../../views/Register/Register';
 import Search from "../../views/Search/Search";
@@ -6,9 +6,7 @@ import LogoIcon from "../../assets/icons/logo.svg";
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 
 const Main = () => {
-  // TODO: Add condition to show Register or Search
-  const [fakeCondition] = React.useState(true);
-  
+  const [fakeCondition] = useState(true);
   
   return (
     <>

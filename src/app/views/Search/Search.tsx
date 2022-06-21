@@ -35,7 +35,7 @@ const Search: React.FC = () => {
     const response = await registeredMethods.manager.viewName({name:search});
     console.log(response); 
     
-    if(Object.keys(response).length !== 0 && response?.error) {
+    if(Object.keys(response).length !== 0 && response.res?.error) {
       response.error && setIsValid(false);
     }
 

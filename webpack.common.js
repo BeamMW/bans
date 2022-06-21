@@ -67,6 +67,11 @@ module.exports = {
           context: 'public',
         },
         {
+          from: path.join(__dirname, 'src/app/assets/fonts'),
+          to: path.join(__dirname, 'html/assets/fonts'),
+          context: 'public',
+        },
+        {
           from: path.join(__dirname, 'src/index.html'),
           to: path.join(__dirname, 'html'),
           context: 'public',

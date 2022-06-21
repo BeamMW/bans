@@ -5,10 +5,10 @@ import Button from '../../components/Button';
 import { useModal } from '../../components/Modals/useModal';
 import KeyModal from '../keyModal/KeyModal';
 import { copyToClipboard } from '../../core/appUtils';
-import { ReactComponent as FaqIcon } from "../../assets/icons/faq.svg";
-import { ReactComponent as KeyIcon } from "../../assets/icons/key.svg";
-import { ReactComponent as UserIcon } from "../../assets/icons/user.svg";
-import { ReactComponent as InfoKey } from "../../assets/icons/info.svg";
+import FaqIcon from "../../assets/icons/faq.svg";
+import KeyIcon from "../../assets/icons/key.svg";
+import UserIcon from "../../assets/icons/user.svg";
+import InfoKey from "../../assets/icons/info.svg";
 import { TabsContainer, TabsChildren } from './Tabs.style';
 
 let activeButtonStyle = {

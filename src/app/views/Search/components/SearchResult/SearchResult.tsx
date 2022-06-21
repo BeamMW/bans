@@ -22,7 +22,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
         <>
       <Paragraph variant="header">Results</Paragraph>
       <SplitContainer leftWeight={2} rightWeight={1}>
-        <SearchResultLeft  value={value} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid}/>
+        <SearchResultLeft  value={value + ".beam"} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid}/>
         <SearchResultRight isAvailable={isAvailable} isValid={isValid}/>
          </SplitContainer>
          <Flex>
