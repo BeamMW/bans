@@ -53,7 +53,7 @@ export const Register: React.FC = () => {
           <Text variant="panelHeader">
             Registration price
           </Text>
-          <Amount value='TBD' size="14px" />
+          <Amount value='TBD' size="14px" showConvertedToUsd={true}/>
         </Flex>
         <Flex sx={{ flexDirection: 'column' }}>
           <Text variant="panelHeader">
