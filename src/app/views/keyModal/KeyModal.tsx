@@ -50,6 +50,10 @@ return (
           <Button
            variant='custom'
            onClick={handleConfirm}
+           padding="11px 25px 11px 22px"
+           height='38px'
+           width='fit-content'
+           borderRadius='50px'
            >
             <CopyBlue />
             <CopyText>copy and close</CopyText>

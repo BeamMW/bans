@@ -27,6 +27,7 @@ const MyPage = () => {
 
   useEffect(() => {
     myKey && registeredMethods.manager.viewDomain().then(response => {
+      console.log(response)
       setDomains(response.domains.filter(
         domain => domain.key === myKey
       ).map(
