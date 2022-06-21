@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import Button from '../../components/Button';
-//import {Tooltip} from '../../components/Tooltip';
+import {Tooltip} from '../../components/Tooltip';
 import { useModal } from '../../components/Modals/useModal';
 import KeyModal from '../keyModal/KeyModal';
 import { copyToClipboard } from '../../core/appUtils';
@@ -54,11 +54,11 @@ const Tabs:FC = () => {
        onClick={e => handleClick('about')}
        style={ active === 'about' ? activeButtonStyle : passiveButtonStyle }
        >
-        {/* <Tooltip message={'About'} placement={"top"}>
+        <Tooltip message={'About'} placement={"top"}>
           <InfoKey
             style={ active === 'about' ? activeIconStyle : passiveIconStyle }
        />
-        </Tooltip> */}
+        </Tooltip>
       </Button>
       </NavLink>
       <NavLink
@@ -70,11 +70,11 @@ const Tabs:FC = () => {
           onClick={e => handleClick('faq')}
           style={ active === 'faq' ? activeButtonStyle : passiveButtonStyle }
         >
-          {/* <Tooltip message={'FAQ'} placement={"top"}>
+          <Tooltip message={'FAQ'} placement={"top"}>
             <FaqIcon 
              style={ active === 'faq' ? activeIconStyle : passiveIconStyle }
             />
-          </Tooltip> */}
+          </Tooltip>
         </Button>
       </NavLink>
       <Button
@@ -84,11 +84,11 @@ const Tabs:FC = () => {
         onClick={e =>  { handleClick('key'); toggle() } }
         style={ active === 'key' ? activeButtonStyle : passiveButtonStyle }
       >
-        {/* <Tooltip message={'Public Key'} placement={"top"}>
+        <Tooltip message={'Public Key'} placement={"top"}>
           <KeyIcon 
            style={ active === 'key' ? activeIconStyle : passiveIconStyle }
           />
-        </Tooltip> */}
+        </Tooltip>
       </Button>
       <NavLink to='my-page'>
         <Button
@@ -98,11 +98,11 @@ const Tabs:FC = () => {
           onClick={e => handleClick('my-page')}
           style={ active === 'my-page' ? activeButtonStyle : passiveButtonStyle }
         >
-          {/* <Tooltip message={'My page'} placement={"top"}>
+          <Tooltip message={'My page'} placement={"top"}>
             <UserIcon 
               style={ active === 'my-page' ? activeIconStyle : passiveIconStyle }
             />
-          </Tooltip> */}
+          </Tooltip>
         </Button>
       </NavLink>
     </TabsChildren>

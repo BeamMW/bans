@@ -15,7 +15,7 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
     <Flex sx={containerStyles(props)}>
       <Text>{value}</Text>
       { !isAvailable && isValid && (
-          <SubText>Expires on {expireBlock} block</SubText>
+          <SubText>Expires in {expireBlock} block</SubText>
       )}
     </Flex>
   )
