@@ -29,13 +29,21 @@ export class ShaderApiGenerator<ShaderActions> extends ShaderApiAbstract {
         method.couldPredict ?? false
       )
  
-      registeredMethods[method.role] = {
+      //api.role.method view
+      /* registeredMethods[method.role] = {
         ...registeredMethods?.[method.role], ...{
           ...registeredMethods?.[method.role],
           ...{ [generator.snakeToCamel(method.action)]: generatedMethod }
         }
-      }
+      } */
 
+      //api.roleMethod view
+      registeredMethods = {
+        ...registeredMethods, ...{
+          ...{ [generator.snakeToCamel(method.role + "_" + method.action)]: generatedMethod }
+        }
+      }
+      
     }
 
     return registeredMethods;

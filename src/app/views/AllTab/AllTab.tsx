@@ -53,21 +53,18 @@ const RightSide: React.FC = () => {
 export const AllTab: React.FC<{ domains: any }> = (props) => {
   const { domains } = props;
   //This name is in grace period, and needs to be renewed by June 30, 2022
+
+  const rows = 
+    domains.map((domain, i) => (
+      <SplitContainer key={i} leftWeight={12} rightWeight={0}>
+        <LeftSide name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
+        <RightSide />
+      </SplitContainer>
+  ));
+
   return (
     <>
-      {
-        domains.map((domain, i) => {
-          return (
-            <>
-            <SplitContainer key={i} leftWeight={12} rightWeight={0}>
-              <LeftSide name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
-              <RightSide />
-            </SplitContainer>
-            <Flex sx={{marginBottom:"10px"}}></Flex>
-            </>
-          );
-        })
-      }
+      {rows}
     </>
   );
 }

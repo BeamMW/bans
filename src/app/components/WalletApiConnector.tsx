@@ -16,11 +16,13 @@ import Window from "./Window";
 import ShaderApi, { ShaderStore } from "../library/base/api/ShaderApi";
 import methods from "@library/bans/methods";
 import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/WalletApiConnector/WalletApiConnectorProvider";
+import store from "index";
+import { loadAppParams } from "@app/store/BansStore/actions";
+import { setDappVersion } from "@app/store/SharedStore/actions";
 
 
 const shadersData = Array.from([
   ["bans", "6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4", "./bansAppShader.wasm", 0],
-  ["dao-vault", "2ac05e912e03e8f75cd8bd1a7bd03ccaef94dd1e9d2d80e0b54f906b9aae0911", "./daoVaultAppShader.wasm", 1]
 ], params => new UtilsShader(...params));
 
 
@@ -48,7 +50,7 @@ const walletEventhandler = ({ walletEventPayload }) => {
   }
 }
 
-export const WalletApiConnector = ({ children, }) => {
+export const WalletApiConnector = ({ children }) => {
   const dispatch = useDispatch();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
@@ -91,6 +93,7 @@ export const WalletApiConnector = ({ children, }) => {
              */
             setWalletShaders(shadersData)
 
+
             Utils.callApi("ev_subunsub", {
               /* "ev_sync_progress": true, */
               "ev_system_state": true,
@@ -103,7 +106,7 @@ export const WalletApiConnector = ({ children, }) => {
             },
               (error, result, full) => {
                 if (result) {
-                  //store.dispatch(loadAppParams.request(bytes));
+                  store.dispatch(loadAppParams.request());
                 }
               }
             );
@@ -115,13 +118,11 @@ export const WalletApiConnector = ({ children, }) => {
                 }
 
                 if (result) {
-                  //store.dispatch(setDappVersion(result));
+                  store.dispatch(setDappVersion(result));
                 }
               }
             );
           });
-
-
         });
       } catch (e) {
         console.log("Error has been thrown:", e);

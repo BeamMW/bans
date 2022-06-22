@@ -8,6 +8,7 @@ const Container = styled.div`
    height: 79px;
    cursor: pointer;
    padding: 20px;
+   margin-bottom:10px;
 `
 
 interface StyledCardProps {
@@ -34,7 +35,7 @@ export const SplitContainer: React.FC<SplitContainerProps> = ({
 }) => {
   const [left, right] = children;
   return (
-    <Container onClick={handleClick}>
+    <Container onClick={handleClick} >
       <Pane weight={leftWeight}>
         {left}
       </Pane>

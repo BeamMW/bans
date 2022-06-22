@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Flex, Text, Divider, Box } from 'theme-ui';
 import Button from "../../components/Button";
 import styled from "styled-components";
@@ -28,6 +28,10 @@ const iconStyle = {
 export const Register: React.FC = () => {
   const { search } = useBansView();
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: "DOMAIN" });
+  const [period, setPeriod] = useState<number>(1);
+
+
+  const periodDecrease = () => period > 1 && setPeriod(period - 1);
 
   return (
     <Container>
@@ -45,9 +49,9 @@ export const Register: React.FC = () => {
           <Text variant="panelHeader">
             Registration period
           </Text>
-          <YearMinus style={iconStyle} />
-          <Text sx={{ mx: '12px' }}>1 year</Text>
-          <YearPlus style={iconStyle} />
+          <YearMinus style={iconStyle} onClick={()=>{periodDecrease()}} />
+          <Text sx={{ mx: '12px' }}>{period}</Text>
+          <YearPlus style={iconStyle} onClick={()=>{setPeriod(period + 1)}} />
         </Flex>
         <Flex sx={{ mt: 24, mb: 5 }}>
           <Text variant="panelHeader">
@@ -62,6 +66,7 @@ export const Register: React.FC = () => {
           <RegisterAction
             transactionId={"DOMAIN_REGISTER"}
             change={"registerDomain"}
+            period={period}
           >
             <Plus />
             register

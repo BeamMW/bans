@@ -32,7 +32,7 @@ const Search: React.FC = () => {
       setIsValid(true);
     }
 
-    const response = await registeredMethods.manager.viewName({name:search});
+    const response = await registeredMethods.managerViewName({name:search});
     console.log(response); 
     
     if(Object.keys(response).length !== 0 && response.res?.error) {
