@@ -10,7 +10,7 @@ import KeyIcon from "../../assets/icons/key.svg";
 import UserIcon from "../../assets/icons/user.svg";
 import InfoKey from "../../assets/icons/info.svg";
 import { TabsContainer, TabsChildren } from './Tabs.style';
-console.log(DIRECTIONS.BOTTOM)
+
 let activeButtonStyle = {
   background: '#00F6D2',
 };
@@ -82,11 +82,11 @@ const Tabs:FC = () => {
           variant='icon'
           pallete='opacity'
           id='key'
-          onClick={e =>  { handleClick('key'); toggle() } }
-          style={ active === 'key' ? activeButtonStyle : passiveButtonStyle }
+          onClick={toggle}
+          style={ isShown ? activeButtonStyle : passiveButtonStyle }
         >
           <KeyIcon 
-            style={ active === 'key' ? activeIconStyle : passiveIconStyle }
+            style={ isShown ? activeIconStyle : passiveIconStyle }
           />
         </Button>
       </Tooltip>
