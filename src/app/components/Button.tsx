@@ -112,8 +112,8 @@ const IconButtonStyled = styled(BaseButtonStyled)`
   background-color: ${({ pallete }) => `var(--color-${pallete})`};
   color: ${({ pallete }) => `var(--color-${pallete})`};
   padding: 0;
-  height: 33px;
-  width: 33px;
+  width: ${({ width }) => `${width}`};
+  height: ${({ height }) => `${height}`};
   border-radius: 10px;
   > svg {
     vertical-align: middle;
@@ -180,8 +180,8 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   pallete = 'green',
   variant = 'regular',
-  width = 'fit-content',
-  height = '38px',
+  width = '33px',
+  height = '33px',
   borderRadius = '50px',
   padding = '11px 25px 11px 22px',
   icon: IconComponent,

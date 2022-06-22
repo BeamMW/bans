@@ -3,25 +3,11 @@ import { Flex, Text, Container } from "theme-ui";
 import Button from "../../components/Button";
 import { Popup } from "../../components/Popup/Popup";
 import { SplitContainer } from "../../components/SplitContainer/SplitContainer";
-import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
 import Copy from '././../../assets/icons/copy.svg';
 import Dots from '././../../assets/icons/dots.svg';
 import Renew from '././../../assets/icons/renew.svg';
 import Sell from '././../../assets/icons/sell.svg';
-
-interface LeftSideProps {
-  name: string;
-  expiresAt: string;
-};
-
-const LeftSide: React.FC<LeftSideProps> = ({ name, expiresAt }) => {
-  return (
-    <Flex sx={{ variant: 'layout.card' }}>
-      <Text>{name}</Text>
-      <SubText>{expiresAt}</SubText>
-    </Flex>
-  )
-}
+import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 
 const RightSide: React.FC = () => {
   const [showPopup, setShowPopup] = React.useState(false);
@@ -57,7 +43,7 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
   const rows = 
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
-        <LeftSide name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
+        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
         <RightSide />
       </SplitContainer>
   ));

@@ -18,5 +18,6 @@ export const Wrapper = styled.div`
 export const ModalContent = styled.div`
     padding: 40px;
     border-radius: 10px;
-    background-color: ${bgColor};
+    /* background-color: ${bgColor}; */
+    background-color: #0D4D76;
 `;
