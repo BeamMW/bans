@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import Button from '../../components/Button';
-import {Tooltip} from '../../components/Tooltip';
+import {Tooltip, DIRECTIONS } from '../../components/Tooltip/Tooltip';
 import { useModal } from '../../components/Modals/useModal';
 import KeyModal from '../keyModal/KeyModal';
 import { copyToClipboard } from '../../core/appUtils';
@@ -10,7 +10,7 @@ import KeyIcon from "../../assets/icons/key.svg";
 import UserIcon from "../../assets/icons/user.svg";
 import InfoKey from "../../assets/icons/info.svg";
 import { TabsContainer, TabsChildren } from './Tabs.style';
-
+console.log(DIRECTIONS.BOTTOM)
 let activeButtonStyle = {
   background: '#00F6D2',
 };
@@ -45,65 +45,65 @@ const Tabs:FC = () => {
   <TabsContainer>
     <TabsChildren>
       <NavLink
-       to="/about"
-       >
-      <Button
-       variant='icon'
-       pallete='opacity'
-       id='about'
-       onClick={e => handleClick('about')}
-       style={ active === 'about' ? activeButtonStyle : passiveButtonStyle }
-       >
-        <Tooltip message={'About'} placement={"top"}>
-          <InfoKey
-            style={ active === 'about' ? activeIconStyle : passiveIconStyle }
-       />
+        to="/about"
+      >
+        <Tooltip content='About' direction={DIRECTIONS.BOTTOM}>
+          <Button
+          variant='icon'
+          pallete='opacity'
+          id='about'
+          onClick={e => handleClick('about')}
+          style={ active === 'about' ? activeButtonStyle : passiveButtonStyle }
+          >
+            <InfoKey
+              style={ active === 'about' ? activeIconStyle : passiveIconStyle }
+            />
+          </Button>
         </Tooltip>
-      </Button>
       </NavLink>
       <NavLink
        to="/faq">
-        <Button
-          variant='icon'
-          pallete='opacity'
-          id='faq'
-          onClick={e => handleClick('faq')}
-          style={ active === 'faq' ? activeButtonStyle : passiveButtonStyle }
-        >
-          <Tooltip message={'FAQ'} placement={"top"}>
+        <Tooltip content='FAQ' direction={DIRECTIONS.BOTTOM}>
+          <Button
+            variant='icon'
+            pallete='opacity'
+            id='faq'
+            onClick={e => handleClick('faq')}
+            style={ active === 'faq' ? activeButtonStyle : passiveButtonStyle }
+          >
             <FaqIcon 
-             style={ active === 'faq' ? activeIconStyle : passiveIconStyle }
+              style={ active === 'faq' ? activeIconStyle : passiveIconStyle }
             />
-          </Tooltip>
-        </Button>
-      </NavLink>
-      <Button
-        variant='icon'
-        pallete='opacity'
-        id='key'
-        onClick={e =>  { handleClick('key'); toggle() } }
-        style={ active === 'key' ? activeButtonStyle : passiveButtonStyle }
-      >
-        <Tooltip message={'Public Key'} placement={"top"}>
-          <KeyIcon 
-           style={ active === 'key' ? activeIconStyle : passiveIconStyle }
-          />
+          </Button>
         </Tooltip>
-      </Button>
-      <NavLink to='my-page'>
+      </NavLink>
+      <Tooltip content='Public Key' direction={DIRECTIONS.BOTTOM}>
         <Button
           variant='icon'
           pallete='opacity'
-          id='page'
-          onClick={e => handleClick('my-page')}
-          style={ active === 'my-page' ? activeButtonStyle : passiveButtonStyle }
+          id='key'
+          onClick={e =>  { handleClick('key'); toggle() } }
+          style={ active === 'key' ? activeButtonStyle : passiveButtonStyle }
         >
-          <Tooltip message={'My page'} placement={"top"}>
+          <KeyIcon 
+            style={ active === 'key' ? activeIconStyle : passiveIconStyle }
+          />
+        </Button>
+      </Tooltip>
+      <NavLink to='my-page'>
+        <Tooltip content='My page' direction={DIRECTIONS.BOTTOM} customClass="page">
+          <Button
+            variant='icon'
+            pallete='opacity'
+            id='page'
+            onClick={e => handleClick('my-page')}
+            style={ active === 'my-page' ? activeButtonStyle : passiveButtonStyle }
+          >
             <UserIcon 
               style={ active === 'my-page' ? activeIconStyle : passiveIconStyle }
             />
-          </Tooltip>
-        </Button>
+          </Button>
+        </Tooltip>
       </NavLink>
     </TabsChildren>
   </TabsContainer>
