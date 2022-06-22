@@ -20,14 +20,20 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
 }) => {
 
     const { registeredMethods } = useBansApi();
+    const { search } = useBansView();
 
     const apiCall = (change) => {
         switch (change) {
             case "registerDomain":
                 {
-                    const { search } = useBansView();
 
-                    return () => registeredMethods.userDomainRegister({name: search});
+                    return () => registeredMethods.userDomainRegister({ name: search });
+                }
+
+            case "registerDomainWithSetPeriod":
+                {
+                    //registeredMethods.userDomainExtend({ name: search })
+                    return () => registeredMethods.userDomainRegister({ name: search });
                 }
         }
 

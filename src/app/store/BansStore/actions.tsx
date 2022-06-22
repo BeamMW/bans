@@ -1,8 +1,8 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import React from 'react';
 
-export const setAppParams = createAction('@@MAIN/SET_PARAMS')<any/* NephriteAppParams */>();
-export const setUserView = createAction('@@MAIN/SET_USER_VIEW')<any/* UserViewParams */>();
+export const setAppParams = createAction('@@MAIN/SET_PARAMS')<any/*  */>();
+export const setUserView = createAction('@@MAIN/SET_USER_VIEW')<any/*  */>();
 export const setIsModerator = createAction('@@MAIN/SET_IS_MODERATOR')<boolean>();
 export const setPublicKey = createAction('@@MAIN/SET_PUBLIC_KEY')<string>();
 export const setProposalsState = createAction('@@MAIN/SET_PROPOSALS_STATE')<{is_active: boolean, type: string}>();
@@ -13,7 +13,7 @@ export const loadAppParams = createAsyncAction(
     '@@MAIN/LOAD_PARAMS',
     '@@MAIN/LOAD_PARAMS_SUCCESS',
     '@@MAIN/LOAD_PARAMS_FAILURE',
-)<ArrayBuffer | void, any/* NephriteAppParams */, any>();
+)<ArrayBuffer | void, any/*  */, any>();
 
 export const loadContractInfo = createAsyncAction(
     '@@MAIN/LOAD_CONTRACT_INFO',

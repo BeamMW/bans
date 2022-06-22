@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 import { AppState } from '@app/types/interface/State';
 
-const selectMain = (state: AppState) => state.nephrite;
+const selectMain = (state: AppState) => state.bans;
 
-export const selectNephriteAppParams = () => createSelector(selectMain, (state) => state);
+export const selectBansAppParams = () => createSelector(selectMain, (state) => state);
 
 export const selectContractHeight = () => createSelector(selectMain, (state) => state.contractHeight);
 export const selectUserView = () => createSelector(selectMain, (state) => state.userView);

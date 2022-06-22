@@ -23,6 +23,7 @@ import { setDappVersion } from "@app/store/SharedStore/actions";
 
 const shadersData = Array.from([
   ["bans", "6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4", "./bansAppShader.wasm", 0],
+  ["vault-anon", "a3385e50cf33afc9f769ee1d82d56b73046d680d343977f36d9a303d7bcdc4da", "./vaultAnonAppShader.wasm", 1]
 ], params => new UtilsShader(...params));
 
 

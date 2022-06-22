@@ -6,34 +6,30 @@ import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '../../components/Input';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
-import { useBansApi } from '@app/contexts/Bans/BansContexts';
+import { useBansApi, useBansView } from '@app/contexts/Bans/BansContexts';
 
 
 
 const Search: React.FC = () => {
-  const [search, setSearch] = useState("");
-  const [isValid, setIsValid] = useState(true);
+  const {search, setSearch} = useBansView();
+  const [isValid, setIsValid] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
   const [expireBlock, setExpireBlock] = useState(0);
   
   const {registeredMethods} = useBansApi();
 
   const searchValidator = useCallback((search) => {
+    console.log(search);
     if(search.length < 3) return false;
 
     return true;
   }, []);
 
   const fetchDomain = async (search) => {
-    if(!searchValidator(search)) {
-      setIsValid(false);
-      return false;
-    } else {
-      setIsValid(true);
-    }
+
+    if(!isValid) return;
 
     const response = await registeredMethods.managerViewName({name:search});
-    console.log(response); 
     
     if(Object.keys(response).length !== 0 && response.res?.error) {
       response.error && setIsValid(false);
@@ -55,7 +51,8 @@ const Search: React.FC = () => {
     });    
   }, [search]);
 
-  const handleChange = (e/* : React.ChangeEvent<HTMLInputElement> */) => {
+  const handleChange = (e) => {
+    searchValidator(e.target.value) ? setIsValid(true) : setIsValid(false);
     setSearch(e.target.value);
   }
 

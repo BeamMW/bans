@@ -1,5 +1,5 @@
 import { Theme, ThemeUIStyleObject } from "theme-ui";
-import utils from './core/utils';
+import Utils from "./library/base/utils";
 
 const baseColors = {
   blue: "#1542cd",
@@ -150,7 +150,7 @@ const headerGradient: ThemeUIStyleObject = {
   background: `linear-gradient(90deg, ${colors.background}, ${colors.muted})`
 };
 
-const bgColor = utils.getStyles().background_main;
+const bgColor = Utils.getStyles().background_main;
 
 const windowGradient: ThemeUIStyleObject = {
   /* background: "rgb(50,91,93)", */

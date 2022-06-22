@@ -40,10 +40,10 @@ export class ShaderApiGenerator<ShaderActions> extends ShaderApiAbstract {
       //api.roleMethod view
       registeredMethods = {
         ...registeredMethods, ...{
-          ...{ [generator.snakeToCamel(method.role + "_" + method.action)]: generatedMethod }
+          ...{ [generator.snakeToCamel(/* for snakeToCamel transform */method.role + "_" + method.action)]: generatedMethod }
         }
       }
-      
+
     }
 
     return registeredMethods;

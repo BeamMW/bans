@@ -1,8 +1,7 @@
 import produce from 'immer';
 import { ActionType, createReducer } from 'typesafe-actions';
 import * as actions from './actions';
-import { Decimal } from '@app/library/nephrite/Decimal';
-import { Trove } from '@app/library/nephrite';
+import { Decimal } from '@app/library/base/Decimal';
 
 type Action = ActionType<typeof actions>;
 
@@ -11,10 +10,6 @@ const initialState = {
     numberOfTroves: 0,
     fees: (Decimal.ZERO),
 
-    //@TODO: BEAM wallet do not provide balance throught web beam api!
-    //accountBalance: Decimal.ZERO,
-    //nephriteBalance: Decimal.ZERO,
-    
     appParams: {
       tcr: Decimal.ZERO,
       tvl: Decimal.ZERO,
@@ -59,7 +54,7 @@ const reducer = createReducer<any, Action>(
       const {totals: {tok: deposit, col: collateral}} = action.payload;
 
       nextState.total = new Trove(Decimal.from(collateral), Decimal.from(deposit));
-      nextState.appParams = {...action.payload, tcr: Decimal.from(action.payload.tcr ? action.payload.tcr : 0), nephritePrice: Decimal.from(action.payload.price)};
+      nextState.appParams = {...action.payload, tcr: Decimal.from(action.payload.tcr ? action.payload.tcr : 0)};
     }),
   )
   .handleAction(actions.loadOpenTroves.success, (state, action) =>
@@ -91,4 +86,4 @@ const reducer = createReducer<any, Action>(
     }),
   ) */;
 
-export { reducer as NephriteReducer };
+export { reducer as BansReducer };
