@@ -4,11 +4,11 @@ import styled from "styled-components"
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   valid?: boolean;
-  variant?: 'regular' | 'gray' | 'proposal' | 'icon';
+  variant?: 'regular' | 'gray' | 'proposal' | 'icon' | 'sell';
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
-  icon?: React.FC;
-
+  info?: string;
+  children?: React.ReactNode;
 }
 
 const ContainerStyled = styled.div<InputProps>`
@@ -65,14 +65,36 @@ const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
   }
 `;
 
+const InputSellStyled = styled(InputGrayStyled)<{ pallete: string }>`
+  font-size: 16px;
+  font-weight: normal;
+  color: ${({ pallete }) => `var(--color-${pallete})`};
+  height: 45px;
+  background-color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .05)' : 'rgb(255, 116, 107, .15)')};
+  padding: 0 15px;
+  border-radius: 10px;
+  border: none;
+
+  &::placeholder {
+    font-size: 16px;
+  }
+`;
+
 const LabelStyled = styled.div<InputProps>`
   text-align: start;
-  margin-top: 4px;
+  margin-bottom: 10px;
   font-family: 'SFProDisplay';
   font-size: 14px;
-  font-style: italic;
-  color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .7)' : 'var(--color-red)')};
+  color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .6)' : 'var(--color-red)')};
 `;
+
+const InfoStyled = styled.div<InputProps>`
+  text-align: start;
+  margin-top: 6px;
+  font-family: 'SFProDisplay';
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+`
 
 const IconContainer = styled.div`
  position: absolute;
@@ -88,7 +110,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     variant = 'regular',
     margin = 'none',
     pallete = 'blue',
-    icon: IconComponent,
+    info,
+    children,
     className, ...rest
   }, ref) => {
     const InputComponent = {
@@ -96,19 +119,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       gray: InputGrayStyled,
       proposal: InputProposalStyled,
       icon: InputRegularStyled,
+      sell: InputSellStyled,
     }[variant];
 
     return (
       <ContainerStyled className={className} margin={margin}>
-       {
-       !!IconComponent && (
-        <IconContainer>
-          <IconComponent />
-        </IconContainer>
-       )
-      }
-        <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
         {!!label && <LabelStyled valid={valid}>{valid ? label : ''}</LabelStyled>}
+
+        {
+          !!children && (
+            <IconContainer>
+              { children }
+            </IconContainer>
+          )
+        }
+        <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+        {!!info && <InfoStyled>{info}</InfoStyled>}
       </ContainerStyled>
     );
   },

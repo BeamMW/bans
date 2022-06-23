@@ -21,3 +21,15 @@ export const ModalContent = styled.div`
     /* background-color: ${bgColor}; */
     background-color: #0D4D76;
 `;
+
+export const ModalHeader = styled.p`
+    font-family: 'SFProDisplay';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+    color: #FFFFFF;
+    text-align: center;
+    margin: 40px 0px 30px 0px;
+`
