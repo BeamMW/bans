@@ -14,8 +14,9 @@ export const Container = styled.div<ContainerStyleProps>`
     background-color: ${Utils.getStyles().background_popup};
     display: ${props => (props.isVisible ? "block" : "none")};
     right: 10px;
+`
 
-    .item {
+export const PopupItem = styled.div`
       color: #fff;
       padding: 6px 0;
       cursor: pointer;
@@ -31,5 +32,4 @@ export const Container = styled.div<ContainerStyleProps>`
       & > svg {
         margin-right: 10px
       }
-    }
 `

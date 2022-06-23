@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import utils from '../../core/utils';
 
 const bgColor = "#0e4d76"; //utils.getStyles().background_popup;
 export const Wrapper = styled.div`
@@ -17,6 +16,7 @@ export const Wrapper = styled.div`
 
 export const ModalContent = styled.div`
     padding: 40px;
+    min-width: 630px;
     border-radius: 10px;
     /* background-color: ${bgColor}; */
     background-color: #0D4D76;
