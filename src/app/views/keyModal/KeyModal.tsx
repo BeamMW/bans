@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import Button from '../../components/Button';
 import CopyBlue from "../../assets/icons/copy-blue.svg";
-import Cancel from "../../assets/icons/cancel.svg";
 import Copy from "../../assets/icons/copy.svg";
 import { Modal } from '../../components/Modals/Modal';  
-import { Container, Title, Content, Controls, CloseText, CopyText } from './KeyModal.style';
+import { Container, Title, Content, Controls, CopyText } from './KeyModal.style';
+import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 
 interface KeyModalProps {
   isShown: boolean;
@@ -35,18 +35,7 @@ return (
           </Button>
         </Content>
         <Controls>
-          <Button
-           variant='custom' 
-           pallete='ghost'
-           onClick={toggle}
-           padding="11px 25px 11px 22px"
-           height='38px'
-           width='fit-content'
-           borderRadius='50px'
-           >
-            <Cancel />
-            <CloseText>Close</CloseText>
-          </Button>
+          <CloseBtn toggle={toggle} />
           <Button
            variant='custom'
            onClick={handleConfirm}

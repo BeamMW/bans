@@ -49,7 +49,7 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
         <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
-        <RightSide />
+        <RightSide copyToClipboard={copyToClipboard} domainName={domain.name}/>
       </SplitContainer>
   ));
 

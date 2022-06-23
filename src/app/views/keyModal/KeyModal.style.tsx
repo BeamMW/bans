@@ -28,11 +28,8 @@ export const Controls = styled.div`
   }
 `
 
-export const CloseText = styled.span`
+export const CopyText = styled.span`
+  color: rgb(3, 46, 73);
   font-weight: bold;
   margin-left: 9px;
-`
-
-export const CopyText = styled(CloseText)`
-  color: rgb(3, 46, 73);
 `
