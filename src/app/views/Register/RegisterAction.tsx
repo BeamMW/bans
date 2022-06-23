@@ -20,7 +20,7 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
 }) => {
 
     const { registeredMethods } = useBansApi();
-    const { search } = useMainView();
+    const { search } = useBansView();
 
     const apiCall = (change) => {
         switch (change) {

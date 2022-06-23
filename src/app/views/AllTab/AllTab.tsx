@@ -9,16 +9,28 @@ import Renew from '././../../assets/icons/renew.svg';
 import Sell from '././../../assets/icons/sell.svg';
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { copyToClipboard } from '../../core/appUtils';
+import { useModal } from "@app/components/Modals/useModal";
+import { RenewModal } from './../RenewModal/RenewModal';
+import { PopupItem } from '@app/components/Popup/Popup.styles';
 
 interface RightSideProps {
   copyToClipboard: (value: string) => void;
   domainName: string;
 }
 const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) => {
+  let timeout: ReturnType<typeof setTimeout>;
   const [showPopup, setShowPopup] = React.useState(false);
+  const { isShown, toggle } = useModal();
+
+  const hideTip = () => {
+      setShowPopup(false);
+  };
+
   return (
     <>
-      <Container sx={{ position: 'relative' }}>
+      <Container sx={{ position: 'relative' }}
+        onMouseLeave={hideTip}
+      >
         <Flex>
           <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domainName)}>
             <Copy />
@@ -28,16 +40,17 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) =>
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
-          <div className="item">
+          <PopupItem onClick={() => { toggle(); hideTip() }}>
             <Renew />
             renew subscription
-          </div>
-          <div className="item">
+          </PopupItem>
+          <PopupItem>
             <Sell />
             sell BANS
-          </div>
+          </PopupItem>
         </Popup>
       </Container>
+      <RenewModal isModalShown={isShown} closeModal={toggle}/>
     </>
   )
 }

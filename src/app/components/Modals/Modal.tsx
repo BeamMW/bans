@@ -25,7 +25,7 @@ export const Modal: FC<ModalProps> = ({
         {
           header && (
             <ModalHeader>
-              header
+              { header }
             </ModalHeader>
         )} 
           { children }

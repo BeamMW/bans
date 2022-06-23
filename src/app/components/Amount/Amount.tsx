@@ -15,19 +15,19 @@ interface ContainerStyles {
 
 const Container = styled.div<ContainerStyles>`
   font-size: ${props => props.size};
-
+  font-weight: 700;
   display: flex;
   align-items: center;
   font-family: 'SFProDisplay', sans-serif;
   font-weight: bolder;
-  margin-right: 6px;
+  margin-right: 4px;
 
   & .text {
     font-size: ${props => props.size};
   }
 
   & > *:not(:first-child) {
-    margin-left: 8px;
+    margin-left: 10px;
   }
 `
 
