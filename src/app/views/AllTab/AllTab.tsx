@@ -8,14 +8,19 @@ import Dots from '././../../assets/icons/dots.svg';
 import Renew from '././../../assets/icons/renew.svg';
 import Sell from '././../../assets/icons/sell.svg';
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
+import { copyToClipboard } from '../../core/appUtils';
 
-const RightSide: React.FC = () => {
+interface RightSideProps {
+  copyToClipboard: (value: string) => void;
+  domainName: string;
+}
+const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) => {
   const [showPopup, setShowPopup] = React.useState(false);
   return (
     <>
       <Container sx={{ position: 'relative' }}>
         <Flex>
-          <Button variant='icon' pallete='transparent'>
+          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domainName)}>
             <Copy />
           </Button>
           <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>

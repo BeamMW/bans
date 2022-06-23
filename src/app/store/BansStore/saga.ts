@@ -26,11 +26,11 @@ export function* loadParamsSaga(
   action: ReturnType<typeof actions.loadAppParams.request>,
 ): Generator {
   try {
-    
+
     const bansShaderBytes = action.payload ??
       ShaderApi.useShaderStore.retriveShader("6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4").shaderData;
 
-    const state = (yield select()) as { nephrite; shared };
+    const state = (yield select()) as { bans; shared };
 
     if (!state.shared.isLoaded && !action.payload) {
       yield null;
