@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Flex, Text } from "theme-ui";
 
 interface SubTextProps {
-  isExpired: boolean;
+  isexpired: boolean;
 }
 export const SubText = styled(Text)<SubTextProps>`
   font-family: 'SFProDisplay';
@@ -16,16 +16,17 @@ export const SubText = styled(Text)<SubTextProps>`
   padding-top: 6px;
   white-space: nowrap;
 `
-interface LeftSideProps extends SubTextProps {
+interface LeftSideProps {
   name: string;
   expiresAt: string;
+  isExpired: boolean;
 };
 
 export const LeftSide: React.FC<LeftSideProps> = ({ name, expiresAt,isExpired }) => {
   return (
     <Flex sx={{ variant: 'layout.card' }}>
       <Text>{name}</Text>
-      <SubText isExpired={isExpired}>{expiresAt}</SubText>
+      <SubText isexpired={isExpired.toString()}>{expiresAt}</SubText>
     </Flex>
   )
 }

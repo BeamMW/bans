@@ -14,6 +14,7 @@ import { BackButton } from "@app/components/BackButton/BackButton";
 import { useTransactionState } from "@app/library/transaction-react/context/TransactionContext";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
+import { getDomainPresentedData } from "@app/library/bans/domainsPresenter";
 
 const Container = styled.div`
   max-width: 630px;
@@ -41,7 +42,11 @@ export const Register: React.FC = () => {
   const {search, setView} = useBansView();
 
   const backButtonHandler = () => setView("SEARCH");
+
+  const periodIncrease = () => period < 5 && setPeriod(period + 1);
   const periodDecrease = () => period > 1 && setPeriod(period - 1);
+
+  const {name: domainName} = getDomainPresentedData(search);
 
   useEffect(() => {
     if (useTransactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
@@ -65,7 +70,7 @@ export const Register: React.FC = () => {
         <Box>
           <Flex >
             <Text variant="panelHeader">
-              {search}.beam
+              {domainName}
             </Text>
             <Button variant='icon' pallete='opacity' style={{ margin: 0 }}>
               <Heart />
@@ -76,9 +81,9 @@ export const Register: React.FC = () => {
             <Text variant="panelHeader">
               Registration period
             </Text>
-            <YearMinus style={period > 1 ? iconStyle : iconStyleShade} onClick={() => { periodDecrease() }} />
+            <YearMinus style={period > 1 ? iconStyle : iconStyleShade} onClick={periodDecrease} />
             <Text sx={{ mx: '12px' }}>{period}</Text>
-            <YearPlus style={iconStyle} onClick={() => { setPeriod(period + 1) }} />
+            <YearPlus style={iconStyle} onClick={periodIncrease} />
           </Flex>
           <Flex sx={{ mt: 24, mb: 5 }}>
             <Text variant="panelHeader">

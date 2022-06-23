@@ -3,13 +3,13 @@ import { TransactionLink } from "../TransactionsLink/TransactionsLink";
 import { Container } from './FilterTabs.style';
 
 interface Tabs {
-  id: string,
+  id: number,
   name: string,
 }
 interface FliterTabsProps {
   tabs: Tabs[],
-  active: string,
-  setActive: (tabId: string) => void,
+  active: number,
+  setActive: (tabId: number) => void,
   children?: React.ReactNode
 }
 
@@ -22,7 +22,7 @@ export const FilterTabs: React.FC<FliterTabsProps> = ({tabs, children, active, s
         tabs.map((tab) => {
           return (
             <React.Fragment key={tab.id}>
-              <div className={`tab-item ${active === tab.id ? 'tab-active' : ''}`} onClick={() => setActive(tab.id)}>
+              <div className={`tab-item ${active === tab.id ? 'tab-active' : ''}`} onClick={() => {console.log(tab.id);setActive(tab.id)}}>
                 <div className="title">{ tab.name }</div>
                 <div
                  className={ active === tab.id ? 'bottom-line' : ''}
