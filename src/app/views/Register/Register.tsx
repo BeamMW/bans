@@ -40,9 +40,9 @@ export const Register: React.FC = () => {
   const {name: domainName} = foundDomain;
 
   useEffect(() => {
-    if (useTransactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-
-      setCurrentView("REGISTER_COMPLETED");
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      //dispatch to the main search view and clear found domain data
+      setCurrentView("REGISTER_COMPLETED") && foundDomain(null);
 
       return () => {
         //store.dispatch()

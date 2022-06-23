@@ -41,7 +41,7 @@ const Search: React.FC = () => {
 
   }
 
-
+  //@TODO: maybe refactor this logic into another
   useEffect(() => {
     //if search already exists
     !!foundDomain && (
