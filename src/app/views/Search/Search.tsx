@@ -65,12 +65,13 @@ const Search: React.FC = () => {
       <Input
         variant='proposal'
         pallete='white'
-        icon={search ? RemoveIcon : SearchIcon}
         onChange={handleChange}
         value={search}
         maxLength={30}
         pattern="[A-Za-z0-9]"
-      />
+      >
+        { search ? <RemoveIcon onClick={() => setSearch('')}/> : <SearchIcon/> }
+      </Input>
       <SearchResult value={search} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid} />
     </Container>
   );
