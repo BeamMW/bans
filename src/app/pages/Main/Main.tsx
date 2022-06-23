@@ -4,19 +4,19 @@ import { Register } from '../../views/Register/Register';
 import Search from "../../views/Search/Search";
 import LogoIcon from "../../assets/icons/logo.svg";
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import { useBansView } from '@app/contexts/Bans/BansContexts';
+import { useMainView } from '@app/contexts/Bans/BansContexts';
 
 const Main = () => {
-  const {view} = useBansView();
+  const { view } = useMainView();
 
   return (
     <>
-      <Flex sx={{ justifyContent:'center', mt: 79, mb:50 }}>
+      <Flex sx={{ justifyContent: 'center', mt: 79, mb: 50 }}>
         <PageHeader icon={LogoIcon} title='Beam Anonymous Name Service' />
       </Flex>
-    {
-      view === "SEARCH" ? <Search /> : (view === "REGISTER" ? <Register /> : <></>)
-    }
+      {
+        view === "SEARCH" ? <Search /> : (view === "REGISTER" ? <Register /> : <></>)
+      }
     </>
   );
 }

@@ -36,7 +36,10 @@ const MyPage = () => {
     });
 
     active === 2 && useGetFavoritesDomains().then(response => {
-      setDomains(response.domains);
+      setDomains(response.domains.map(
+        //for future logic
+        domain => domain
+      ));
     });
 
 

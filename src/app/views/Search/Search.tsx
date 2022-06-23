@@ -6,49 +6,57 @@ import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '../../components/Input';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
-import { useBansApi, useBansView } from '@app/contexts/Bans/BansContexts';
+import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
 
 
 
 const Search: React.FC = () => {
-  const {search, setSearch} = useBansView();
+  const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isValid, setIsValid] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(false);
-  const [expireBlock, setExpireBlock] = useState(0);
-  
-  const {registeredMethods} = useBansApi();
+
+  const { foundDomain, setFoundDomain } = useMainView();
+  const { registeredMethods } = useBansApi();
 
   const searchValidator = useCallback((search) => {
-    console.log(search);
-    if(search.length < 3) return false;
+    if (search.length < 3) return false;
 
     return true;
   }, []);
 
   const fetchDomain = async (search) => {
 
-    if(!isValid) return;
+    if (!isValid) return;
 
-    const response = await registeredMethods.managerViewName({name:search});
-    
-    if(Object.keys(response).length !== 0 && response.res?.error) {
-      response.error && setIsValid(false);
+    const response = await registeredMethods.managerViewName({ name: search });
+
+    if (Object.keys(response).length !== 0 && response.res?.error) {
+      return response.error /* && setIsValid(true) */;
     }
 
-    setIsAvailable(Object.keys(response).length === 0 ? true : false);
-    
-    Object.keys(response).length !== 0 && response?.hExpire && setExpireBlock(response?.hExpire)
+    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain({ ...response, ...{ searchName: search } });
+
+    Object.keys(response).length === 0 && setFoundDomain(
+      { searchName: search, isAvailable: true }
+    );
 
   }
-  
+
+
   useEffect(() => {
-    if(!search.length) return;
+    //if search already exists
+    !!foundDomain && (
+      setSearch(foundDomain.name),
+      setIsValid(true)
+    );
+  }, [])
+
+  useEffect(() => {
+    if (!search.length) return;
 
     fetchDomain(search).catch((error) => {
-      setIsAvailable(false);
       setIsValid(false);
       console.error
-    });    
+    });
   }, [search]);
 
   const handleChange = (e) => {
@@ -57,8 +65,8 @@ const Search: React.FC = () => {
   }
 
   const debouncedHandleChange = useMemo(
-    () => debounce(handleChange, 100,{leading:false, trailing:true})
-  , []);
+    () => debounce(handleChange, 100, { leading: false, trailing: true })
+    , []);
 
   return (
     <Container sx={{ maxWidth: 630 }}>
@@ -70,9 +78,9 @@ const Search: React.FC = () => {
         maxLength={30}
         pattern="[A-Za-z0-9]"
       >
-        { search ? <RemoveIcon onClick={() => setSearch('')}/> : <SearchIcon/> }
+        {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>
-      <SearchResult value={search} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid} />
+      {search || foundDomain ? <SearchResult search={search} isValid={isValid} /> : <></>}
     </Container>
   );
 };

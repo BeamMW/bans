@@ -4,7 +4,7 @@ import { useTransactionFunction } from "@app/library/transaction-react/useTransa
 import { toGroths } from '@app/library/base/appUtils';
 import Plus from '../../assets/icons/blue-plus.svg';
 import Button from "../../components/Button";
-import { useBansApi, useBansView } from "@app/contexts/Bans/BansContexts";
+import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 
 type TroveActionProps = {
     transactionId: string;
@@ -20,7 +20,7 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
 }) => {
 
     const { registeredMethods } = useBansApi();
-    const { search } = useBansView();
+    const { search } = useMainView();
 
     const apiCall = (change) => {
         switch (change) {

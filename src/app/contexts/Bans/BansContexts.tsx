@@ -17,15 +17,15 @@ export const useBansApi = (): BansApiContextType => {
 };
 
 
-type BansContextType = any;
+type MainViewContextType = any;
 
-export const BansContext = createContext<BansContextType | null>(null);
+export const MainContext = createContext<MainViewContextType | null>(null);
 
-export const useBansView = (): BansContextType => {
-const context: BansContextType | null = useContext(BansContext);
+export const useMainView = (): MainViewContextType => {
+const context: MainViewContextType | null = useContext(MainContext);
 
 if (context === null) {
-  throw new Error("You must add a <BansContext> into the React tree");
+  throw new Error("You must add a <MainContext> into the React tree");
 }
 
 return context;

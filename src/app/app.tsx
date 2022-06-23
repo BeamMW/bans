@@ -25,7 +25,7 @@ import MyPage from './pages/MyPage/MyPage';
 import Transactions from './pages/Transactions/Transactions';
 import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
-import { BansViewProvider } from './contexts/Bans/BansViewProvider';
+import { MainViewProvider } from './contexts/Bans/MainViewProvider';
 
 const App = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <WalletApiConnector>
         <BansApiProvider>
-          <BansViewProvider>
+          <MainViewProvider>
             <TransactionProvider>
               <BansLayout>
                 <Routes>
@@ -50,7 +50,7 @@ const App = () => {
               </BansLayout>
               <TransactionMonitor transactions={[]} />
             </TransactionProvider>
-          </BansViewProvider>
+          </MainViewProvider>
         </BansApiProvider>
       </WalletApiConnector>
     </ThemeProvider>

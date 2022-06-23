@@ -7,14 +7,14 @@ import Heart from '../../assets/icons/heart.svg';
 import Plus from '../../assets/icons/blue-plus.svg';
 import YearMinus from '../../assets/icons/year-minus.svg';
 import YearPlus from '../../assets/icons/year-plus.svg';
-import { useBansApi, useBansView } from "@app/contexts/Bans/BansContexts";
+import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { RegisterAction } from "./RegisterAction";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { BackButton } from "@app/components/BackButton/BackButton";
 import { useTransactionState } from "@app/library/transaction-react/context/TransactionContext";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
-import { getDomainPresentedData } from "@app/library/bans/domainsPresenter";
+import { getDomainPresentedData } from "@app/library/bans/DomainPresenter";
 
 const Container = styled.div`
   max-width: 630px;
@@ -39,26 +39,26 @@ export const Register: React.FC = () => {
   const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
 
   const [period, setPeriod] = useState<number>(1);
-  const {search, setView} = useBansView();
+  const {foundDomain, setCurrentView} = useMainView();
 
-  const backButtonHandler = () => setView("SEARCH");
+  const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
   const periodIncrease = () => period < 5 && setPeriod(period + 1);
   const periodDecrease = () => period > 1 && setPeriod(period - 1);
 
-  const {name: domainName} = getDomainPresentedData(search);
+  const {name: domainName} = foundDomain;
 
   useEffect(() => {
     if (useTransactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
 
-      setView("SEARCH");
+      setCurrentView("REGISTER_COMPLETED");
 
       return () => {
         //store.dispatch()
       }
     }
 
-  }, [transactionState, setView]);
+  }, [transactionState, setCurrentView]);
 
   return (
     <>
@@ -70,7 +70,7 @@ export const Register: React.FC = () => {
         <Box>
           <Flex >
             <Text variant="panelHeader">
-              {domainName}
+              {domainName}<span>.beam</span>
             </Text>
             <Button variant='icon' pallete='opacity' style={{ margin: 0 }}>
               <Heart />
