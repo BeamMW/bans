@@ -20,10 +20,14 @@ const BackBtn = styled.div`
     }
 `
 
-export const BackButton: React.FC<{text:string}> = ({text}) => {
+export const BackButton: React.FC<{handler?:Function, text:string}> = ({handler, text}) => {
   const navigate = useNavigate();
+  const handleClick = () => {
+    return handler ? handler() : navigate('/')
+  };
+
   return (
-    <BackBtn onClick={() =>  navigate('/')}>
+    <BackBtn onClick={handleClick}>
       <BackBtnIcon/>
     <Text sx={{ ml: 2 }}>{ text }</Text>
   </BackBtn>

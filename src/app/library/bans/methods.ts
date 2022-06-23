@@ -21,6 +21,22 @@ const methods: Array<IMethod<ShaderActions>> = [
         type: "readable"
     },
     {
+        role: "manager",
+        action: "pay",
+        requiredParams:["aid", "amount", "name"],
+        type: "readable"
+    },
+    {
+        role: "user",
+        action: "my_key",
+        type: "readable"
+    },
+    {
+        role: "user",
+        action: "view",
+        type: "readable"
+    },
+    {
         role: "user",
         action: "domain_register",
         requiredParams: ["name"],
@@ -28,8 +44,21 @@ const methods: Array<IMethod<ShaderActions>> = [
     },
     {
         role: "user",
-        action: "my_key",
-        type: "readable"
+        action: "domain_extend",
+        requiredParams: ["name"],
+        type: "writable"
+    },
+    {
+        role: "user",
+        action: "domain_set_owner",
+        requiredParams: ["name"],
+        type: "writable"
+    },
+    {
+        role: "user",
+        action: "receive",
+        requiredParams: ["pkOwner"],
+        type: "writable"
     },
 ]
 

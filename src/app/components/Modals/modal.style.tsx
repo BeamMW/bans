@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import utils from '../../core/utils';
 
-const bgColor = utils.getStyles().background_popup;
+const bgColor = "#0e4d76"; //utils.getStyles().background_popup;
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;

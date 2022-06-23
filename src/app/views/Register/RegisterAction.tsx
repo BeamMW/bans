@@ -9,23 +9,31 @@ import { useBansApi, useBansView } from "@app/contexts/Bans/BansContexts";
 type TroveActionProps = {
     transactionId: string;
     change: any;
+    period: number;
 };
 
 export const RegisterAction: React.FC<TroveActionProps> = ({
     children,
     transactionId,
     change,
+    period
 }) => {
 
     const { registeredMethods } = useBansApi();
+    const { search } = useBansView();
 
     const apiCall = (change) => {
         switch (change) {
             case "registerDomain":
                 {
-                    const { search } = useBansView();
 
-                    return () => registeredMethods.user.domainRegister({name: search});
+                    return () => registeredMethods.userDomainRegister({ name: search });
+                }
+
+            case "registerDomainWithSetPeriod":
+                {
+                    //registeredMethods.userDomainExtend({ name: search })
+                    return () => registeredMethods.userDomainRegister({ name: search });
                 }
         }
 

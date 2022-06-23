@@ -19,18 +19,15 @@ const MyPage = () => {
   //TEMP SOLUTION!
   useEffect(() => {
 
-    registeredMethods.user.myKey().then(response => setMyKey(
+    registeredMethods && registeredMethods.userMyKey().then(response => setMyKey(
       response.key
     ));
   }, [registeredMethods])
 
 
   useEffect(() => {
-    myKey && registeredMethods.manager.viewDomain().then(response => {
-      console.log(response)
-      setDomains(response.domains.filter(
-        domain => domain.key === myKey
-      ).map(
+    myKey && registeredMethods.userView().then(response => {
+      setDomains(response.domains.map(
         //for future logic
         domain => domain
       )
