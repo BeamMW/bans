@@ -45,7 +45,7 @@ const methods: Array<IMethod<ShaderActions>> = [
     {
         role: "user",
         action: "domain_extend",
-        requiredParams: ["name"],
+        requiredParams: ["name", "nPeriods"],
         type: "writable"
     },
     {

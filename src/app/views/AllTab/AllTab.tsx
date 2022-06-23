@@ -12,12 +12,13 @@ import { copyToClipboard } from '../../core/appUtils';
 import { useModal } from "@app/components/Modals/useModal";
 import { RenewModal } from './../RenewModal/RenewModal';
 import { PopupItem } from '@app/components/Popup/Popup.styles';
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 
 interface RightSideProps {
   copyToClipboard: (value: string) => void;
-  domainName: string;
+  domain: DomainPresenterType;
 }
-const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) => {
+const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain }) => {
   let timeout: ReturnType<typeof setTimeout>;
   const [showPopup, setShowPopup] = React.useState(false);
   const { isShown, toggle } = useModal();
@@ -32,7 +33,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) =>
         onMouseLeave={hideTip}
       >
         <Flex>
-          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domainName)}>
+          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
           </Button>
           <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
@@ -50,7 +51,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domainName }) =>
           </PopupItem>
         </Popup>
       </Container>
-      <RenewModal isModalShown={isShown} closeModal={toggle}/>
+      <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle}/>
     </>
   )
 }
@@ -61,8 +62,8 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
   const rows = 
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
-        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
-        <RightSide copyToClipboard={copyToClipboard} domainName={domain.name}/>
+        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.expireAt}`} />
+        <RightSide copyToClipboard={copyToClipboard} domain={domain}/>
       </SplitContainer>
   ));
 

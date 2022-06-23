@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { FilterTabs } from '../../views/filterTabs/FilterTabs';
 import EmptyPage from '../../views/EmptyPage/EmptyPage';
@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import useGetFavoritesDomains from '@app/hooks/useGetFavoritesDomains';
 import { FavoriteTab } from '@app/views/FavoriteTab';
+import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
@@ -20,28 +21,27 @@ const MyPage = () => {
 
   const { registeredMethods } = useBansApi();
 
-  //TEMP SOLUTION!
+  //refactor remove duplication
   useEffect(() => {
     registeredMethods && registeredMethods.userMyKey().then(response => setMyKey(
       response.key
     ));
-  }, [registeredMethods])
+  }, [registeredMethods]);
 
   useEffect(() => {
     active === 1 && myKey && registeredMethods.userView().then(response => {
       setDomains(response.domains.map(
         //for future logic
-        domain => domain
+        domain => getDomainPresentedData({...domain, ...{searchName: domain.name}})
       ));
     });
 
     active === 2 && useGetFavoritesDomains().then(response => {
       setDomains(response.domains.map(
         //for future logic
-        domain => domain
+        domain => getDomainPresentedData({...domain, ...{searchName: domain.name}})
       ));
     });
-
 
   }, [myKey, active])
 

@@ -1,4 +1,4 @@
-type DomainPresenterType = {
+export type DomainPresenterType = {
     name: string;
     expireAt: any;
     isExpired: any;

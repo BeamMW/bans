@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Flex, Text, Divider, Box } from 'theme-ui';
 import styled from "styled-components";
 import Plus from '../../assets/icons/blue-plus.svg';
@@ -34,8 +34,8 @@ export const Register: React.FC = () => {
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
-  const periodIncrease = () => period < 5 && setPeriod(period + 1);
-  const periodDecrease = () => period > 1 && setPeriod(period - 1);
+  const periodIncrease = useCallback(() => period < 5 && setPeriod(period + 1), []);
+  const periodDecrease = useCallback(() => period > 1 && setPeriod(period - 1), []);
 
   const {name: domainName} = foundDomain;
 

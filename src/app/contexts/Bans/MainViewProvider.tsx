@@ -14,23 +14,24 @@ const bansStates = {
   REGISTER: {
     REGISTER_CLOSED: "SEARCH",
     REGISTER_COMPLETED: "SEARCH",
-  }
+  },
 }
 
 export const MainViewProvider: React.FC = props => {
   const { children } = props;
+  const location = useLocation();
 
   const [foundDomain, _setFoundDomain] = useState(null);
-  
+
   const [view, setView] = useState("SEARCH");
   const viewRef = useRef(view);
-  
+
   const setCurrentView = useCallback((event: any /* BansEvent */) => {
     const nextView = bansStates[viewRef.current][event] ?? view;
 
     setView(nextView);
   }, []);
-  
+
   const setFoundDomain = (rawData) => {
     //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
     _setFoundDomain(
@@ -38,10 +39,14 @@ export const MainViewProvider: React.FC = props => {
     )
   };
 
-
   useEffect(() => {
     viewRef.current = view;
   }, [view]);
+
+
+  useEffect(() => {
+    location.pathname == "/"  && setView("SEARCH"); 
+  }, [location])
 
   const provider = {
     view,
