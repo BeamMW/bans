@@ -6,7 +6,6 @@ import YearPlus from '../../assets/icons/year-plus.svg';
 interface PeriodProps {
   period: number;
   setPeriod: (period: number) => void;
-  periodDecrease: () => void;
 }
 
 const iconStyle = {

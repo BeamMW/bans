@@ -1,4 +1,4 @@
-import { getDomainPresentedData, RawDomainType } from "@app/library/bans/DomainPresenter";
+import { DomainPresenterType, getDomainPresentedData, RawDomainType } from "@app/library/bans/DomainPresenter";
 import methods from "@app/library/bans/methods";
 import ShaderApi from "@app/library/base/api/ShaderApi";
 import { useWalletApiConnector } from "@app/library/wallet-react/context/WalletApiConnector/WalletApiConnectorContext";
@@ -21,7 +21,7 @@ export const MainViewProvider: React.FC = props => {
   const { children } = props;
   const location = useLocation();
 
-  const [foundDomain, _setFoundDomain] = useState(null);
+  const [foundDomain, _setFoundDomain] = useState<DomainPresenterType | null>(null);
 
   const [view, setView] = useState("SEARCH");
   const viewRef = useRef(view);
@@ -35,7 +35,7 @@ export const MainViewProvider: React.FC = props => {
   const setFoundDomain = (rawData) => {
     //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
     _setFoundDomain(
-      getDomainPresentedData(rawData)
+      !!rawData ? getDomainPresentedData(rawData) : null
     )
   };
 

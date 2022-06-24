@@ -30,19 +30,16 @@ export const Register: React.FC = () => {
   const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
 
   const [period, setPeriod] = useState<number>(1);
-  const {foundDomain, setCurrentView} = useMainView();
+  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
-
-  const periodIncrease = useCallback(() => period < 5 && setPeriod(period + 1), []);
-  const periodDecrease = useCallback(() => period > 1 && setPeriod(period - 1), []);
 
   const {name: domainName} = foundDomain;
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       //dispatch to the main search view and clear found domain data
-      setCurrentView("REGISTER_COMPLETED") && foundDomain(null);
+      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null); 
 
       return () => {
         //store.dispatch()
@@ -61,7 +58,7 @@ export const Register: React.FC = () => {
         <Box>
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 5 }} />
-          <RegistrationPeriod period={period} periodDecrease={periodDecrease} setPeriod={setPeriod}/>
+          <RegistrationPeriod period={period} setPeriod={setPeriod}/>
           <RegistrationPrice/>
           <Flex sx={{ flexDirection: 'column' }}>
             <Text variant="panelHeader">
