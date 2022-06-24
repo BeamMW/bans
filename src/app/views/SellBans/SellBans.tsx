@@ -31,7 +31,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle })
           </Input>
         </Box>
         <Box sx={{ my: '30px' }}>
-        <Select/>
+        <Select items={[]} setActiveItem={() => {}} />
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>
           <Box sx={{ mr: '30px' }}>

@@ -45,7 +45,6 @@ const MyPage = () => {
 
   }, [myKey, active])
 
-
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (
     <>
