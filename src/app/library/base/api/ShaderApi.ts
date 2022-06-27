@@ -2,12 +2,12 @@ import Utils from "@library/base/utils"
 import ApiError from "./ApiError";
 import { IShaderApi } from "./Interfaces";
 import ShaderApiAbstract from "./ShaderApiAbstract";
-import { IMethod, IRegisteredMethods } from "./Interfaces";
+import { IMethod, IRegisteredMethods, IShaderStore } from "./Interfaces";
 import UtilsShader from "../shader/utilsShader";
 import { ShaderApiGenerator } from "./ShaderApiGenerator";
 import { MethodRoles } from "./types";
 
-export class ShaderStore implements ShaderStore{
+export class ShaderStore implements IShaderStore{
 
     protected static shaderStore: Map<string, UtilsShader> = new Map<string, UtilsShader>();
 
@@ -38,7 +38,7 @@ export class ShaderStore implements ShaderStore{
 
 export default class ShaderApi<ShaderActions> extends ShaderApiAbstract implements IShaderApi {
 
-    public static useShaderStore: ShaderStore = ShaderStore;
+    public static useShaderStore: IShaderStore = ShaderStore;
 
     protected registeredMethods: any/* IRegisteredMethods<ShaderActions> */ = {};
 

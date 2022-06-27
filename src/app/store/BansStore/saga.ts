@@ -1,18 +1,22 @@
-import { call, put, takeLatest, select, takeEvery } from 'redux-saga/effects';
+import { call, put, takeLatest, select, takeEvery, getContext } from 'redux-saga/effects';
 import { CID } from '@app/constants';
+import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
 import { actions } from '.';
 import store from '../../../index';
+import _ from 'lodash';
 
 import {
   setIsLoaded,
   navigate,
   setError,
-  loadAdminKey,
+  loadPublicKey,
 } from '@app/store/SharedStore/actions';
 import { Base64DecodeUrl, fromGroths } from '@app/library/base/appUtils';
 import { Decimal } from '@app/library/base/Decimal';
 import ShaderApi from '@app/library/base/api/ShaderApi';
+import methods from '@app/library/bans/methods';
+import { useEffect, useState } from 'react';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -22,34 +26,46 @@ export function* handleParams(payload: any) {
   yield put(actions.setAppParams(payload));
 }
 
+
+const getBansApi = () => {
+  let bansApi;
+
+  bansApi = !_.isEmpty(getGlobalApiProviderValue()) ? getGlobalApiProviderValue() : (() => {
+    const bansShader = ShaderApi.useShaderStore.retriveShader("6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4")
+    const bansApi = new ShaderApi(bansShader, methods);
+
+    return bansApi.getRegisteredMethods();
+  })()
+
+  return bansApi;
+}
+
+
 export function* loadParamsSaga(
   action: ReturnType<typeof actions.loadAppParams.request>,
 ): Generator {
   try {
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
 
-    const bansShaderBytes = action.payload ??
-      ShaderApi.useShaderStore.retriveShader("6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4").shaderData;
+    const resultUserViewParams = yield call(
+      bandApiMethods.managerViewDomain
+    );
+    console.log(resultUserViewParams);
 
     const state = (yield select()) as { bans; shared };
 
-    if (!state.shared.isLoaded && !action.payload) {
+    if (!state.shared.isLoaded && _.isEmpty(bandApiMethods)) {
       yield null;
     }
 
-    const result = yield call(
-      LoadViewParams,
-      action.payload ? action.payload : null,
-    );
 
-    yield put(actions.loadAppParams.success(result));
+    yield put(actions.loadAppParams.success(resultUserViewParams));
 
     store.dispatch(actions.loadContractInfo.request());
-    store.dispatch(actions.loadOpenTroves.request());
-
-    yield call(loadUserViewSaga);
+    store.dispatch(actions.loadUserBans.request());
 
     if (state.shared.isLoaded) {
-      store.dispatch(loadAdminKey.request());
+      store.dispatch(loadPublicKey.request());
     }
   } catch (e) {
     console.log(e);
@@ -57,31 +73,36 @@ export function* loadParamsSaga(
   }
 }
 
+export function* loadUserBansSaga(
+  action: ReturnType<typeof actions.loadUserBans.request>
+) {
+  const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+  const resultUserViewParams = yield call(
+    bandApiMethods.userView
+  );
+
+  yield put(actions.loadUserBans.success(resultUserViewParams));
+
+}
+
 export function* loadContractInfoSaga(
   action: ReturnType<typeof actions.loadContractInfo.request>,
 ): Generator {
   try {
-    const managerViewData = (yield call(
-      LoadManagerView,
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+    const managerViewParams = (yield call(
+      bandApiMethods.managerView,
     )) as any; /* ManagerViewData */
 
-    const contract = managerViewData.contracts.find(item => item.cid === CID);
+    const contract = managerViewParams.contracts.find(item => item.cid === CID);
     if (contract) {
       yield put(actions.loadContractInfo.success(contract /* .Height */));
     }
   } catch (e) {
     yield put(actions.loadContractInfo.failure(e));
   }
-}
-
-function* loadUserViewSaga(
-  action?: ReturnType<typeof troveActions.loadUserTrove.request>,
-) {
-  const userView = (yield call(LoadUserView)) as any; /* UserViewParams */
-  yield put(actions.setUserView(userView));
-
-  yield call(updateUserTroveSaga, userView);
-  yield call(updateUserStabilityDepositSaga, userView);
 }
 
 async function loadRatesApiCall() {
@@ -106,10 +127,11 @@ export function* loadRate() {
   }
 }
 
-function* mainSaga() {
+function* bansSaga() {
   yield takeEvery(actions.loadAppParams.request, loadParamsSaga);
+  yield takeEvery(actions.loadUserBans.request, loadUserBansSaga);
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
   yield takeLatest(actions.loadRate.request, loadRate);
 }
 
-export default mainSaga;
+export default bansSaga;

@@ -26,7 +26,7 @@ const initialState: SharedStateType = {
 };
 
 const reducer = createReducer<SharedStateType, Action>(initialState)
-  .handleAction(actions.loadAdminKey.success, (state, action) =>
+  .handleAction(actions.loadPublicKey.success, (state, action) =>
     produce(state, nextState => {
       nextState.adminKey = action.payload.admin_key;
     }),
