@@ -4,10 +4,13 @@ import { Flex, Text } from "theme-ui";
 import Button from '../../../../components/Button';
 import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
 import Heart from '../../../../assets/icons/heart.svg';
-import { createFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
+import HeartActive from '../../../../assets/icons/heart-active.svg';
+import { createFavoriteBans, deleteFavoriteBansByName } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
 import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
-import { DomainPresenter } from '@app/library/bans/DomainPresenter';
+import { DomainPresenter, DomainPresenterType } from '@app/library/bans/DomainPresenter';
+import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
+import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
 
 
 const Container = styled(Flex)`
@@ -17,7 +20,8 @@ align-items: center;
 
 interface SearchResultProps extends SearchResultStyleProps {
   isValid: boolean;
-  domain?: DomainPresenter;
+  domain?: DomainPresenterType;
+  search: string;
 }
   const getAvailableStatusText = (isValid: boolean, isAvailable: boolean) => {
     if (!isValid) {
@@ -32,14 +36,17 @@ interface SearchResultProps extends SearchResultStyleProps {
   }
 
 export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
-  const { isValid, isAvailable, domain } = props;
+  const { isValid, isAvailable, domain, search } = props;
+  const isBansLove = useIsBansFavorite(search);
+  const heartHandler = useHandleHeartAction(isBansLove, search);
+
   return (
     <Container>
     <Flex sx={{ mr: 4 }}>
       {
-        /* isAvailable && */ domain && (
-          <Button variant='icon' pallete='opacity' onClick={()=> createFavoriteBans(userDatabase, new FavoriteBans(domain.name))}>
-              <Heart />
+        domain && (
+          <Button variant='icon' pallete='opacity' onClick={heartHandler}>
+            {!!isBansLove && isBansLove.length ? <HeartActive/> : <Heart />}
           </Button>
         )
       }
