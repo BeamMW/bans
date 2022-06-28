@@ -4,6 +4,10 @@ import { Flex, Text } from "theme-ui";
 import Button from '../../../../components/Button';
 import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
 import Heart from '../../../../assets/icons/heart.svg';
+import { createFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
+import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
+import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
+import { DomainPresenter } from '@app/library/bans/DomainPresenter';
 import RedHeart from '../../../../assets/icons/red-heart.svg';
 
 
@@ -14,6 +18,7 @@ align-items: center;
 
 interface SearchResultProps extends SearchResultStyleProps {
   isValid: boolean;
+  domain?: DomainPresenter;
 }
   const getAvailableStatusText = (isValid: boolean, isAvailable: boolean) => {
     if (!isValid) {
@@ -28,15 +33,15 @@ interface SearchResultProps extends SearchResultStyleProps {
   }
 
 export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
-  const { isValid, isAvailable } = props;
+  const { isValid, isAvailable, domain } = props;
   const [liked, setLiked] = React.useState(false);
   const toggleLike = () => setLiked(!liked);
   return (
     <Container>
     <Flex sx={{ mr: 4 }}>
       {
-        isAvailable && isValid && (
-          <Button variant='icon' pallete='opacity' onClick={toggleLike}>
+        /* isAvailable && */ domain && (
+          <Button variant='icon' pallete='opacity' onClick={()=> { createFavoriteBans(userDatabase, new FavoriteBans(domain.name)), toggleLike() }}>
               { liked ? <RedHeart/ > : <Heart /> }
           </Button>
         )

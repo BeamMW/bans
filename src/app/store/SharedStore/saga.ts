@@ -1,3 +1,4 @@
+import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 import {
   call,
   take,
@@ -10,8 +11,6 @@ import {
 } from 'redux-saga/effects';
 
 import { actions } from './';
-
-import { LoadAdminKey } from '@app/core/api';
 
 function* sharedSaga() {
   yield takeEvery(actions.setTransactionsRequest, function* (action): Generator {
@@ -28,12 +27,14 @@ function* sharedSaga() {
     }
   });
 
-  yield takeLatest(actions.loadAdminKey.request, function* (action): Generator {
+  yield takeLatest(actions.loadPublicKey.request, function* (action): Generator {
+    if(!getGlobalApiProviderValue) yield null;
+    
     try {
-      const result = yield call(LoadAdminKey);
-      yield put(actions.loadAdminKey.success(result));
+      const result = yield call(getGlobalApiProviderValue.userMyKey);
+      yield put(actions.loadPublicKey.success(result));
     } catch (e) {
-      yield put(actions.loadAdminKey.failure(e));
+      yield put(actions.loadPublicKey.failure(e));
     }
   });
 }

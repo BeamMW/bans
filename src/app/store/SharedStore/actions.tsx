@@ -1,12 +1,11 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
 import { SharedActionTypes } from './constants';
-import { SystemState, Transaction } from '@core/types';
-import { TxsEvent } from '../../core/types';
+import {Transaction, TxsEvent} from "@library/base/transaction/types" 
 
 export const navigate = createAction(SharedActionTypes.NAVIGATE)<string>();
 export const setError = createAction(SharedActionTypes.SET_ERROR)<string | null>();
 
-export const setSystemState = createAction('@@SHARED/SET_SYSTEM_STATE')<SystemState>();
+export const setSystemState = createAction('@@SHARED/SET_SYSTEM_STATE')<any/* SystemState */>();
 export const setDappVersion = createAction('@@DAPP_VERSION/SET_DAPP_VERSION')<any>();
 export const setIsLoaded = createAction('@@SHARED/SET_IS_LOADED')<boolean>();
 
@@ -16,8 +15,8 @@ export const setTransactionsSuccess = createAction('@@TRANSACTIONS/SET_TRANSACTI
 export const setTransactionsFailure = createAction('@@TRANSACTIONS/SET_TRANSACTIONS_FAILURE')<any>();
 
 
-export const loadAdminKey = createAsyncAction(
-    '@@SHARED/LOAD_ADMIN_KEY',
-    '@@SHARED/LOAD_ADMIN_KEY_SUCCESS',
-    '@@SHARED/LOAD_ADMIN_KEY_FAILURE',
+export const loadPublicKey = createAsyncAction(
+    '@@SHARED/LOAD_PUBLIC_KEY',
+    '@@SHARED/LOAD_PUBLIC_KEY_SUCCESS',
+    '@@SHARED/LOAD_PUBLIC_KEY_FAILURE',
 )<void, any, any>();

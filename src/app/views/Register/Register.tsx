@@ -60,14 +60,15 @@ export const Register: React.FC = () => {
           <Divider sx={{ my: 5 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod}/>
           <RegistrationPrice/>
-          <Flex sx={{ flexDirection: 'column' }}>
-            <Text variant="panelHeader">
+          <Flex sx={{ flexDirection: 'column'}}>
+            <Text variant="panelHeader" sx={{mb:30}}>
               Current domain will be available from TBD till TBD.
             </Text>
             <RegisterAction
               transactionId={"DOMAIN_REGISTER"}
-              change={period > 1 ? "registerDomainWithSetPeriod" : "registerDomain"}
+              change={"registerDomain"}
               period={period}
+              domain={foundDomain}
             >
               <Plus />
               register

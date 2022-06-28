@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { AppState } from '@app/types/interface';
+//import { AppState } from '@app/types/interface';
 
-const selectShared = (state: AppState) => state.shared;
+const selectShared = (state: any/* AppState */) => state.shared;
 
 export const selectSharedAppParams = () => createSelector(selectShared, (state) => state);
 

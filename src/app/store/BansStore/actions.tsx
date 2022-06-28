@@ -13,7 +13,7 @@ export const loadAppParams = createAsyncAction(
     '@@MAIN/LOAD_PARAMS',
     '@@MAIN/LOAD_PARAMS_SUCCESS',
     '@@MAIN/LOAD_PARAMS_FAILURE',
-)<ArrayBuffer | void, any/*  */, any>();
+)<void, any, any>();
 
 export const loadContractInfo = createAsyncAction(
     '@@MAIN/LOAD_CONTRACT_INFO',
@@ -21,10 +21,10 @@ export const loadContractInfo = createAsyncAction(
     '@@MAIN/LOAD_CONTRACT_INFO_FAILURE',
 )<void, number, any>();
 
-export const loadOpenTroves = createAsyncAction(
-    '@@MAIN/LOAD_OPEN_TROVES',
-    '@@MAIN/LOAD_OPEN_TROVES_SUCCESS',
-    '@@MAIN/LOAD_OPEN_TROVES_FAILURE',
+export const loadUserBans = createAsyncAction(
+    '@@MAIN/LOAD_USER_BANS',
+    '@@MAIN/LOAD_USER_BANS_SUCCESS',
+    '@@MAIN/LOAD_USER_BANS_FAILURE',
 )<void, any, any>();
 
 export const loadRate = createAsyncAction(

@@ -3,14 +3,14 @@ import Utils from '../library/base/utils';
 import UtilsShader from '../library/base/shader/utilsShader';
 
 //import store from "index";
-//import { setSystemState } from '@app/store/SharedStore//actions';
+import { setSystemState } from '@app/store/SharedStore//actions';
 //import { loadAppParams, loadRate } from '@app/store/BansStore/actions';
-//import { selectIsLoaded } from '@app/store/SharedStore/selectors';
+import { selectIsLoaded } from '@app/store/SharedStore/selectors';
 //import { selectRate } from '@app/store/BansStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 //import { setDappVersion, loadAdminKey } from '@app/store/SharedStore/actions';
 import { isObject } from "formik";
-//import { setTransactionsRequest } from '@app/store/SharedStore/actions';
+import { setTransactionsRequest } from '@app/store/SharedStore/actions';
 import { Loader } from './BeamLoader';
 import Window from "./Window";
 import ShaderApi, { ShaderStore } from "../library/base/api/ShaderApi";
@@ -19,6 +19,7 @@ import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/Wa
 import store from "index";
 import { loadAppParams } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
+import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
 
 
 const shadersData = Array.from([
@@ -32,15 +33,17 @@ const walletEventhandler = ({ walletEventPayload }) => {
     try {
       switch (walletEventPayload.id) {
         case 'ev_system_state':
-          //store.dispatch(setSystemState(walletEventPayload.result));
-          //store.dispatch(loadAppParams.request(null));
+          store.dispatch(setSystemState(walletEventPayload.result));
+          store.dispatch(loadAppParams.request(null));
 
           break;
 
-        /* case 'ev_txs_changed':
+        case 'ev_txs_changed':
           isObject(walletEventPayload.result) &&
             walletEventPayload.result &&
-            store.dispatch(setTransactionsRequest(walletEventPayload.result.txs)); */
+            store.dispatch(setTransactionsRequest(walletEventPayload.result.txs));
+          
+          break;
 
         default:
           break;
@@ -61,8 +64,8 @@ export const WalletApiConnector = ({ children }) => {
   const [walletShaders, setWalletShaders] = useState<Array<UtilsShader>>(null);
 
   //const isLoaded = useSelector(selectIsLoaded());
-  //const rate = useSelector(selectRate());
   const isLoaded = true;
+  //const rate = useSelector(selectRate());
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -81,7 +84,10 @@ export const WalletApiConnector = ({ children }) => {
             err ? (() => { throw new err })() : setIsAuthorized(true);
 
             const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
-
+            
+            //open and check if exists user-defined-database
+            userDatabase.openDatabase();
+            
             /**
              * Put shadersData in ShaderStore
              */
@@ -93,7 +99,6 @@ export const WalletApiConnector = ({ children }) => {
              * Duplicate put shaders data in wallet provider
              */
             setWalletShaders(shadersData)
-
 
             Utils.callApi("ev_subunsub", {
               /* "ev_sync_progress": true, */

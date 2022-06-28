@@ -5,34 +5,37 @@ import { toGroths } from '@app/library/base/appUtils';
 import Plus from '../../assets/icons/blue-plus.svg';
 import Button from "../../components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 
 type TroveActionProps = {
     transactionId: string;
     change: any;
     period: number;
+    domain: DomainPresenterType;
 };
 
 export const RegisterAction: React.FC<TroveActionProps> = ({
     children,
     transactionId,
     change,
-    period
+    period,
+    domain
 }) => {
 
     const { registeredMethods } = useBansApi();
-    const { foundDomain : {name: name} } = useMainView();
+    //const { foundDomain : {name: name} } = useMainView();
 
     const apiCall = (change) => {
         switch (change) {
             case "registerDomain":
                 {
-                    return () => registeredMethods.userDomainRegister({ name: name });
+                    return () => registeredMethods.userDomainRegister({ name: domain.name, nPeriods: period });
                 }
 
-            case "registerDomainWithSetPeriod":
+            case "renewDomainExpiration":
                 {
                     //registeredMethods.userDomainExtend({ name: search })
-                    return () => registeredMethods.userDomainRegister({ name: name });
+                    return () => registeredMethods.userDomainExtend({ name: domain.name, nPeriods: period });
                 }
         }
 
@@ -44,7 +47,7 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
     );
 
     return (
-        <Button pallete="green" style={{ marginTop: '32px' }} onClick={sendTransaction}>
+        <Button pallete="green" onClick={sendTransaction}>
             {children}
         </Button>
     );

@@ -1,7 +1,7 @@
 import { Modal } from "@app/components/Modals/Modal";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Divider } from "theme-ui";
 import { RegistrationPeriod } from './../../components/RegistrationPeriod/RegistrationPeriod';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
@@ -9,6 +9,10 @@ import Button from "@app/components/Button";
 import Renew from '../../assets/icons/renew-blue.svg';
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { RegisterAction } from "../Register/RegisterAction";
+import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import { LoadingOverlay } from "@app/components/LoadingOverlay";
 
 interface RenewModalProps {
   isModalShown: boolean;
@@ -18,26 +22,42 @@ interface RenewModalProps {
 
 export const RenewModal: React.FC<RenewModalProps> = ({ isModalShown, closeModal, selectedDomain }) => {
 
-  const [period, setPeriod] = useState<number>(1);
+  const TRANSACTION_ID = "DOMAIN_EXTENDED";
+  const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
 
-  const periodIncrease = useCallback(() => period < 5 && setPeriod(period + 1), []);
-  const periodDecrease = useCallback(() => period > 1 && setPeriod(period - 1), [])
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
+
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      return () => closeModal();
+    }
+
+  }, [transactionState]);
+
 
   return (
     <Modal isShown={isModalShown} header="Renew subscription">
       <>
-      <RegistrationHeader search={selectedDomain.name} />
-      <Divider sx={{ my: 5 }} />
-      <RegistrationPeriod period={4} setPeriod={() => {}} periodDecrease={() => {}} />
-      <RegistrationPrice />
-      <ButtonContainer>
-          <CloseBtn toggle={closeModal}/>
-          <Button pallete="green">
-            <Renew/>
+        <RegistrationHeader search={selectedDomain.name} />
+        <Divider sx={{ my: 5 }} />
+        <RegistrationPeriod period={period} setPeriod={setPeriod} />
+        <RegistrationPrice />
+        <ButtonContainer>
+          <CloseBtn toggle={closeModal} />
+          <RegisterAction
+            transactionId={TRANSACTION_ID}
+            change={"renewDomainExpiration"}
+            period={period}
+            domain={selectedDomain}
+          >
+            <Renew />
             renew
-          </Button>
-      </ButtonContainer>
+          </RegisterAction>
+        </ButtonContainer>
+        {isTransactionPending && <LoadingOverlay />}
+
       </>
-    </Modal> 
+    </Modal>
   )
 }

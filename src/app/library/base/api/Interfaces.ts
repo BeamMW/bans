@@ -35,3 +35,7 @@ export interface ShaderStore {
     addShaderToStore: void,
     retriveShader:  UtilsShader | undefined,
 }
+
+export interface IShaderStore {
+    retriveShader(cid: string): UtilsShader | undefined;
+}

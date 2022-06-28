@@ -6,27 +6,19 @@ import { Decimal } from '@app/library/base/Decimal';
 type Action = ActionType<typeof actions>;
 
 const initialState = {
-    assetPrice: (Decimal.ZERO),
-    numberOfTroves: 0,
     fees: (Decimal.ZERO),
-
     appParams: {
-      tcr: Decimal.ZERO,
-      tvl: Decimal.ZERO,
     },
     contract: {
       
     },
     //currentCurrency: "beam",
-    troves: [],
     total: Decimal.ZERO,
 
     is_moderator: false,
     public_key: '',
     contractHeight: 0,
     userView: false,
-    totalsView: {
-    },
     popupsState: {
     },
 };
@@ -51,13 +43,10 @@ const reducer = createReducer<any, Action>(
   )
   .handleAction(actions.loadAppParams.success, (state, action) =>
     produce(state, nextState => {
-      const {totals: {tok: deposit, col: collateral}} = action.payload;
-
-      nextState.total = new Trove(Decimal.from(collateral), Decimal.from(deposit));
       nextState.appParams = {...action.payload, tcr: Decimal.from(action.payload.tcr ? action.payload.tcr : 0)};
     }),
   )
-  .handleAction(actions.loadOpenTroves.success, (state, action) =>
+  .handleAction(actions.loadUserBans.success, (state, action) =>
     produce(state, nextState => {
       nextState.troves = action.payload;
     }),

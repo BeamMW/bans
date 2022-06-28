@@ -12,9 +12,9 @@ import createSagaMiddleware from 'redux-saga';
 import appSagas from './saga';
 import rootReducer from './reducer';
 
-/* const sagaMiddleware = createSagaMiddleware({
+const sagaMiddleware = createSagaMiddleware({
   context: {}
-}); */
+});
 let middleware: Array<Middleware>;
 // eslint-disable-next-line @typescript-eslint/ban-types
 let composer: Function;
@@ -51,13 +51,13 @@ if (process.env.NODE_ENV === 'development' && 0) {
     // eslint-disable-next-line no-console
     console.log('________________');
   };
-  //middleware = [sagaMiddleware, debuggerMiddleware];
+  middleware = [sagaMiddleware, debuggerMiddleware];
   composer = compose;
 } else {
-  //middleware = [sagaMiddleware];
+  middleware = [sagaMiddleware];
   composer = compose;
 }
-middleware = [];
+
 const composeEnhancers =
   (typeof window === 'object' &&
     (window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose))/*  ||
@@ -75,7 +75,7 @@ const enhancer = composeEnhancers(
 export default function configureStore() {
   const store = createStore(rootReducer(), undefined, enhancer);
 
-  //sagaMiddleware.run(appSagas);
+  sagaMiddleware.run(appSagas);
 
   // eslint-disable-next-line
   if ((module as any).hot) {

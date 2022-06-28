@@ -11,11 +11,11 @@ import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
 
 
 const Search: React.FC = () => {
-  const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
-  const [isValid, setIsValid] = useState(false);
-
   const { foundDomain, setFoundDomain } = useMainView();
   const { registeredMethods } = useBansApi();
+
+  const [isValid, setIsValid] = useState(false);
+  const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
 
   const searchValidator = useCallback((search) => {
     if (search.length < 3) return false;
@@ -42,13 +42,14 @@ const Search: React.FC = () => {
   }
 
   //@TODO: maybe refactor this logic into another
+  //when component re-render we check is foundedDomain object exists
   useEffect(() => {
     //if search already exists
     !!foundDomain && (
       setSearch(foundDomain.name),
       setIsValid(true)
     );
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!search.length) return;
