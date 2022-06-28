@@ -31,7 +31,7 @@ const getBansApi = () => {
   let bansApi;
 
   bansApi = !_.isEmpty(getGlobalApiProviderValue()) ? getGlobalApiProviderValue() : (() => {
-    const bansShader = ShaderApi.useShaderStore.retriveShader("6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4")
+    const bansShader = ShaderApi.useShaderStore.retriveShader("a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956")
     const bansApi = new ShaderApi(bansShader, methods);
 
     return bansApi.getRegisteredMethods();

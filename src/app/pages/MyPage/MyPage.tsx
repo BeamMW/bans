@@ -18,6 +18,7 @@ const MyPage = () => {
   const [myKey, setMyKey] = useState(null);
   const [domains, setDomains] = useState(null);
   const [active, setActive] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { registeredMethods } = useBansApi();
 
@@ -29,6 +30,8 @@ const MyPage = () => {
   }, [registeredMethods]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     active === 1 && myKey && registeredMethods.userView().then(response => {
       setDomains(response.domains.map(
         //for future logic
@@ -43,6 +46,7 @@ const MyPage = () => {
       ));
     });
 
+    setIsLoading(false);
   }, [myKey, active])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
@@ -59,7 +63,7 @@ const MyPage = () => {
             (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
         ) : <EmptyPage />
       }
-      {!domains && <LoadingOverlay />}
+      {isLoading && <LoadingOverlay />}
     </>
   );
 }

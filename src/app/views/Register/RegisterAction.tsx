@@ -31,12 +31,10 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
                 {
                     return () => registeredMethods.userDomainRegister({ name: domain.name, nPeriods: period });
                 }
-
             case "renewDomainExpiration":
                 {
-                    //registeredMethods.userDomainExtend({ name: search })
                     return () => registeredMethods.userDomainExtend({ name: domain.name, nPeriods: period });
-                }
+                }   
         }
 
     }
