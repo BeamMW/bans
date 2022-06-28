@@ -10,7 +10,7 @@ export const selectErrorMessage = () => createSelector(selectShared, (state) => 
 export const selectSystemState = () => createSelector(selectShared, (state) => state.systemState);
 export const selectIsLoaded = () => createSelector(selectShared, (state) => state.isLoaded);
 export const selectTransactions = () => createSelector(selectShared, (state) => state.transactions);
-export const selectAdminKey = () => createSelector(selectShared, (state) => state.adminKey);
+export const selectPublicKey = () => createSelector(selectShared, (state) => state.publicKey);
 export const selectTransactionById = () => createSelector(
     [
         selectShared,

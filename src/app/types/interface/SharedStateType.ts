@@ -6,5 +6,5 @@ export interface SharedStateType {
   transactions: /* Transaction[] */ any;
   isLoaded: boolean;
   dappVersion: any;
-  adminKey: string;
+  publicKey: string;
 }

@@ -63,10 +63,12 @@ export function* loadParamsSaga(
 
     store.dispatch(actions.loadContractInfo.request());
     store.dispatch(actions.loadUserBans.request());
+    store.dispatch(loadPublicKey.request());
 
-    if (state.shared.isLoaded) {
-      store.dispatch(loadPublicKey.request());
+    if (!state.shared.isLoaded) {
+      store.dispatch(setIsLoaded(true));
     }
+
   } catch (e) {
     console.log(e);
     yield put(actions.loadAppParams.failure(e));
