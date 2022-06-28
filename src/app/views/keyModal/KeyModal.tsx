@@ -5,6 +5,8 @@ import Copy from "../../assets/icons/copy.svg";
 import { Modal } from '../../components/Modals/Modal';  
 import { Container, Title, Content, Controls, CopyText } from './KeyModal.style';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
+import { useSelector } from 'react-redux';
+import { selectPublicKey } from '@app/store/SharedStore/selectors';
 
 interface KeyModalProps {
   isShown: boolean;
@@ -12,16 +14,15 @@ interface KeyModalProps {
   copyToClipboard: (pKey: string) => void;
 }
 const KeyModal:FC<KeyModalProps> = ({isShown, toggle, copyToClipboard}) => {
-  // const pKey = useSelector(selectPublicKey());
-  const pKey = 'test key';
+  const publicKey = useSelector(selectPublicKey())
 
   const handleConfirm: React.MouseEventHandler = async () => {
-    await copyToClipboard(pKey);
+    await copyToClipboard(publicKey);
     toggle();
   };
 
   const handleCopy = async () => {
-    await copyToClipboard(pKey);
+    await copyToClipboard(publicKey);
   }
 return (
   <>
@@ -29,7 +30,7 @@ return (
       <Container>
         <Title>Public Key</Title>
         <Content>
-          <span>bb0d9b3aaced20ffe24403519c9830324d2de0fb6742e5af09a8a04f9aad4bf240</span>
+          <span>{publicKey}</span>
           <Button variant='icon' pallete='transparent' onClick={handleCopy}>
             <Copy />
           </Button>

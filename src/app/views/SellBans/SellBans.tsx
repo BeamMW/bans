@@ -6,6 +6,8 @@ import Input from "@app/components/Input";
 import Beam from '../../assets/icons/beam.svg';
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { SellBtn } from './../../components/SellBtn/SellBtn';
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+
 interface SellBansModalProps {
   isShown: boolean;
   toggle: () => void;
@@ -15,24 +17,24 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle })
   const [activeItem, setActiveItem] = React.useState('');
   const testItems = [{
     id:'1',
-    name: 'testName'
+    name: 'testName1'
   },
   {
     id:'2',
-    name: 'testName'
+    name: 'testName2'
   },
   {
     id:'3',
-    name: 'testName'
+    name: 'testName3'
   },
   {
     id:'4',
-    name: 'testName'
+    name: 'testName4'
   }];
   return (
     <Modal isShown={isShown} header="Sell Bans">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
-        <Select items={testItems} setActiveItem={setActiveItem} />
+        <Select items={testItems} setActiveItem={setActiveItem} activeItem={activeItem}/>
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='sell'
@@ -47,7 +49,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle })
         <Input
           variant='sell'
           pallete='white'
-          label='Domain'
+          label="Buyer's Public Key"
           />
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>

@@ -8,17 +8,18 @@ interface items {
 }
 interface SelectProps {
   items: items[];
+  activeItem: string;
   setActiveItem: (id: string) => void;
 }
-export const Select: React.FC<SelectProps> = ({ items, setActiveItem }) => {
+export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem }) => {
   const [show, setShow] = React.useState(false);
 
   return (
     <div>
-        <Label>Buyer’s Public Key</Label>
+        <Label>Domain</Label>
     <CustomSelect>
       <div className="selected" onClick={() => setShow(true)}>
-        Some Value
+        {activeItem ? activeItem : items[0].name}
         <ArrowDown className="arrow"/>
       </div>
       {
@@ -27,7 +28,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem }) => {
             {
               items.map((item) => {
                 return (
-                  <div key={item.id} onClick={() => setActiveItem(item.id)}>
+                  <div key={item.id} onClick={() => { setActiveItem(item.name); setShow(false) }}>
                   <span>{item.name}</span>
                 </div>
                 )

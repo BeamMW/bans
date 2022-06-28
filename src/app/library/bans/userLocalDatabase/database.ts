@@ -45,7 +45,6 @@ export class Database extends Dexie {
     async clearAllTables(database) {
         try {
             await Promise.all([
-                database.userWallet.clear(),
                 database.favoriteBans.clear()
             ]);
         } catch (err) {
@@ -78,7 +77,7 @@ export class UserBansDatabase extends Database implements IUserDatabase {
 }
 
 class InitializeDatabase {
-    protected database: Database;
+    protected database: UserBansDatabase;
 
     constructor(databaseName:string, schema: { [tableName: string]: string; }) {
         this.database = new UserBansDatabase(databaseName);
@@ -86,7 +85,7 @@ class InitializeDatabase {
         this.database.version(1).stores(schema);
     }
 
-    get userDatabase(): Database{
+    get userDatabase(): UserBansDatabase{
         return this.database;
     }
 }

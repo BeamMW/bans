@@ -19,7 +19,7 @@ export const BansApiProvider: React.FC = props => {
   const {walletShaders} = useWalletApiConnector();
 
   useEffect(() => {
-    const bansShader = walletShaders.filter((shader) => shader.cid === "6f0e4ccfff83fceef99a7eb07b79d71f5994f46cae94d87d973afc4712d8fbb4").pop();
+    const bansShader = walletShaders.filter((shader) => shader.cid === "a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956").pop();
     const api = new ShaderApi(bansShader, methods);
 
     setRegisteredMethods(api.getRegisteredMethods());
