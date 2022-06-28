@@ -8,9 +8,10 @@ import HeartActive from '../../../../assets/icons/heart-active.svg';
 import { createFavoriteBans, deleteFavoriteBansByName } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
 import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
-import { DomainPresenter, DomainPresenterType } from '@app/library/bans/DomainPresenter';
+import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
+import RedHeart from '../../../../assets/icons/red-heart.svg';
 
 
 const Container = styled(Flex)`
@@ -40,6 +41,9 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const isBansLove = useIsBansFavorite(search);
   const heartHandler = useHandleHeartAction(isBansLove, search);
 
+  const [liked, setLiked] = React.useState(false);
+  const toggleLike = () => setLiked(!liked);
+  
   return (
     <Container>
     <Flex sx={{ mr: 4 }}>

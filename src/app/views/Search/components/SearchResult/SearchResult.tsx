@@ -25,8 +25,8 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
       {search && (
         <>
           <Paragraph variant="header">Results</Paragraph>
-          <SplitContainer leftWeight={2} rightWeight={1} handleClick={proceedWithDomainHandler}>
-            <SearchResultLeft value={search + (search ? ".beam" : "")} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid} />
+          <SplitContainer leftWeight={3} rightWeight={1}>
+            <SearchResultLeft value={search + (search ? ".beam" : "")} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid} handleClick={proceedWithDomainHandler}/>
             <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
           </SplitContainer>
           <Flex>
