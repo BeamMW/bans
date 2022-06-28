@@ -20,9 +20,9 @@ export class Database extends Dexie {
     /**
      * Delete the entire database
      */
-    async deleteDatabase(database) {
+    async deleteDatabase() {
         try {
-            await database.delete()
+            await this.delete()
         } catch (err) {
             console.error;
         }
@@ -31,9 +31,9 @@ export class Database extends Dexie {
     /**
      * Open a  database
      */
-    async openDatabase(database) {
+    async openDatabase() {
         try {
-            await database.open()
+            await this.open()
         } catch (err) {
             console.error
         }
@@ -92,6 +92,8 @@ class InitializeDatabase {
 }
 
 
-export const database = new InitializeDatabase('user-favorite-bans', {
+const databaseInstance = new InitializeDatabase('user-favorite-bans', {
     favoriteBans: '&gid, bansName',
 });
+
+export const userDatabase = databaseInstance.userDatabase;

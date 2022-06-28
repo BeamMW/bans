@@ -19,9 +19,7 @@ import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/Wa
 import store from "index";
 import { loadAppParams } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
-import { database } from "@app/library/bans/userLocalDatabase/database";
-import { createFavoriteBans, deleteDatabase, openDatabase } from "@app/library/bans/userLocalDatabase/dao/userFavorites";
-import { FavoriteBans } from "@app/library/bans/userLocalDatabase/domainObject";
+import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
 
 
 const shadersData = Array.from([
@@ -88,7 +86,7 @@ export const WalletApiConnector = ({ children }) => {
             const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
             
             //open and check if exists user-defined-database
-            database.userDatabase.openDatabase(database);
+            userDatabase.openDatabase();
             
             /**
              * Put shadersData in ShaderStore

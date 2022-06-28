@@ -19,8 +19,6 @@ const initialState = {
     public_key: '',
     contractHeight: 0,
     userView: false,
-    totalsView: {
-    },
     popupsState: {
     },
 };

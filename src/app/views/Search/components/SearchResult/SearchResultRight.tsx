@@ -5,7 +5,7 @@ import Button from '../../../../components/Button';
 import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
 import Heart from '../../../../assets/icons/heart.svg';
 import { createFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
-import { database } from '@app/library/bans/userLocalDatabase/database';
+import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
 import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
 import { DomainPresenter } from '@app/library/bans/DomainPresenter';
 
@@ -38,7 +38,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
     <Flex sx={{ mr: 4 }}>
       {
         /* isAvailable && */ domain && (
-          <Button variant='icon' pallete='opacity' onClick={()=> createFavoriteBans(database, new FavoriteBans(domain.name))}>
+          <Button variant='icon' pallete='opacity' onClick={()=> createFavoriteBans(userDatabase, new FavoriteBans(domain.name))}>
               <Heart />
           </Button>
         )
