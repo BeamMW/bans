@@ -3,31 +3,15 @@ import ArrowDown from '../../assets/icons/arrow-down.svg';
 import { Label, CustomSelect } from './Select.style';
 
 interface items {
-  id: number,
+  id: string,
   name: string;
 }
 interface SelectProps {
   items: items[];
-  setActiveItem: () => void;
+  setActiveItem: (id: string) => void;
 }
 export const Select: React.FC<SelectProps> = ({ items, setActiveItem }) => {
   const [show, setShow] = React.useState(false);
-  const testItems = [{
-    id:1,
-    name: 'testName'
-  },
-  {
-    id:2,
-    name: 'testName'
-  },
-  {
-    id:3,
-    name: 'testName'
-  },
-  {
-    id:4,
-    name: 'testName'
-  }];
 
   return (
     <div>
@@ -41,7 +25,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem }) => {
         show && (
           <div className="items">
             {
-              testItems.map((item) => {
+              items.map((item) => {
                 return (
                   <div key={item.id} onClick={() => setActiveItem(item.id)}>
                   <span>{item.name}</span>
