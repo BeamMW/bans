@@ -4,6 +4,7 @@ import { Flex, Text } from "theme-ui";
 import Button from '../../../../components/Button';
 import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
 import Heart from '../../../../assets/icons/heart.svg';
+import RedHeart from '../../../../assets/icons/red-heart.svg';
 
 
 const Container = styled(Flex)`
@@ -28,13 +29,15 @@ interface SearchResultProps extends SearchResultStyleProps {
 
 export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const { isValid, isAvailable } = props;
+  const [liked, setLiked] = React.useState(false);
+  const toggleLike = () => setLiked(!liked);
   return (
     <Container>
     <Flex sx={{ mr: 4 }}>
       {
-        isAvailable && (
-          <Button variant='icon' pallete='opacity'>
-              <Heart />
+        isAvailable && isValid && (
+          <Button variant='icon' pallete='opacity' onClick={toggleLike}>
+              { liked ? <RedHeart/ > : <Heart /> }
           </Button>
         )
       }
