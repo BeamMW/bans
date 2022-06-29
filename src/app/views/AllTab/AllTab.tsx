@@ -56,8 +56,8 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
           </PopupItem>
         </Popup>
       </Container>
-      <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />
-      <SellBansModal domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />
+      {domains && <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />}
+      {domains && <SellBansModal domain={domain} domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />}
     </>
   )
 }
@@ -68,7 +68,7 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
   const rows = 
   domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
-        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.expiresAt}`} />
+        <LeftSide domain={domain} />
         <RightSide copyToClipboard={copyToClipboard} domains={domains} domain={domain}/>
       </SplitContainer>
   ));

@@ -1,24 +1,23 @@
 import React from "react";
-import { Decimal } from "@app/library/base/Decimal";
 import { useTransactionFunction } from "@app/library/transaction-react/useTransactionFunction";
 import { toGroths } from '@app/library/base/appUtils';
-import Plus from '../../assets/icons/blue-plus.svg';
 import Button from "../../components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { GROTHS_IN_BEAM } from "@app/constants";
 
-type RegisterActionProps = {
+type SellBansActionProps = {
     transactionId: string;
     change: any;
-    period: number;
+    amount: number;
     domain: DomainPresenterType;
 };
 
-export const RegisterAction: React.FC<RegisterActionProps> = ({
+export const SellBansAction: React.FC<SellBansActionProps> = ({
     children,
     transactionId,
     change,
-    period,
+    amount,
     domain
 }) => {
 
@@ -27,20 +26,11 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
 
     const apiCall = (change) => {
         switch (change) {
-            case "registerDomain":
+            case "sellBans":
                 {
-                    return () => registeredMethods.userDomainRegister({ name: domain.name, nPeriods: period });
-                }
-            case "renewDomainExpiration":
-                {
-                    return () => registeredMethods.userDomainExtend({ name: domain.name, nPeriods: period });
-                }
-            case "buyDomain":
-                {
-                    return () => registeredMethods.userDomainBuy({ name: domain.name });
+                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: amount * GROTHS_IN_BEAM });
                 }
         }
-
     }
 
     const [sendTransaction] = useTransactionFunction(

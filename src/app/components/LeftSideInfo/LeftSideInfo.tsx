@@ -1,3 +1,5 @@
+import { GROTHS_IN_BEAM } from "@app/constants";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import styled from 'styled-components';
 import { Flex, Text } from "theme-ui";
@@ -17,16 +19,17 @@ export const SubText = styled(Text)<SubTextProps>`
   white-space: nowrap;
 `
 interface LeftSideProps {
-  name: string;
-  expiresAt: string;
-  isExpired: boolean;
+  domain: DomainPresenterType;
 };
 
-export const LeftSide: React.FC<LeftSideProps> = ({ name, expiresAt,isExpired }) => {
+export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
+  const {name, expiresAt,isExpired, isOnSale, price} = domain;
+
   return (
     <Flex sx={{ variant: 'layout.card' }}>
-      <Text>{name}.beam</Text>
-      <SubText isexpired={isExpired.toString()}>{expiresAt}</SubText>
+      <Text>{name}.beam  {isOnSale ? `---  On Sale for ${price.amount / GROTHS_IN_BEAM}` : ""}</Text>
+
+      <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText>
     </Flex>
   )
 }

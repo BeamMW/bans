@@ -34,13 +34,14 @@ const tillDate = (foundDomain, period) => useMemo(() => {
 }, [foundDomain, period])
 
 export const Register: React.FC = () => {
-  const TRANSACTION_ID = "DOMAIN_REGISTER";
+  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
+
+  const TRANSACTION_ID = foundDomain.isOnSale ? "DOMAIN_BUYING" : "DOMAIN_REGISTER";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
 
   const [period, setPeriod] = useState<number>(1);
-  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
@@ -80,7 +81,7 @@ export const Register: React.FC = () => {
               Current domain will be available from {now} till {till}.
             </Text>
             <RegisterAction
-              transactionId={"DOMAIN_REGISTER"}
+              transactionId={TRANSACTION_ID}
               change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
               period={period}
               domain={foundDomain}
