@@ -27,4 +27,5 @@ export const textStyles = ({ isAvailable, isValid }: SearchResultStyleProps): Th
 
 export const containerStyles = ({ isAvailable }: SearchResultStyleProps): ThemeUICSSObject => ({
   flexDirection: 'column',
+  padding: '30px 0px'
 });
