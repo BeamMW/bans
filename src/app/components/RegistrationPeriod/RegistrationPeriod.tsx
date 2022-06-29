@@ -17,7 +17,7 @@ const iconStyleShade = {...iconStyle, ...{opacity:0.5}}
 export const RegistrationPeriod: React.FC<PeriodProps> = ({period, setPeriod}) => {
 
 
-  const periodIncrease = useCallback(() => period < 5 && setPeriod(period + 1), [period]);
+  const periodIncrease = useCallback(() => period < 50 && setPeriod(period + 1), [period]);
   const periodDecrease = useCallback(() => period > 1 && setPeriod(period - 1), [period]);
 
 

@@ -32,10 +32,10 @@ export const MainViewProvider: React.FC = props => {
     setView(nextView);
   }, []);
 
-  const setFoundDomain = (rawData, currentStateTimestamp, publicKey) => {
+  const setFoundDomain = (rawData, currentStateTimestamp, currentStateHeight, publicKey) => {
     //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
     _setFoundDomain(
-      !!rawData ? getDomainPresentedData(rawData, currentStateTimestamp, publicKey) : null
+      !!rawData ? getDomainPresentedData(rawData, currentStateTimestamp, currentStateHeight, publicKey) : null
     )
   };
 

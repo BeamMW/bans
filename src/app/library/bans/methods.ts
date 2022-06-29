@@ -56,6 +56,12 @@ const methods: Array<IMethod<ShaderActions>> = [
     },
     {
         role: "user",
+        action: "domain_buy",
+        requiredParams: ["name"],
+        type: "writable"
+    },
+    {
+        role: "user",
         action: "receive",
         requiredParams: ["pkOwner"],
         type: "writable"

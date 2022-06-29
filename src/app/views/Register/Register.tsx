@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Flex, Text, Divider, Box } from 'theme-ui';
 import styled from "styled-components";
 import Plus from '../../assets/icons/blue-plus.svg';
@@ -23,6 +23,16 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+
+const tillDate = (foundDomain, period) => useMemo(() => {
+  if(foundDomain.expiresAt) return foundDomain.expiresAt;
+
+  const current = new Date();
+  current.setFullYear(current.getFullYear() + period);
+  return current.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+
+}, [foundDomain, period])
+
 export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
@@ -35,6 +45,11 @@ export const Register: React.FC = () => {
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
   const {name: domainName} = foundDomain;
+
+  const currentTime = new Date();
+  const now = (currentTime.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}));
+
+  const till = tillDate(foundDomain, period);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
@@ -58,20 +73,20 @@ export const Register: React.FC = () => {
         <Box>
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 5 }} />
-          <RegistrationPeriod period={period} setPeriod={setPeriod}/>
-          <RegistrationPrice/>
+          {!foundDomain.isOnSale ? <RegistrationPeriod period={period} setPeriod={setPeriod}/> : <></>}
+          <RegistrationPrice isOnSale={foundDomain.isOnSale} price={foundDomain.price} period={period} />
           <Flex sx={{ flexDirection: 'column'}}>
             <Text variant="panelHeader" sx={{mb:30}}>
-              Current domain will be available from TBD till TBD.
+              Current domain will be available from {now} till {till}.
             </Text>
             <RegisterAction
               transactionId={"DOMAIN_REGISTER"}
-              change={"registerDomain"}
+              change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
               period={period}
               domain={foundDomain}
             >
               <Plus />
-              register
+              {foundDomain.isOnSale ? "buy" : "register"}
             </RegisterAction>
           </Flex>
         </Box>

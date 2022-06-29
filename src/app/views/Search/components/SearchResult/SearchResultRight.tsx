@@ -24,15 +24,18 @@ interface SearchResultProps extends SearchResultStyleProps {
   domain?: DomainPresenterType;
   search: string;
 }
-  const getAvailableStatusText = (isValid: boolean, isAvailable: boolean) => {
+  const getAvailableStatusText = (isValid: boolean, isAvailable: boolean, isOnSale: boolean) => {
     if (!isValid) {
       return "invalid domain";
     }
-    if(!isAvailable) {
+    if(!isAvailable && !isOnSale) {
       return "not available";
     }
-    if(isAvailable) {
+    if(isAvailable && !isOnSale) {
       return "available";
+    }
+    if(isAvailable && isOnSale) {
+      return "on sale";
     }
   }
 
@@ -41,6 +44,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const isBansLove = useIsBansFavorite(search);
   const heartHandler = useHandleHeartAction(isBansLove, search);
   const isYourOwn = domain && domain.isYourOwn;
+  const isOnSale =  domain && domain.isOnSale;
 
   const [liked, setLiked] = React.useState(false);
   const toggleLike = () => setLiked(!liked);
@@ -57,8 +61,8 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
       }
     </Flex>
     <Flex>
-      <Text sx={isYourOwn ? {color: "#00F6D2"} : textStyles(props)}>
-      {isYourOwn ? "your domain" : getAvailableStatusText(isValid, isAvailable)}
+      <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2"} : textStyles(props)}>
+      {isYourOwn ? "your domain" : getAvailableStatusText(isValid, isAvailable, isOnSale)}
       </Text>
     </Flex>
   </Container>

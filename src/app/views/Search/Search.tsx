@@ -20,7 +20,10 @@ const Search: React.FC = () => {
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
 
   const publicKey = useSelector(selectPublicKey());
-  const {current_state_timestamp: currentStateTimestamp} = useSelector(selectSystemState());
+  const {
+    current_height: currentStateHeight,
+    current_state_timestamp: currentStateTimestamp
+  } = useSelector(selectSystemState());
 
   const searchValidator = useCallback((search) => {
     if (search.length < 3) return false;
@@ -28,7 +31,7 @@ const Search: React.FC = () => {
     return true;
   }, []);
 
-  const fetchDomain = async (search) => {
+  const fetchDomain = async (search, currentStateTimestamp, currentStateHeight) => {
 
     if (!isValid) {
       setFoundDomain(null)
@@ -41,11 +44,17 @@ const Search: React.FC = () => {
       return response.error /* && setIsValid(true) */;
     }
 
-    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain({ ...response, ...{ searchName: search } }, currentStateTimestamp, publicKey);
+    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain(
+      { ...response, ...{ searchName: search } },
+      currentStateTimestamp,
+      currentStateHeight,
+      publicKey
+    );
 
     Object.keys(response).length === 0 && setFoundDomain(
-      { searchName: search, isAvailable: true }, 
-      currentStateTimestamp, 
+      { searchName: search, isAvailable: true },
+      currentStateTimestamp,
+      currentStateHeight,
       publicKey
     );
 
@@ -64,11 +73,11 @@ const Search: React.FC = () => {
   useEffect(() => {
     if (!search.length) return;
 
-    fetchDomain(search).catch((error) => {
+    fetchDomain(search, currentStateTimestamp, currentStateHeight).catch((error) => {
       setIsValid(false);
       console.error
     });
-  }, [search]);
+  }, [search, currentStateTimestamp, currentStateHeight]);
 
   const handleChange = (e) => {
     searchValidator(e.target.value) ? setIsValid(true) : setIsValid(false);

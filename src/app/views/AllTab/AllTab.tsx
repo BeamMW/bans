@@ -17,9 +17,9 @@ import { SellBansModal } from './../SellBans/SellBans';
 interface RightSideProps {
   copyToClipboard: (value: string) => void;
   domain: DomainPresenterType;
+  domains: any;
 }
-const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain }) => {
-  let timeout: ReturnType<typeof setTimeout>;
+const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains }) => {
   const [showPopup, setShowPopup] = React.useState(false);
   const [showSellModal, setShowSellModal] = React.useState(false);
   const { isShown, toggle } = useModal();
@@ -57,7 +57,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain }) => {
         </Popup>
       </Container>
       <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />
-      <SellBansModal toggle={toggleShowSellModal} isShown={showSellModal} />
+      <SellBansModal domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />
     </>
   )
 }
@@ -68,8 +68,8 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
   const rows = 
   domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
-        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.expireAt}`} />
-        <RightSide copyToClipboard={copyToClipboard} domain={domain}/>
+        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.expiresAt}`} />
+        <RightSide copyToClipboard={copyToClipboard} domains={domains} domain={domain}/>
       </SplitContainer>
   ));
 

@@ -7,4 +7,5 @@ export type ShaderActions =
     "pay" |
     "domain_extend" |
     "domain_set_owner" |
+    "domain_buy" |
     "receive";

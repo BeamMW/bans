@@ -10,6 +10,8 @@ import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import useGetFavoritesDomains from '@app/hooks/useGetFavoritesDomains';
 import { FavoriteTab } from '@app/views/FavoriteTab';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
+import { useSelector } from 'react-redux';
+import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
@@ -21,6 +23,13 @@ const MyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const { registeredMethods } = useBansApi();
+
+  const publicKey = useSelector(selectPublicKey());
+  const {
+    current_height: currentStateHeight,
+    current_state_timestamp: currentStateTimestamp
+  } = useSelector(selectSystemState());
+
 
   //refactor remove duplication
   useEffect(() => {
@@ -35,19 +44,29 @@ const MyPage = () => {
     active === 1 && myKey && registeredMethods.userView().then(response => {
       setDomains(response.domains.map(
         //for future logic
-        domain => getDomainPresentedData({...domain, ...{searchName: domain.name}})
+        domain => getDomainPresentedData(
+          { ...domain, ...{ searchName: domain.name } },
+          currentStateTimestamp,
+          currentStateHeight,
+          publicKey
+        )
       ));
     });
 
     active === 2 && useGetFavoritesDomains().then(response => {
       setDomains(response.domains.map(
         //for future logic
-        domain => getDomainPresentedData({...domain, ...{searchName: domain.name}})
+        domain => getDomainPresentedData(
+          { ...domain, ...{ searchName: domain.name } },
+          currentStateTimestamp,
+          currentStateHeight,
+          publicKey
+        )
       ));
     });
 
     setIsLoading(false);
-  }, [myKey, active])
+  }, [myKey, active, currentStateHeight, currentStateTimestamp])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (

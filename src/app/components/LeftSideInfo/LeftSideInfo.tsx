@@ -25,7 +25,7 @@ interface LeftSideProps {
 export const LeftSide: React.FC<LeftSideProps> = ({ name, expiresAt,isExpired }) => {
   return (
     <Flex sx={{ variant: 'layout.card' }}>
-      <Text>{name}</Text>
+      <Text>{name}.beam</Text>
       <SubText isexpired={isExpired.toString()}>{expiresAt}</SubText>
     </Flex>
   )

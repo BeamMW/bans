@@ -34,7 +34,11 @@ export const RegisterAction: React.FC<TroveActionProps> = ({
             case "renewDomainExpiration":
                 {
                     return () => registeredMethods.userDomainExtend({ name: domain.name, nPeriods: period });
-                }   
+                }
+            case "buyDomain":
+                {
+                    return () => registeredMethods.userDomainBuy({ name: domain.name });
+                }
         }
 
     }

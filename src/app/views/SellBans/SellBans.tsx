@@ -11,30 +11,20 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 interface SellBansModalProps {
   isShown: boolean;
   toggle: () => void;
+  domains: Array<DomainPresenterType>
 }
 
-export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle }) => {
+export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, domains }) => {
   const [activeItem, setActiveItem] = React.useState('');
-  const testItems = [{
-    id:'1',
-    name: 'testName1'
-  },
-  {
-    id:'2',
-    name: 'testName2'
-  },
-  {
-    id:'3',
-    name: 'testName3'
-  },
-  {
-    id:'4',
-    name: 'testName4'
-  }];
+  const domainsSelect = domains.map((domain, i) => new Object({
+    id: i,
+    name: domain.name
+  }));
+
   return (
     <Modal isShown={isShown} header="Sell Bans">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
-        <Select items={testItems} setActiveItem={setActiveItem} activeItem={activeItem}/>
+        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem}/>
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='sell'
@@ -46,11 +36,11 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle })
           </Input>
         </Box>
         <Box sx={{ my: '30px' }}>
-        <Input
+        {/* <Input
           variant='sell'
           pallete='white'
           label="Buyer's Public Key"
-          />
+          /> */}
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>
           <Box sx={{ mr: '30px' }}>
