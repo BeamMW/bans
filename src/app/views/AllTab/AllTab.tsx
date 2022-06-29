@@ -7,6 +7,7 @@ import Copy from '././../../assets/icons/copy.svg';
 import Dots from '././../../assets/icons/dots.svg';
 import Renew from '././../../assets/icons/renew.svg';
 import Sell from '././../../assets/icons/sell.svg';
+import TransferIcon from '././../../assets/icons/gift.svg';
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { copyToClipboard } from '../../core/appUtils';
 import { useModal } from "@app/components/Modals/useModal";
@@ -14,6 +15,9 @@ import { RenewModal } from './../RenewModal/RenewModal';
 import { PopupItem } from '@app/components/Popup/Popup.styles';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { SellBansModal } from './../SellBans/SellBans';
+import { Transfer } from "../Transfer/Transfer";
+import { RemoveOrChange } from './../RemoveOrChange/RemoveOrChange';
+
 interface RightSideProps {
   copyToClipboard: (value: string) => void;
   domain: DomainPresenterType;
@@ -22,10 +26,16 @@ interface RightSideProps {
 const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains }) => {
   const [showPopup, setShowPopup] = React.useState(false);
   const [showSellModal, setShowSellModal] = React.useState(false);
+  const [showTransfer, setShowTransfer] = React.useState(false);
+
   const { isShown, toggle } = useModal();
 
   const toggleShowSellModal = () => {
     setShowSellModal(!showSellModal)
+  }
+
+  const toggleShowTranferModal = () => {
+    setShowTransfer(!showTransfer);
   }
 
   const hideTip = () => {
@@ -54,10 +64,15 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
             <Sell />
             sell BANS
           </PopupItem>
+          <PopupItem onClick={toggleShowTranferModal}>
+            <TransferIcon />
+            Transfer
+          </PopupItem>
         </Popup>
       </Container>
       {domains && <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />}
       {domains && <SellBansModal domain={domain} domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />}
+       <Transfer  isShown={showTransfer} toggleClose={toggleShowTranferModal} />
     </>
   )
 }
@@ -73,9 +88,18 @@ export const AllTab: React.FC<{ domains: any }> = (props) => {
       </SplitContainer>
   ));
 
+  const removeRow =  domains.map((domain, i) => (
+    <SplitContainer key={i} leftWeight={9.5} rightWeight={2.5}>
+      <LeftSide domain={domain} />
+      <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain}/>
+    </SplitContainer>
+));
+
   return (
     <>
       {rows}
+      <br/>
+     {removeRow}
     </>
   );
 }

@@ -9,7 +9,10 @@ export const ButtonContainer: React.FC<ButtonContainerProps> = ({ children }) =>
   const [left, right] = children;
 
   return (
-    <Flex sx={{ justifyContent: 'center' }}>
+    <Flex sx={{
+    justifyContent: 'center',
+    mt: '30px'
+    }}>
       <Box sx={{ mr: '30px' }}>
         { left }
       </Box>

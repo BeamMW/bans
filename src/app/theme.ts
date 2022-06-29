@@ -229,6 +229,10 @@ const theme: Theme = {
       alignSelf: 'center',
       flex: 2,
     },
+    subHeader: {
+      color: '#8DA1AD',
+      display: 'block'
+    },
     subText: {
       fontFamily: 'SFProDisplay',
       fontStyle: 'normal',
