@@ -7,16 +7,16 @@ import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult
 interface SearchResultLeftProps extends SearchResultStyleProps {
   value: string;
   isValid: boolean;
-  expireBlock: number;
+  expiredAt: string;
   handleClick: () => void;
 }
 export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
-  const { value, isAvailable, isValid, expireBlock, handleClick} = props;
+  const { value, isAvailable, isValid, expiredAt, handleClick} = props;
   return (
     <Flex sx={containerStyles(props)} onClick={handleClick}>
       <Text>{value}</Text>
       { !isAvailable && isValid && (
-          <SubText>Expires in {expireBlock} block</SubText>
+          <SubText>Expires on {expiredAt}</SubText>
       )}
     </Flex>
   )

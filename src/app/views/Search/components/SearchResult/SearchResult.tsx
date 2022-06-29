@@ -14,7 +14,7 @@ export interface SearchResultProps {
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { search, isValid } = props;
   const { setCurrentView, foundDomain } = useMainView();
-  const { isAvailable, expireBlock } = foundDomain ?? { isAvailable: null, expireBlock: 0 };
+  const { isAvailable, expiredAt } = foundDomain ?? { isAvailable: false, expireBlock: 0 };
 
   const proceedWithDomainHandler = () => {
     isValid && isAvailable && setCurrentView("REGISTER_DOMAIN");
@@ -26,7 +26,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
         <>
           <Paragraph variant="header">Results</Paragraph>
           <SplitContainer leftWeight={3} rightWeight={1}>
-            <SearchResultLeft value={search + (search ? ".beam" : "")} expireBlock={expireBlock} isAvailable={isAvailable} isValid={isValid} handleClick={proceedWithDomainHandler}/>
+            <SearchResultLeft value={search + (search ? ".beam" : "")} expiredAt={expiredAt} isAvailable={isAvailable} isValid={isValid} handleClick={proceedWithDomainHandler}/>
             <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
           </SplitContainer>
           <Flex>

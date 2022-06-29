@@ -3,7 +3,7 @@ export type DomainPresenterType = {
     expireAt: any;
     isExpired: any;
     isAvailable: boolean;
-    isYouOwn: boolean;
+    isYourOwn: boolean;
 }
 
 export type RawDomainType = {
@@ -37,12 +37,12 @@ class DomainPresenterValidator {
 export class DomainPresenter implements IDomainPresenter {
     protected rawDomain: RawDomainType;
     protected currentStateTimestamp: number | null;
-    protected userPkKey: string | null;
+    protected userPublicKey: string | null;
 
-    constructor(rawDomain: RawDomainType, currentStateTimestamp?: null, userPkKey?: string) {
+    constructor(rawDomain: RawDomainType, currentStateTimestamp?: null, userPublicKey?: string) {
         this.rawDomain = rawDomain;
         this.currentStateTimestamp = currentStateTimestamp;
-        this.userPkKey = userPkKey;
+        this.userPublicKey = userPublicKey;
     }
 
     get rawSearch(){
@@ -66,7 +66,7 @@ export class DomainPresenter implements IDomainPresenter {
     }
 
     protected resolveIsYouOwn(): boolean {
-        const isYourOwn = (this.rawDomain?.key && this.rawDomain?.hExpire && this.userPkKey) && this.rawDomain.key === this.userPkKey;
+        const isYourOwn = (this.rawDomain?.key && this.rawDomain?.hExpire && this.userPublicKey) && this.rawDomain.key === this.userPublicKey;
         return !!isYourOwn;
     }
 
@@ -77,20 +77,16 @@ export class DomainPresenter implements IDomainPresenter {
                 expireAt: this.domainExpireTimeConverter(),
                 isExpired: this.domainIsExpireTimeConverter(),
                 isAvailable: this.resolveIsAvailable(),
-                isYouOwn: this.resolveIsYouOwn(),
+                isYourOwn: this.resolveIsYouOwn(),
             }
         } catch(e) {
             throw new DomainPresenterError(e.message)
         }
-        
     }
-
-
 }
 
-
-export const getDomainPresentedData = (rawDomain: RawDomainType): DomainPresenterType => {
-    const domainsPresenter: DomainPresenter = new DomainPresenter(rawDomain);
+export const getDomainPresentedData = (rawDomain: RawDomainType, currentStateTimestamp?: null, userPublicKey?: string): DomainPresenterType => {
+    const domainsPresenter: DomainPresenter = new DomainPresenter(rawDomain, currentStateTimestamp, userPublicKey);
 
     return domainsPresenter.getDomainPresenterData();
 }

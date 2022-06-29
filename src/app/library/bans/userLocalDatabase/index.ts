@@ -1,3 +1,3 @@
-export { database as userLocalDatabase } from "./database";
+export { userDatabase } from "./database";
 
 

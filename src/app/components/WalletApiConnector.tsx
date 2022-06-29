@@ -8,7 +8,6 @@ import { setSystemState } from '@app/store/SharedStore//actions';
 import { selectIsLoaded } from '@app/store/SharedStore/selectors';
 //import { selectRate } from '@app/store/BansStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-//import { setDappVersion, loadAdminKey } from '@app/store/SharedStore/actions';
 import { isObject } from "formik";
 import { setTransactionsRequest } from '@app/store/SharedStore/actions';
 import { Loader } from './BeamLoader';

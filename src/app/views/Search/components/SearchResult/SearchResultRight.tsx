@@ -40,10 +40,11 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const { isValid, isAvailable, domain, search } = props;
   const isBansLove = useIsBansFavorite(search);
   const heartHandler = useHandleHeartAction(isBansLove, search);
+  const isYourOwn = domain && domain.isYourOwn;
 
   const [liked, setLiked] = React.useState(false);
   const toggleLike = () => setLiked(!liked);
-  
+
   return (
     <Container>
     <Flex sx={{ mr: 4 }}>
@@ -56,8 +57,8 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
       }
     </Flex>
     <Flex>
-      <Text sx={textStyles(props)}>
-      { getAvailableStatusText(isValid, isAvailable) }
+      <Text sx={isYourOwn ? {color: "#00F6D2"} : textStyles(props)}>
+      {isYourOwn ? "your domain" : getAvailableStatusText(isValid, isAvailable)}
       </Text>
     </Flex>
   </Container>

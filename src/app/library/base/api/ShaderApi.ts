@@ -15,7 +15,7 @@ export class ShaderStore implements IShaderStore{
 
     static addShaderToStore(shaderData: UtilsShader): void {
         if(ShaderStore.shaderStore.has(shaderData.cid)) {
-            console.log(`We do not rewirite ${shaderData.shaderName} shader in ShaderStore`);
+            //console.log(`We do not rewirite ${shaderData.shaderName} shader in ShaderStore`);
             //ShaderStore.shaderStore.delete(shaderData.cid);
         }
             

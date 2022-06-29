@@ -7,6 +7,8 @@ import Input from '../../components/Input';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
 import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
+import { useSelector } from 'react-redux';
+import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
 
 
 
@@ -17,6 +19,9 @@ const Search: React.FC = () => {
   const [isValid, setIsValid] = useState(false);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
 
+  const publicKey = useSelector(selectPublicKey());
+  const {current_state_timestamp: currentStateTimestamp} = useSelector(selectSystemState());
+
   const searchValidator = useCallback((search) => {
     if (search.length < 3) return false;
 
@@ -25,7 +30,10 @@ const Search: React.FC = () => {
 
   const fetchDomain = async (search) => {
 
-    if (!isValid) return;
+    if (!isValid) {
+      setFoundDomain(null)
+      return;
+    }
 
     const response = await registeredMethods.managerViewName({ name: search });
 
@@ -33,10 +41,12 @@ const Search: React.FC = () => {
       return response.error /* && setIsValid(true) */;
     }
 
-    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain({ ...response, ...{ searchName: search } });
+    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain({ ...response, ...{ searchName: search } }, currentStateTimestamp, publicKey);
 
     Object.keys(response).length === 0 && setFoundDomain(
-      { searchName: search, isAvailable: true }
+      { searchName: search, isAvailable: true }, 
+      currentStateTimestamp, 
+      publicKey
     );
 
   }
