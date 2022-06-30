@@ -17,6 +17,8 @@ import { Decimal } from '@app/library/base/Decimal';
 import ShaderApi from '@app/library/base/api/ShaderApi';
 import methods from '@app/library/bans/methods';
 import { useEffect, useState } from 'react';
+import { readAllFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
+import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -40,6 +42,15 @@ const getBansApi = () => {
   return bansApi;
 }
 
+const fetchBansFromShader = async (bans: Array<string>) => {
+  const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+  return Promise.all(await bans.map(async (domain) => {
+    const response = await bandApiMethods.managerViewName({ name: domain });
+    return { ...response, ...{ searchName: domain } };
+  }, []));
+}
+
 
 export function* loadParamsSaga(
   action: ReturnType<typeof actions.loadAppParams.request>,
@@ -47,10 +58,12 @@ export function* loadParamsSaga(
   try {
     const bandApiMethods: any/* ShaderActions */ = getBansApi();
 
-    const resultUserViewParams = yield call(
+
+    /* const resultUserViewParams = yield call(
       bandApiMethods.managerViewDomain
     );
-    console.log(resultUserViewParams);
+
+    yield put(actions.loadAppParams.success(resultUserViewParams)); */
 
     const state = (yield select()) as { bans; shared };
 
@@ -59,11 +72,13 @@ export function* loadParamsSaga(
     }
 
 
-    yield put(actions.loadAppParams.success(resultUserViewParams));
-
     store.dispatch(actions.loadContractInfo.request());
     store.dispatch(actions.loadUserBans.request());
     store.dispatch(loadPublicKey.request());
+
+    if (Array.isArray(state.bans.allFavoritesBans) && !state.bans.allFavoritesBans.length) {
+      store.dispatch(actions.loadAllFavoritesBans.request());
+    }
 
     if (!state.shared.isLoaded) {
       store.dispatch(setIsLoaded(true));
@@ -75,16 +90,53 @@ export function* loadParamsSaga(
   }
 }
 
+export function* loadAllFavoritesBansSaga(
+  action: ReturnType<typeof actions.loadAllFavoritesBans.request>
+) {
+  try {
+    const state = (yield select()) as { shared };
+
+    const {
+      systemState: { current_height: currentStateHeight },
+      systemState: { current_state_timestamp: currentStateTimestamp },
+      publicKey
+    } = state.shared;
+
+    if (!(currentStateHeight && currentStateTimestamp && publicKey))
+      return false;
+
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+    const allFavoritesBans = yield call(readAllFavoriteBans);
+    const allFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.map(bans => bans.bansName))
+
+    const allFavoritesBansToDomainPresenter = allFavoritesBansPrepare.map((bans) =>
+      getDomainPresentedData(bans, currentStateHeight, currentStateTimestamp, publicKey));
+    yield put(actions.loadAllFavoritesBans.success(allFavoritesBansToDomainPresenter));
+    yield put(actions.setIsFavoriteLoaded(true))
+  } catch (e) {
+    console.log(e);
+    yield put(actions.loadAllFavoritesBans.failure(e));
+  }
+
+}
+
 export function* loadUserBansSaga(
   action: ReturnType<typeof actions.loadUserBans.request>
 ) {
-  const bandApiMethods: any/* ShaderActions */ = getBansApi();
+  try {
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
 
-  const resultUserViewParams = yield call(
-    bandApiMethods.userView
-  );
+    const resultUserViewParams = yield call(
+      bandApiMethods.userView
+    );
 
-  yield put(actions.loadUserBans.success(resultUserViewParams));
+    yield put(actions.loadUserBans.success(resultUserViewParams));
+
+  } catch (e) {
+    console.log(e);
+    yield put(actions.loadUserBans.failure(e));
+  }
 
 }
 
@@ -134,6 +186,7 @@ function* bansSaga() {
   yield takeEvery(actions.loadUserBans.request, loadUserBansSaga);
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
   yield takeLatest(actions.loadRate.request, loadRate);
+  yield takeLatest(actions.loadAllFavoritesBans.request, loadAllFavoritesBansSaga);
 }
 
 export default bansSaga;

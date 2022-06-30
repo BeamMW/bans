@@ -18,5 +18,6 @@ export const selectPopupsState = () => createSelector(selectMain,
     (state) => state.popupsState);
 
 
-//export const selectCurrentCurrency = () => createSelector(selectMain, (state) => state.currentCurrency);
+export const selectFavoritesBans = () => createSelector(selectMain, (state) => state.allFavoritesBans);
+export const selectIsFavoriteLoaded = () => createSelector(selectMain, (state) => state.isFavoriteLoaded);
 

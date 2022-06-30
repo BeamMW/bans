@@ -16,7 +16,7 @@ const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
   const { registeredMethods } = useBansApi();
 
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isLoading, setIsLoading] = useState(false);
 
