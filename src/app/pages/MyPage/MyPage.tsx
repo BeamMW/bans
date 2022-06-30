@@ -68,6 +68,16 @@ const MyPage = () => {
     setIsLoading(false);
   }, [myKey, active, currentStateHeight, currentStateTimestamp])
 
+  const domainsTest = [{
+    name: 'TT',
+    expiresAt: '22',
+    isExpired: 22,
+    isOnSale: true,
+    price: {
+      aid: 33,
+      amount: 44
+    }
+  }]
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (
     <>
@@ -76,10 +86,10 @@ const MyPage = () => {
         <FilterTabs tabs={tabs} active={active} setActive={setActive} />
       }
       {
-        domains ? (
+        domainsTest ? (
           +active == 1 ?
-            <AllTab domains={domains} /> :
-            (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
+            <AllTab domains={domainsTest} /> :
+            (active == 2 ? <FavoriteTab domains={domainsTest} /> : <></>)
         ) : <EmptyPage />
       }
       {isLoading && <LoadingOverlay />}

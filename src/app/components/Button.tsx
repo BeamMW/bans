@@ -27,8 +27,7 @@ const BaseButtonStyled = styled.button<ButtonProps>`
 const ButtonStyled = styled(BaseButtonStyled)`
   display: block;
   width: 100%;
-  max-width: 254px;
-  margin: 0 auto;
+  max-width: 180px;
   margin-bottom: 10px;
   padding: 10px 24px;
   border: none;
@@ -36,7 +35,7 @@ const ButtonStyled = styled(BaseButtonStyled)`
   background-color: ${({ pallete }) => `var(--color-${pallete})`};
   text-align: center;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--color-dark-blue);
 
   &:hover,

@@ -1,29 +1,40 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div`
+interface ContainerProps {
+  border: boolean;
+  height: string;
+}
+
+const Container = styled.div<ContainerProps>`
    display: flex;
    border-radius: 10px;
+   border: ${props => props.border == 'none' ? 'none' : props.border ? '2px solid #00F6D2' : '2px solid #FF746B' };
    background-color: rgba(255,255,255,0.05);
-   height: 79px;
+   height: ${props => props.height};
    cursor: pointer;
    padding: 20px;
    margin-bottom:10px;
 `
 
 interface StyledCardProps {
-  weight?: number
+  weight?: number;
 }
 
 
-const Pane = styled.div<StyledCardProps>`
+const PaneLeft = styled.div<StyledCardProps>`
     flex: ${props => props.weight};
-    align-self: center ;
+    align-self: center;
 `
 
+const PaneRight = styled(PaneLeft)`
+    text-align: end;
+`
 interface SplitContainerProps {
     leftWeight: number;
     rightWeight: number;
+    border?: boolean;
+    height?: string;
     children: React.ReactNode[];
     handleClick?: () => void;
 }
@@ -31,17 +42,19 @@ export const SplitContainer: React.FC<SplitContainerProps> = ({
   children,
   leftWeight = 1,
   rightWeight = 1,
+  border = 'none',
+  height= '79px',
   handleClick,
 }) => {
   const [left, right] = children;
   return (
-    <Container onClick={handleClick} >
-      <Pane weight={leftWeight}>
+    <Container onClick={handleClick} border={border} height={height}>
+      <PaneLeft weight={leftWeight}>
         {left}
-      </Pane>
-      <Pane weight={rightWeight}>
+      </PaneLeft>
+      <PaneRight weight={rightWeight}>
         {right}
-      </Pane>
+      </PaneRight>
     </Container>
   );
 }

@@ -15,17 +15,17 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { search, isValid } = props;
   const { setCurrentView, foundDomain } = useMainView();
   const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: false, expireBlock: 0 };
-
+  const showBorder = isAvailable && isValid;
   const proceedWithDomainHandler = () => {
     isValid && !foundDomain.isYourOwn && (isAvailable || foundDomain.isOnSale) && setCurrentView("REGISTER_DOMAIN");
   }
-
+console.log(showBorder)
   return (
     <>
       {search && (
         <>
           <Paragraph variant="header">Results</Paragraph>
-          <SplitContainer leftWeight={3} rightWeight={1}>
+          <SplitContainer leftWeight={3} rightWeight={1} border={showBorder}>
             <SearchResultLeft value={search + (search ? ".beam" : "")} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} handleClick={proceedWithDomainHandler}/>
             <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
           </SplitContainer>

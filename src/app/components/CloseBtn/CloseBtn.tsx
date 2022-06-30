@@ -13,10 +13,10 @@ export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle }) => {
     variant='custom' 
     pallete='ghost'
     onClick={toggle}
-    padding="11px 25px 11px 22px"
-    height='38px'
+    padding="10px 24px"
     width='fit-content'
     borderRadius='50px'
+    height='auto'
     >
      <Cancel />
      <Text sx={{ ml:'9px', fontWeight: 'bold' }}>Close</Text>

@@ -31,5 +31,5 @@ export const ModalHeader = styled.p`
     text-align: center;
     color: #FFFFFF;
     text-align: center;
-    margin: 40px 0px 30px 0px;
+    margin-bottom: 30px;
 `

@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
 import { useSelector } from 'react-redux';
 import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
+import { Notification } from "@app/components/Notification/Notifcation";
 
 
 
@@ -101,6 +102,7 @@ const Search: React.FC = () => {
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} /> : <></>}
+      <Notification />
     </Container>
   );
 };
