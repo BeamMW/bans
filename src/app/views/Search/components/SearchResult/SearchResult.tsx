@@ -17,7 +17,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: false, expireBlock: 0 };
 
   const proceedWithDomainHandler = () => {
-    isValid && (isAvailable || foundDomain.isOnSale) && setCurrentView("REGISTER_DOMAIN");
+    isValid && !foundDomain.isYourOwn && (isAvailable || foundDomain.isOnSale) && setCurrentView("REGISTER_DOMAIN");
   }
 
   return (
