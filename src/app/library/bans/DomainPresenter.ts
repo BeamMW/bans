@@ -16,10 +16,10 @@ export type RawDomainType = {
     hExpire?: number;
     key?: string;
     isAvailable?: boolean;
-    price: PriceInfo
+    price?: PriceInfo
 }
 
-export type PriceInfo  = {
+export type PriceInfo = {
     aid: number,
     amount: number
 }
@@ -40,21 +40,21 @@ class DomainPresenterValidator {
     static checkIsValidNameAndReturn(rawDomainName: string): string {
         if (rawDomainName.length < 3) throw new DomainPresenterError("name is too short");
 
+        if (!rawDomainName.match(/^[a-zA-Z0-9\-\_\~]*$/i)) throw new DomainPresenterError("contains forbidden symbols");
+
         return rawDomainName;
     }
 }
 
 export class DomainPresenter implements IDomainPresenter {
-    protected rawDomain: RawDomainType;
-    protected currentStateHeight: number | null;
-    protected currentStateTimestamp: number | null;
-    protected userPublicKey: string | null;
 
-    constructor(rawDomain: RawDomainType, currentStateTimestamp?: number | null, currentStateHeight?: number | null, userPublicKey?: string) {
-        this.rawDomain = rawDomain;
-        this.currentStateHeight = currentStateHeight;
-        this.currentStateTimestamp = currentStateTimestamp;
-        this.userPublicKey = userPublicKey;
+    constructor(
+        protected rawDomain: RawDomainType,
+        protected currentStateTimestamp?: number | null,
+        protected currentStateHeight?: number | null,
+        protected userPublicKey?: string
+    ) {
+        
     }
 
     get rawSearch() {
@@ -74,7 +74,7 @@ export class DomainPresenter implements IDomainPresenter {
             (this.rawDomain.hExpire - this.currentStateHeight) * 60 + this.currentStateTimestamp :
             null;
 
-        return unixTimestamp ? (new Date(unixTimestamp * 1000)).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) : null;
+        return unixTimestamp ? (new Date(unixTimestamp * 1000)).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : null;
     }
 
     protected domainIsExpireTimeConverter(): boolean {
@@ -92,7 +92,7 @@ export class DomainPresenter implements IDomainPresenter {
 
     protected resolveDomainPrice(): PriceInfo {
         return this.rawDomain?.price ?? {
-            aid: 0, amount: GROTHS_IN_BEAM * 640
+            aid: 0, amount: GROTHS_IN_BEAM * 16
         };
     }
 

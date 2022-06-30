@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Paragraph, Flex } from "theme-ui";
+import { Paragraph, Flex, Text } from "theme-ui";
 import { SubText } from './SearchResult.styles';
 import { SplitContainer } from './../../../../components/SplitContainer/SplitContainer';
 import { SearchResultLeft } from "./SearchResultLeft";
@@ -8,10 +8,13 @@ import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { RegisterAction } from "@app/views/Register/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export interface SearchResultProps {
   isValid: boolean;
   search: string;
+  isLoading: boolean;
 };
 
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
@@ -25,7 +28,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       //dispatch to the main search view and clear found domain data
-      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null);
+      setCurrentView("REGISTER_COMPLETED") && setFoundDomain(null);
 
       return () => {
         //store.dispatch()
@@ -34,9 +37,11 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
 
   }, [transactionState, setCurrentView]);
 
-  const { search, isValid } = props;
-  const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: false, expireBlock: 0 };
+  const { search, isValid, isLoading } = props;
+  const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: true, expireBlock: 0 };
+  
   const showBorder = isAvailable && isValid;
+
   const proceedWithDomainHandler = () => {
     isValid && isAvailable && !foundDomain.isYourOwn && !foundDomain.isOnSale && setCurrentView("REGISTER_DOMAIN");
   }
@@ -48,40 +53,58 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
     </SplitContainer>
   );
 
+  const skeletonResult = (
+    <SplitContainer leftWeight={4} rightWeight={0}>
+      <Flex sx={{
+        flexDirection: 'column',
+        padding: '30px 0px'
+      }}>
+      <Skeleton/>
+    </Flex>
+      <></>
+    </SplitContainer>
+  );
+
   return (
     <>
-      {search && (
-        <>
-          <Paragraph variant="header">Results</Paragraph>
-          {foundDomain && foundDomain.isOnSale && !foundDomain.isYourOwn ? (
-            <RegisterAction
-              transactionId={TRANSACTION_ID}
-              change={"buyDomain"}
-              domain={foundDomain}
-              isPure={true}
-            >
-              {searchResult}
-            </RegisterAction>) : (
-            <>
-              {searchResult}
-            </>
-          )
-          }
+      {
+        search && (
+          <>
+            <Paragraph variant="header">Results</Paragraph>
+            {isLoading ? (skeletonResult) : (
+              <>
+                {foundDomain && foundDomain.isOnSale && !foundDomain.isYourOwn ? (
+                  <RegisterAction
+                    transactionId={TRANSACTION_ID}
+                    change={"buyDomain"}
+                    domain={foundDomain}
+                    isPure={true}
+                  >
+                    {searchResult}
+                  </RegisterAction>
+                ) : (
+                  <>
+                    {searchResult}
+                  </>
+                )}
+                <Flex>
+                  {
+                    !isValid && (
+                      <SubText sx={{ fontSize: '14px' }}>Domain should contain only letters and numbers</SubText>
+                    )
+                  }
+                  {
+                    foundDomain && foundDomain.isYourOwn && (
+                      <SubText sx={{ fontSize: '14px' }}>Your are already own the domain</SubText>
+                    )
+                  }
+                </Flex>
 
-          <Flex>
-            {
-              !isValid && (
-                <SubText sx={{ fontSize: '14px' }}>Domain should contain only letters and numbers</SubText>
-              )
-            }
-            {
-              foundDomain && foundDomain.isYourOwn && (
-                <SubText sx={{ fontSize: '14px' }}>Your are already own the domain</SubText>
-              )
-            }
-          </Flex>
-        </>
-      )}
+              </>
+            )}
+          </>
+        )
+      }
     </>
   );
 }

@@ -29,7 +29,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
     <Flex sx={{ variant: 'layout.card' }}>
       <Text>{name}.beam</Text>
 
-      <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText>
+      {expiresAt ?  <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText> :<></> }
     </Flex>
   )
 }

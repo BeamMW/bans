@@ -12,13 +12,13 @@ import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selec
 import { Notification } from "@app/components/Notification/Notifcation";
 
 
-
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
   const { registeredMethods } = useBansApi();
 
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
+  const [isLoading, setIsLoading] = useState(false);
 
   const publicKey = useSelector(selectPublicKey());
   const {
@@ -28,13 +28,14 @@ const Search: React.FC = () => {
 
   const searchValidator = useCallback((search) => {
     if (search.length < 3) return false;
-
+    
+    if(!search.match(/^[a-zA-Z0-9\-\_\~]*$/i)) return false;
+    
     return true;
   }, []);
 
   const fetchDomain = async (search, currentStateTimestamp, currentStateHeight) => {
-
-    if (!isValid && !foundDomain) {
+    if (!isValid) {
       setFoundDomain(null)
       return;
     }
@@ -101,8 +102,8 @@ const Search: React.FC = () => {
       >
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>
-      {search || foundDomain ? <SearchResult search={search} isValid={isValid} /> : <></>}
-      <Notification />
+      {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
+      {/* <Notification /> */}
     </Container>
   );
 };

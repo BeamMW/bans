@@ -19,8 +19,8 @@ const initialState = {
     public_key: '',
     contractHeight: 0,
     userView: false,
-    popupsState: {
-    },
+    allFavoritesBans: [],
+    setIsFavoriteLoaded: false
 };
 
 const reducer = createReducer<any, Action>(
@@ -62,17 +62,17 @@ const reducer = createReducer<any, Action>(
       nextState.contractHeight/* Height */ = action.payload.Height;
     }),
   )
-  .handleAction(actions.setPopupState, (state, action) =>
+  .handleAction(actions.loadAllFavoritesBans.success, (state, action) =>
     produce(state, nextState => {
-      nextState.popupsState[action.payload.type] =
-        action.payload.state;
-    }),
-  )
-  /* .handleAction(actions.setCurrentCurrency, (state, action) =>
-    produce(state, nextState => {
-      nextState.currentCurrency =
+      nextState.allFavoritesBans =
         action.payload;
     }),
-  ) */;
+  )
+  .handleAction(actions.setIsFavoriteLoaded, (state, action) =>
+    produce(state, nextState => {
+      nextState.isFavoriteLoaded =
+        action.payload;
+    }),
+  );
 
 export { reducer as BansReducer };
