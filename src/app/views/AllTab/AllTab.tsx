@@ -39,7 +39,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
   }
 
   const hideTip = () => {
-      setShowPopup(false);
+    setShowPopup(false);
   };
 
   return (
@@ -60,7 +60,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
             <Renew />
             renew subscription
           </PopupItem>
-          <PopupItem onClick={() => {toggleShowSellModal(); hideTip()}}>
+          <PopupItem onClick={() => { toggleShowSellModal(); hideTip() }}>
             <Sell />
             sell BANS
           </PopupItem>
@@ -72,34 +72,36 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
       </Container>
       {domains && <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />}
       {domains && <SellBansModal domain={domain} domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />}
-       <Transfer  isShown={showTransfer} toggleClose={toggleShowTranferModal} />
+      {domains && <Transfer domain={domain} isShown={showTransfer} toggleClose={toggleShowTranferModal} />}
     </>
   )
 }
-export const AllTab: React.FC<{ domains: any }> = (props) => {
+export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props) => {
   const { domains } = props;
   //This name is in grace period, and needs to be renewed by June 30, 2022
 
-  const rows = 
-  domains.map((domain, i) => (
+  const rows =
+    domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={12} rightWeight={0}>
         <LeftSide domain={domain} />
-        <RightSide copyToClipboard={copyToClipboard} domains={domains} domain={domain}/>
+        {
+          domain.isOnSale ?
+            <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain} /> :
+            <RightSide copyToClipboard={copyToClipboard} domains={domains} domain={domain} />
+        }
       </SplitContainer>
-  ));
-
-  const removeRow =  domains.map((domain, i) => (
-    <SplitContainer key={i} leftWeight={9.5} rightWeight={2.5}>
-      <LeftSide domain={domain} />
-      <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain}/>
-    </SplitContainer>
-));
+    ));
+  /* 
+    const removeRow = domains.map((domain, i) => (
+      <SplitContainer key={i} leftWeight={9.5} rightWeight={2.5}>
+        <LeftSide domain={domain} />
+  
+      </SplitContainer>
+    )); */
 
   return (
     <>
       {rows}
-      <br/>
-     {removeRow}
     </>
   );
 }

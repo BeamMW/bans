@@ -51,7 +51,7 @@ const methods: Array<IMethod<ShaderActions>> = [
     {
         role: "user",
         action: "domain_set_owner",
-        requiredParams: ["name"],
+        requiredParams: ["name", "pkOwner"],
         type: "writable"
     },
     {

@@ -11,6 +11,8 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { RemoveModal } from '../RemoveModal/RemoveModal';
 import { Amount } from '@app/components/Amount/Amount';
 import { ChangePrice } from './../ChangePrice/ChangePrice';
+import { GROTHS_IN_BEAM } from '@app/constants';
+import { Decimal } from '@app/library/base/Decimal';
 // I think we will find more appropriate name for this Component
 interface RemoveOrChangeProps {
   copyToClipboard: (value: string) => void;
@@ -42,10 +44,10 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
         onMouseLeave={hideTip}
       >
         <Flex>
-        <Amount value="200" size="14px"  showConvertedToUsd={true}/>
-          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+        <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString(2)} size="14px"  showConvertedToUsd={true}/>
+          {/* <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
-          </Button>
+          </Button> */}
           <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
             <Dots />
           </Button>
@@ -62,7 +64,7 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
         </Popup>
       </Container>
 
-      <RemoveModal isShown={showRemove} toggleClose={toggleShowRemoveModal}/>
+      <RemoveModal domain={domain} isShown={showRemove} toggleClose={toggleShowRemoveModal}/>
       <ChangePrice isShown={showSetPrice} toggleClose={toggleshowSetPriceModal} />
     </>
   )

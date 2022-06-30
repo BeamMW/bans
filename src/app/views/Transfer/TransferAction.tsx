@@ -1,22 +1,21 @@
 import React from "react";
 import { useTransactionFunction } from "@app/library/transaction-react/useTransactionFunction";
-import { toGroths } from '@app/library/base/appUtils';
 import Button from "../../components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 
-type SellBansActionProps = {
+type TransferActionProps = {
     transactionId: string;
     change: any;
-    amount?: number;
+    transferKey: string;
     domain: DomainPresenterType;
 };
 
-export const SellBansAction: React.FC<SellBansActionProps> = ({
+export const TransferAction: React.FC<TransferActionProps> = ({
     children,
     transactionId,
     change,
-    amount,
+    transferKey,
     domain
 }) => {
 
@@ -25,16 +24,10 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
 
     const apiCall = (change) => {
         switch (change) {
-            case "sellBans":
-            case "adjustSellingBans":
+            case "transferBans":
                 {
-                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: toGroths(amount) });
+                    return () => registeredMethods.userDomainSetOwner({ name: domain.name, pkOwner: transferKey });
                 }
-            case "removeBansFromSale":
-                {
-                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: 0 });
-                }
-                
         }
     }
 

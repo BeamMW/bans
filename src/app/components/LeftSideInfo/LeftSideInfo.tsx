@@ -27,7 +27,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
 
   return (
     <Flex sx={{ variant: 'layout.card' }}>
-      <Text>{name}.beam  {isOnSale ? `---  On Sale for ${price.amount / GROTHS_IN_BEAM}` : ""}</Text>
+      <Text>{name}.beam</Text>
 
       <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText>
     </Flex>
