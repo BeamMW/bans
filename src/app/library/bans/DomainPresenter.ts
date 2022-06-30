@@ -92,7 +92,7 @@ export class DomainPresenter implements IDomainPresenter {
 
     protected resolveDomainPrice(): PriceInfo {
         return this.rawDomain?.price ?? {
-            aid: 0, amount: GROTHS_IN_BEAM * 640
+            aid: 0, amount: GROTHS_IN_BEAM * 16
         };
     }
 
