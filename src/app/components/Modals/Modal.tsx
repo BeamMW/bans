@@ -11,17 +11,19 @@ export interface ModalProps {
   isShown: boolean;
   children: JSX.Element;
   header?: string;
+  width?: string;
 }
 
 export const Modal: FC<ModalProps> = ({
   isShown,
   header,
+  width,
   children
 }) => {
   const modal = (
     <React.Fragment>
       <Wrapper>
-        <ModalContent>
+        <ModalContent width={width}>
         {
           header && (
             <ModalHeader>

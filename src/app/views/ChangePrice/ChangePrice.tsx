@@ -43,7 +43,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
     setAmount(e.target.value)
   }
   return (
-    <Modal isShown={isShown} header="Change price for batboy.beam domain">
+    <Modal isShown={isShown} header="Change price for batboy.beam domain" width={'390px'}>
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box sx={{ mb: '10px' }}>

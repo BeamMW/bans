@@ -47,7 +47,7 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
       <Container sx={{ position: 'relative' }}
         onMouseLeave={hideTip}
       >
-        <Flex>
+        <Flex sx={{justifyContent: 'flex-end'}}>
           <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
           </Button>

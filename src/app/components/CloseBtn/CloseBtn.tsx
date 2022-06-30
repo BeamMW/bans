@@ -5,9 +5,10 @@ import Cancel from "../../assets/icons/cancel.svg";
 
 interface CloseBtnProps {
   toggle: () => void;
+  text?: string;
 }
 
-export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle }) => {
+export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle, text = 'close' }) => {
   return (
     <Button
     variant='custom' 
@@ -19,7 +20,7 @@ export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle }) => {
     height='auto'
     >
      <Cancel />
-     <Text sx={{ ml:'9px', fontWeight: 'bold' }}>Close</Text>
+     <Text sx={{ ml:'9px', fontWeight: 'bold' }}>{ text }</Text>
    </Button>
   )
 }
