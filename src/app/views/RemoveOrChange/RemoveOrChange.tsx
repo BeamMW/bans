@@ -43,7 +43,7 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
       <Container sx={{ position: 'relative' }}
         onMouseLeave={hideTip}
       >
-        <Flex>
+        <Flex sx={{justifyContent: 'flex-end'}}>
         <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString(2)} size="14px"  showConvertedToUsd={true}/>
           {/* <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
