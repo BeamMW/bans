@@ -39,7 +39,9 @@ class DomainPresenterValidator {
 
     static checkIsValidNameAndReturn(rawDomainName: string): string {
         if (rawDomainName.length < 3) throw new DomainPresenterError("name is too short");
-
+    
+        if(!rawDomainName.match(/^[a-zA-Z0-9\-\_\~]*$/i)) throw new DomainPresenterError("contains forbidden symbols");
+        
         return rawDomainName;
     }
 }
