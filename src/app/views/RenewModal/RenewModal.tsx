@@ -42,7 +42,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isModalShown, closeModal
         <RegistrationHeader search={selectedDomain.name} />
         <Divider sx={{ my: 5 }} />
         <RegistrationPeriod period={period} setPeriod={setPeriod} />
-        <RegistrationPrice />
+        <RegistrationPrice price={selectedDomain.price} period={period} />
         <ButtonContainer>
           <CloseBtn toggle={closeModal} />
           <RegisterAction

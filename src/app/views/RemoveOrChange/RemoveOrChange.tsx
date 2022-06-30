@@ -65,7 +65,7 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
       </Container>
 
       <RemoveModal domain={domain} isShown={showRemove} toggleClose={toggleShowRemoveModal}/>
-      <ChangePrice isShown={showSetPrice} toggleClose={toggleshowSetPriceModal} />
+      <ChangePrice domain={domain} isShown={showSetPrice} toggleClose={toggleshowSetPriceModal} />
     </>
   )
 }

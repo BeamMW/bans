@@ -10,8 +10,9 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 type RegisterActionProps = {
     transactionId: string;
     change: any;
-    period: number;
+    period?: number;
     domain: DomainPresenterType;
+    isPure?: boolean;
 };
 
 export const RegisterAction: React.FC<RegisterActionProps> = ({
@@ -19,7 +20,8 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     transactionId,
     change,
     period,
-    domain
+    domain,
+    isPure
 }) => {
 
     const { registeredMethods } = useBansApi();
@@ -49,8 +51,15 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     );
 
     return (
-        <Button pallete="green" onClick={sendTransaction}>
-            {children}
-        </Button>
+        !isPure ?
+            (
+                <Button pallete="green" onClick={sendTransaction} >
+                    {children}
+                </Button >
+            ) : (
+                <span onClick={sendTransaction}>
+                    {children}
+                </span>
+            )
     );
-};
+}

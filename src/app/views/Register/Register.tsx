@@ -34,14 +34,13 @@ const tillDate = (foundDomain, period) => useMemo(() => {
 }, [foundDomain, period])
 
 export const Register: React.FC = () => {
-  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
-
-  const TRANSACTION_ID = foundDomain.isOnSale ? "DOMAIN_BUYING" : "DOMAIN_REGISTER";
+  const TRANSACTION_ID = "DOMAIN_REGISTER";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
 
   const [period, setPeriod] = useState<number>(1);
+  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
@@ -74,20 +73,20 @@ export const Register: React.FC = () => {
         <Box>
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 5 }} />
-          {!foundDomain.isOnSale ? <RegistrationPeriod period={period} setPeriod={setPeriod}/> : <></>}
-          <RegistrationPrice isOnSale={foundDomain.isOnSale} price={foundDomain.price} period={period} />
+          <RegistrationPeriod period={period} setPeriod={setPeriod}/>
+          <RegistrationPrice price={foundDomain.price} />
           <Flex sx={{ flexDirection: 'column'}}>
             <Text variant="panelHeader" sx={{mb:30}}>
               Current domain will be available from {now} till {till}.
             </Text>
             <RegisterAction
-              transactionId={TRANSACTION_ID}
+              transactionId={"DOMAIN_REGISTER"}
               change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
               period={period}
               domain={foundDomain}
             >
               <Plus />
-              {foundDomain.isOnSale ? "buy" : "register"}
+              register
             </RegisterAction>
           </Flex>
         </Box>

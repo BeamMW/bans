@@ -82,7 +82,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
 
   const rows =
     domains.map((domain, i) => (
-      <SplitContainer key={i} leftWeight={12} rightWeight={0}>
+      <SplitContainer key={i} leftWeight={11.5} rightWeight={0.5}>
         <LeftSide domain={domain} />
         {
           domain.isOnSale ?
@@ -91,14 +91,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
         }
       </SplitContainer>
     ));
-  /* 
-    const removeRow = domains.map((domain, i) => (
-      <SplitContainer key={i} leftWeight={9.5} rightWeight={2.5}>
-        <LeftSide domain={domain} />
   
-      </SplitContainer>
-    )); */
-
   return (
     <>
       {rows}

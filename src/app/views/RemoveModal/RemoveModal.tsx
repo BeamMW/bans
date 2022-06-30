@@ -25,7 +25,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, toggleClose, domai
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-
+      toggleClose();
       return () => {
         //store.dispatch()
       }

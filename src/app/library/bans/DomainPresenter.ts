@@ -82,7 +82,7 @@ export class DomainPresenter implements IDomainPresenter {
     }
 
     protected resolveIsAvailable(): boolean {
-        return this.rawDomain?.isAvailable || !(this.rawDomain?.key && this.rawDomain?.hExpire && !this.rawDomain?.hExpire);
+        return this.rawDomain?.isAvailable || !(this.rawDomain?.key && this.rawDomain?.hExpire && !this.rawDomain?.price);
     }
 
     protected resolveIsYouOwn(): boolean {

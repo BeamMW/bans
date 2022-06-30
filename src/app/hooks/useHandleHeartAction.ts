@@ -4,9 +4,12 @@ import { useCallback } from "react";
 
 export const useHandleHeartAction = (isBansLove, search) => {
     return useCallback(
-        () => !!isBansLove && isBansLove.length ?
+        (e) => {
+            !!isBansLove && isBansLove.length ?
             deleteFavoriteBansByName(search) :
-            createFavoriteBans(new FavoriteBans(search)),
+            createFavoriteBans(new FavoriteBans(search));
+            e.stopPropagation()
+        },
         [isBansLove, search]
     )
 };

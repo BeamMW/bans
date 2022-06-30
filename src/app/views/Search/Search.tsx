@@ -34,7 +34,7 @@ const Search: React.FC = () => {
 
   const fetchDomain = async (search, currentStateTimestamp, currentStateHeight) => {
 
-    if (!isValid) {
+    if (!isValid && !foundDomain) {
       setFoundDomain(null)
       return;
     }

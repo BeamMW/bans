@@ -1,5 +1,5 @@
-import React from "react";
-import { Box,Text } from "theme-ui";
+import React, { useEffect } from "react";
+import { Box, Text } from "theme-ui";
 import Button from "@app/components/Button";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
@@ -7,29 +7,52 @@ import { Modal } from "@app/components/Modals/Modal";
 import ArrowRight from '../../assets/icons/arrow-right.svg'
 import { Amount } from "@app/components/Amount/Amount";
 import Input from "@app/components/Input";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { SellBansAction } from "../SellBans/SellBansAction";
+import { GROTHS_IN_BEAM } from "@app/constants";
+import { Decimal } from "@app/library/base/Decimal";
 
 
 interface ChangePriceProps {
   isShown: boolean;
   toggleClose: () => void;
+  domain: DomainPresenterType;
 }
 
-export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose }) => {
-  const [amount, setAmount] = React.useState();
+export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, domain }) => {
+  const TRANSACTION_ID = "DOMAIN_ADJUSTE_SALE";
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
+
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      toggleClose();
+      return () => {
+        //store.dispatch()
+      }
+    }
+
+  }, [transactionState]);
+
+  const [amount, setAmount] = React.useState(domain.price.amount / GROTHS_IN_BEAM);
 
   const handlePriceChange = (e) => {
     setAmount(e.target.value)
-  } 
+  }
   return (
-    <Modal  isShown={isShown} header="Change price for batboy.beam domain">
+    <Modal isShown={isShown} header="Change price for batboy.beam domain">
       <>
-      <Box sx={{mb: '10px'}}>
-        <Text variant="subHeader">Current price</Text>
-      </Box>
-      <Box>
-      <Amount value="200" size="14px"  showConvertedToUsd={true}/>
-      </Box>
-      <Box sx={{ mt: '30px' }}>
+        {isTransactionPending && <LoadingOverlay />}
+        <Box sx={{ mb: '10px' }}>
+          <Text variant="subHeader">Current price</Text>
+        </Box>
+        <Box>
+          <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
+        </Box>
+        <Box sx={{ mt: '30px' }}>
           <Input
             variant='sell'
             pallete='blue'
@@ -38,16 +61,20 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose }
             value={amount}
             info="0 USD"
           >
-          <Amount value={amount} size="14px" />
           </Input>
         </Box>
-      <ButtonContainer>
-          <CloseBtn toggle={toggleClose}/>
-          <Button pallete="green" onClick={() => {}} style={{ fontSize: '14px' }}>
+        <ButtonContainer>
+          <CloseBtn toggle={toggleClose} />
+          <SellBansAction
+            transactionId={TRANSACTION_ID}
+            change={"adjustSellingBans"}
+            amount={+amount}
+            domain={domain}
+          >
             <ArrowRight />
             Transfer
-          </Button>
-      </ButtonContainer>
+          </SellBansAction>
+        </ButtonContainer>
       </>
     </Modal>
   )

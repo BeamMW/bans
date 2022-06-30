@@ -32,7 +32,7 @@ export const FavoriteTab: React.FC<{ domains: any }> = (props) => {
   const rows = 
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={11} rightWeight={1}>
-        <LeftSide isExpired={false} name={domain.name} expiresAt={`Block expire ${domain.hExpire}`} />
+        <LeftSide domain={domain} />
         <RightSide isAvailable={false} />
       </SplitContainer>
   ));

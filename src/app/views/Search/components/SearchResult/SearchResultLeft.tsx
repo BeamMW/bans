@@ -1,3 +1,4 @@
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import { Flex, Text } from "theme-ui";
 import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult.styles';
@@ -5,6 +6,7 @@ import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult
 
 
 interface SearchResultLeftProps extends SearchResultStyleProps {
+  domain?: DomainPresenterType
   value: string;
   isValid: boolean;
   expiresAt: string;
