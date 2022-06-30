@@ -12,17 +12,18 @@ import { copyToClipboard } from '../../core/appUtils';
 import { useSelector } from "react-redux";
 import { selectFavoritesBans, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 
 interface RightSideProps {
-  isAvailable: boolean;
+  domain: DomainPresenterType;
 }
-const RightSide: React.FC<RightSideProps> = ({isAvailable}) => {
+const RightSide: React.FC<RightSideProps> = ({domain}) => {
   const [showPopup, setShowPopup] = React.useState(false);
   return (
     <>
       <Container sx={{ position: 'relative' }}>
         <Flex>
-          <Text {...{}/* isAvailable some logic */}>{isAvailable ? "available" : "not available"}</Text>
+          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isAvailable ? "available" : "not available"}</Text>
         </Flex>
       </Container>
     </>
@@ -38,10 +39,10 @@ export const FavoriteTab = (props) => {
     favoriteBans.map((domain, i) => (
       <SplitContainer key={i} leftWeight={11} rightWeight={1}>
         <LeftSide domain={domain} />
-        <RightSide isAvailable={false} />
+        <RightSide domain={domain} />
       </SplitContainer>
   )) : <></>);
-  }, [isFavoriteLoaded])
+  }, [isFavoriteLoaded, favoriteBans])
 
   return (
     isFavoriteLoaded ? <>{rows}</> : <LoadingOverlay/>
