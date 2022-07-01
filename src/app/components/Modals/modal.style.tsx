@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-
+interface ModalContentProps {
+  width: string;
+}
 const bgColor = "#0e4d76"; //utils.getStyles().background_popup;
 export const Wrapper = styled.div`
   width: 100%;
@@ -16,7 +18,8 @@ export const Wrapper = styled.div`
 
 export const ModalContent = styled.div`
     padding: 40px;
-    min-width: 630px;
+    min-width: ${({ width }) => width ? width : '630px' };
+    width: ${({ width }) => width ? width : 'auto' };
     border-radius: 10px;
     /* background-color: ${bgColor}; */
     background-color: #0D4D76;
