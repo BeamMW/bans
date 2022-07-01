@@ -29,6 +29,7 @@ const RightSide: React.FC<RightSideProps> = ({domain}) => {
     </>
   )
 }
+
 export const FavoriteTab = (props) => {
   const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded())
   const favoriteBans = useSelector(selectFavoritesBans())
