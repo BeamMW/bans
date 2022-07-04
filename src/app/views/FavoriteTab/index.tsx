@@ -23,7 +23,7 @@ const RightSide: React.FC<RightSideProps> = ({domain}) => {
     <>
       <Container sx={{ position: 'relative' }}>
         <Flex>
-          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isAvailable ? "available" : "not available"}</Text>
+          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isYourOwn ? "your domain" : ( domain.isAvailable ? "available" : "not available")}</Text>
         </Flex>
       </Container>
     </>

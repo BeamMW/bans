@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Paragraph, Text, Flex } from "theme-ui";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { Amount } from "@app/components/Amount/Amount";
 import Button from "@app/components/Button";
 import { WithDrawButton } from "@app/components/WithdrawButton/WithDrawButton";
+import { useBansApi } from "@app/contexts/Bans/BansContexts";
+import { useSelector } from "react-redux";
+import { selectPublicKey, selectSystemState } from "@app/store/SharedStore/selectors";
+import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
 
 interface RightSideProps {
-  isExpired: boolean;
+  domain: DomainPresenterType;
 }
-const RightSide: React.FC<RightSideProps> = ({ isExpired }) => {
+const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   return (
     <Flex sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
     <Amount value="200" size="14px" />
     <WithDrawButton text='withdraw' />
     {
-      isExpired &&  (
+      domain.isExpired &&  (
         <Button variant="ghostBordered" pallete="green" style={{ margin: '0 0 0 20px' }}>
           renew subscription
         </Button>
@@ -26,17 +30,48 @@ const RightSide: React.FC<RightSideProps> = ({ isExpired }) => {
   )
 }
 interface MyBansProps {
-  isExpired: boolean
 }
-export const MyBans: React.FC<MyBansProps> = ({isExpired}) => {
-  const isExpiredText = isExpired ? 'Paid term of usage is over. Your domain will be disconnected on June 30, 2022' : 'Expires on June 29, 2022';
+export const MyBans: React.FC<MyBansProps> = ({}) => {
+
+  const { registeredMethods } = useBansApi();
+  const [domains, setDomains] = useState(null);
+  const myKey = useSelector(selectPublicKey());
+
+  const publicKey = useSelector(selectPublicKey());
+  const {
+    current_height: currentStateHeight,
+    current_state_timestamp: currentStateTimestamp
+  } = useSelector(selectSystemState());
+
+  useEffect(() => {
+
+    publicKey && registeredMethods.userView().then(response => {
+      setDomains(response.domains.map(
+        //for future logic
+        domain => getDomainPresentedData(
+          { ...domain, ...{ searchName: domain.name } },
+          currentStateTimestamp,
+          currentStateHeight,
+          publicKey
+        )
+      ));
+    });
+
+  }, [myKey, currentStateHeight, currentStateTimestamp])
+
+  //const isExpiredText = isExpired ? 'Paid term of usage is over. Your domain will be disconnected on June 30, 2022' : 'Expires on June 29, 2022';
+
   return (
     <>
       <Paragraph sx={{ mt:'53px', mb:5, letterSpacing:'3.1px', color:'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
-      <SplitContainer leftWeight={1} rightWeight={4}>
-        <LeftSide name='testName.beam' expiresAt={isExpiredText} isExpired={isExpired}/>
-        <RightSide isExpired={isExpired}/>
-      </SplitContainer>
+      {
+        domains ? domains.map((domain, i) => (
+          <SplitContainer key={i} leftWeight={10} rightWeight={2}>
+            <LeftSide domain={domain} />
+            <RightSide domain={domain} />
+          </SplitContainer>
+        )) : <></>
+      }
     </>
   );
 }

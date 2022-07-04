@@ -17,7 +17,6 @@ import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selec
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
 
 const MyPage = () => {
-  const [myKey, setMyKey] = useState(null);
   const [domains, setDomains] = useState(null);
   const [active, setActive] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,17 +30,10 @@ const MyPage = () => {
   } = useSelector(selectSystemState());
 
 
-  //refactor remove duplication
-  useEffect(() => {
-    registeredMethods && registeredMethods.userMyKey().then(response => setMyKey(
-      response.key
-    ));
-  }, [registeredMethods]);
-
   useEffect(() => {
     setIsLoading(true);
 
-    active === 1 && myKey && registeredMethods.userView().then(response => {
+    active === 1 && publicKey && registeredMethods.userView().then(response => {
       setDomains(response.domains.map(
         //for future logic
         domain => getDomainPresentedData(
@@ -66,7 +58,7 @@ const MyPage = () => {
     });
 
     setIsLoading(false);
-  }, [myKey, active, currentStateHeight, currentStateTimestamp])
+  }, [active, currentStateHeight, currentStateTimestamp])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (

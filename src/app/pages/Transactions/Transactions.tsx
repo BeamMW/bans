@@ -9,7 +9,7 @@ const Transactions: React.FC = () => {
     <>
       <PageTitle title="BANS' transactions"/>
       <Balance balance="200"/>
-      <MyBans isExpired={false}/>
+      <MyBans/>
     </>
   );
 }
