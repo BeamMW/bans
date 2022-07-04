@@ -67,6 +67,7 @@
     "class-transformer": "^0.5.1",
     "cuid": "^2.1.8",
     "dexie": "^3.2.2",
+    "dexie-observable": "^3.0.0-beta.11",
     "dexie-react-hooks": "^1.1.1",
     "dotenv": "^16.0.0",
     "formik": "^2.2.9",

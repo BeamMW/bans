@@ -10,6 +10,8 @@ import { useCurrentTransactionState } from "@app/library/transaction-react/useCu
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
+import { SearchResultForSale } from "./SearchResultForSale";
+import { useModal } from "@app/components/Modals/useModal";
 
 export interface SearchResultProps {
   isValid: boolean;
@@ -18,28 +20,12 @@ export interface SearchResultProps {
 };
 
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
-  const TRANSACTION_ID = "DOMAIN_BUYING";
-
-  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
-  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
-
   const { setCurrentView, foundDomain, setFoundDomain } = useMainView();
-
-  useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      //dispatch to the main search view and clear found domain data
-      setCurrentView("REGISTER_COMPLETED") && setFoundDomain(null);
-
-      return () => {
-        //store.dispatch()
-      }
-    }
-
-  }, [transactionState, setCurrentView]);
+  const { isShown, toggle } = useModal();
 
   const { search, isValid, isLoading } = props;
   const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: true, expireBlock: 0 };
-  
+
   const showBorder = isAvailable && isValid;
 
   const proceedWithDomainHandler = () => {
@@ -59,8 +45,8 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
         flexDirection: 'column',
         padding: '30px 0px'
       }}>
-      <Skeleton/>
-    </Flex>
+        <Skeleton />
+      </Flex>
       <></>
     </SplitContainer>
   );
@@ -74,14 +60,9 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
             {isLoading ? (skeletonResult) : (
               <>
                 {foundDomain && foundDomain.isOnSale && !foundDomain.isYourOwn ? (
-                  <RegisterAction
-                    transactionId={TRANSACTION_ID}
-                    change={"buyDomain"}
-                    domain={foundDomain}
-                    isPure={true}
-                  >
-                    {searchResult}
-                  </RegisterAction>
+                  <>
+                    <SearchResultForSale isShown={isShown} toggleClose={toggle} />
+                  </>
                 ) : (
                   <>
                     {searchResult}
