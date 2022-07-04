@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { selectFavoritesBans, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-
+import { HeartIcon } from "@app/assets/icons";
 interface RightSideProps {
   domain: DomainPresenterType;
 }
@@ -21,9 +21,12 @@ const RightSide: React.FC<RightSideProps> = ({domain}) => {
   const [showPopup, setShowPopup] = React.useState(false);
   return (
     <>
-      <Container sx={{ position: 'relative' }}>
-        <Flex>
-          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isAvailable ? "available" : "not available"}</Text>
+      <Container sx={{ position: 'relative', justifyContent: 'flex-end' }}>
+        <Flex sx={{justifyContent:'center', alignItems: 'center'}}>
+          <Button variant='icon' pallete='opacity' onClick={() => {}} style={{marginRight: '15px'}}>
+            <HeartIcon />
+          </Button>
+          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isAvailable ? "not available" : "not available"}</Text>
         </Flex>
       </Container>
     </>
