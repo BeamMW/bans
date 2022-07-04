@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Container } from 'theme-ui';
-import SearchIcon from "../../assets/icons/search.svg";
-import RemoveIcon from "../../assets/icons/remove.svg";
+import { Box, Container,Flex,Text } from 'theme-ui';
 import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '../../components/Input';
 import debounce from 'lodash.debounce';
@@ -10,7 +8,11 @@ import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
 import { useSelector } from 'react-redux';
 import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
 import { Notification } from "@app/components/Notification/Notifcation";
+import Button from '@app/components/Button';
 
+import SearchIcon from "@app/assets/icons/search.svg";
+import RemoveIcon from "@app/assets/icons/remove.svg";
+import Sell from '@app/assets/icons/send.svg';
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
@@ -103,6 +105,15 @@ const Search: React.FC = () => {
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
+
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Text sx={{ display:'inline-block', my:'30px' }}>or</Text>
+        <Button>
+          <Sell/>
+          send funds to the BANS
+        </Button>
+      </Flex>
+
       {/* <Notification /> */}
     </Container>
   );

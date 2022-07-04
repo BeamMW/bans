@@ -4,7 +4,7 @@ import styled from "styled-components"
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   valid?: boolean;
-  variant?: 'regular' | 'gray' | 'proposal' | 'icon' | 'sell';
+  variant?: 'regular' | 'gray' | 'proposal' | 'icon' | 'modalInput';
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
   info?: string;
@@ -65,7 +65,7 @@ const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
   }
 `;
 
-const InputSellStyled = styled(InputGrayStyled)<{ pallete: string }>`
+const InputMainStyled = styled(InputGrayStyled)<{ pallete: string }>`
   font-size: 16px;
   font-weight: normal;
   color: ${({ pallete }) => `var(--color-${pallete})`};
@@ -119,7 +119,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       gray: InputGrayStyled,
       proposal: InputProposalStyled,
       icon: InputRegularStyled,
-      sell: InputSellStyled,
+      modalInput: InputMainStyled,
     }[variant];
 
     return (

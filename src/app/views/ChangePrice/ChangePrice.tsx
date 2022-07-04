@@ -55,7 +55,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
         </Box>
         <Box sx={{ mt: '30px' }}>
           <Input
-            variant='sell'
+            variant='modalInput'
             pallete='blue'
             label='New price'
             onChange={handlePriceChange}

@@ -3,7 +3,7 @@ import { Box, Container, Flex, Text } from "theme-ui";
 import { Modal } from "@app/components/Modals/Modal";
 import { Select } from '@app/components/Select/Select';
 import Input from "@app/components/Input";
-import Beam from '../../assets/icons/beam.svg';
+import Beam from '@app/assets/icons/beam.svg';
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { SellBtn } from './../../components/SellBtn/SellBtn';
 import { DomainPresenter, DomainPresenterType } from "@app/library/bans/DomainPresenter";
@@ -68,7 +68,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
         <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} />
         <Box sx={{ mt: '30px' }}>
           <Input
-            variant='sell'
+            variant='modalInput'
             pallete='white'
             label='Amount'
             onChange={handleChange}
