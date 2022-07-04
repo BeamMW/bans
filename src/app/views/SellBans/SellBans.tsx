@@ -11,6 +11,9 @@ import { SellBansAction } from "./SellBansAction";
 import Sell from '../../assets/icons/send.svg';
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import { Decimal } from "@app/library/base/Decimal";
+import { useSelector } from "react-redux";
+import { selectRate } from "@app/store/BansStore/selectors";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -51,11 +54,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
   }, [transactionState]);
 
 
-  useEffect(() => {
-    selectedDomain.isOnSale && (
-      setAmount(selectedDomain.price.amount)
-    );
-  }, []);
+  const beamPrice = useSelector(selectRate());
 
 
   return (
@@ -74,7 +73,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
             label='Amount'
             onChange={handleChange}
             value={amount}
-          //info="0 USD"
+            info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
             <Beam />
           </Input>

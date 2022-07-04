@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { FilterTabs } from '../../views/filterTabs/FilterTabs';
 import EmptyPage from '../../views/EmptyPage/EmptyPage';
@@ -29,11 +29,14 @@ const MyPage = () => {
     current_state_timestamp: currentStateTimestamp
   } = useSelector(selectSystemState());
 
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     setIsLoading(true);
 
     active === 1 && publicKey && registeredMethods.userView().then(response => {
+      !!domains && forceUpdate();
+      
       setDomains(response.domains.map(
         //for future logic
         domain => getDomainPresentedData(
@@ -46,6 +49,8 @@ const MyPage = () => {
     });
 
     active === 2 && useGetFavoritesDomains().then(response => {
+      !!domains && forceUpdate();
+
       setDomains(response.domains.map(
         //for future logic
         domain => getDomainPresentedData(

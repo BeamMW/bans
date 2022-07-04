@@ -51,7 +51,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
           <Text variant="subHeader">Current price</Text>
         </Box>
         <Box>
-          <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
+          <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString(0)} size="14px" showConvertedToUsd={true} />
         </Box>
         <Box sx={{ mt: '30px' }}>
           <Input

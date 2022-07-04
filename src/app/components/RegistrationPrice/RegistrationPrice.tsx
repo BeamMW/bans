@@ -7,7 +7,6 @@ import { Amount } from "../Amount/Amount";
 
 interface PriceProps {
   price?: PriceInfo;
-  isOnSale?: boolean;
   period?: number;
 }
 
@@ -17,7 +16,7 @@ export const RegistrationPrice: React.FC<PriceProps> = ({ price, isOnSale, perio
       <Text variant="panelHeader">
         {isOnSale ? "Selling price" : "Registration price"}
       </Text>
-      <Amount value={price && period ? Decimal.from(/* price.amount / GROTHS_IN_BEAM */5 * period).toString() : "TBD"} size="14px" />
+      <Amount value={price && period ? Decimal.from(price.amount / GROTHS_IN_BEAM * period).toString() : "TBD"} size="14px" showConvertedToUsd={true} />
     </Flex>
   )
 }

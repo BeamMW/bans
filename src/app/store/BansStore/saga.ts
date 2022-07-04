@@ -101,7 +101,7 @@ export function* loadAllFavoritesBansSaga(
       publicKey
     } = state.shared;
 
-    if (!(currentStateHeight && currentStateTimestamp /* && publicKey */))
+    if (!(currentStateHeight && currentStateTimestamp && publicKey))
       return false;
 
     const bandApiMethods: any/* ShaderActions */ = getBansApi();

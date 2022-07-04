@@ -6,6 +6,7 @@ import { Decimal } from '@app/library/base/Decimal';
 type Action = ActionType<typeof actions>;
 
 const initialState = {
+    assetPrice: (Decimal.ZERO),
     fees: (Decimal.ZERO),
     appParams: {
     },

@@ -16,7 +16,7 @@ interface RightSideProps {
 const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   return (
     <Flex sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
-    <Amount value="200" size="14px" />
+    <Amount value="0" size="14px" />
     <WithDrawButton text='withdraw' />
     {
       domain.isExpired &&  (

@@ -16,9 +16,10 @@ import ShaderApi, { ShaderStore } from "../library/base/api/ShaderApi";
 import methods from "@library/bans/methods";
 import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/WalletApiConnector/WalletApiConnectorProvider";
 import store from "index";
-import { loadAppParams } from "@app/store/BansStore/actions";
+import { loadAppParams, loadRate } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
 import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
+import { selectRate } from "@app/store/BansStore/selectors";
 
 
 const shadersData = Array.from([
@@ -56,6 +57,7 @@ const walletEventhandler = ({ walletEventPayload }) => {
 export const WalletApiConnector = ({ children }) => {
   const dispatch = useDispatch();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const rate = useSelector(selectRate());
 
   /**
    * Duplicate ShaderStore logic! In the future have to  resolve to keep one of shaders 'stores'
@@ -134,6 +136,12 @@ export const WalletApiConnector = ({ children }) => {
       }
     }
   }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
+
+  useEffect(() => {
+    if (rate.isZero) {
+      dispatch(loadRate.request());
+    }
+  }, [rate]);
 
   if (isLoaded) {
     return <WalletApiConnectorProvider

@@ -74,7 +74,7 @@ export const Register: React.FC = () => {
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 5 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod}/>
-          <RegistrationPrice price={foundDomain.price} />
+          <RegistrationPrice price={foundDomain.price} period={period}/>
           <Flex sx={{ flexDirection: 'column'}}>
             <Text variant="panelHeader" sx={{mb:30}}>
               Current domain will be available from {now} till {till}.

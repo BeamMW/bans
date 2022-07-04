@@ -8,7 +8,7 @@ const Transactions: React.FC = () => {
   return (
     <>
       <PageTitle title="BANS' transactions"/>
-      <Balance balance="200"/>
+      <Balance balance="0"/>
       <MyBans/>
     </>
   );
