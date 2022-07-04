@@ -41,7 +41,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showHeart }) => {
       <Box>
         <Text>{name}.beam</Text>
 
-        {expiresAt ? <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText> : <></>}
+        {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></>}
       </Box>
       {
         showHeart && (

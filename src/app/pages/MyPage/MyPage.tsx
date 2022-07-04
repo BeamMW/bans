@@ -63,7 +63,7 @@ const MyPage = () => {
     });
 
     setIsLoading(false);
-  }, [active, currentStateHeight, currentStateTimestamp])
+  }, [publicKey, active, currentStateHeight, currentStateTimestamp])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (

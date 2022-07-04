@@ -1,4 +1,5 @@
 import { GROTHS_IN_BEAM } from "@app/constants";
+import moment from 'moment';
 
 export type DomainPresenterType = {
     rawDomain: RawDomainType;
@@ -74,7 +75,7 @@ export class DomainPresenter implements IDomainPresenter {
             (this.rawDomain.hExpire - this.currentStateHeight) * 60 + this.currentStateTimestamp :
             null;
 
-        return unixTimestamp ? (new Date(unixTimestamp * 1000)).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : null;
+        return unixTimestamp ? moment(unixTimestamp * 1000).format('LL') : null;
     }
 
     protected domainIsExpireTimeConverter(): boolean {

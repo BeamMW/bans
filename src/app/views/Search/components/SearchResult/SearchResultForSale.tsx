@@ -11,23 +11,29 @@ import { useCurrentTransactionState } from '@app/library/transaction-react/useCu
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useMainView } from '@app/contexts/Bans/BansContexts';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
+import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 
 interface ResultForSaleProps {
   isShown: boolean;
   toggleClose: () => void;
+  domain?: DomainPresenterType;
 }
-export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ isShown, toggleClose }) => {
-  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
+export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isShown, toggleClose }) => {
+  //@TODO:refactor this mess!
+  const { foundDomain, setFoundDomain, setCurrentView } = !domain ? useMainView() : {
+    foundDomain: domain,
+    setFoundDomain: () => null,
+    setCurrentView: () => null
+  };
 
   const TRANSACTION_ID = "DOMAIN_BUYING";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
-  const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      //dispatch to the main search view and clear found domain data
-      toggleClose(), /* setCurrentView("REGISTER_COMPLETED") && */ setFoundDomain(null);
+      toggleClose(), setFoundDomain(null);
 
       return () => {
         //store.dispatch()

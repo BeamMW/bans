@@ -1,5 +1,5 @@
 import { call, put, takeLatest, select, takeEvery, getContext } from 'redux-saga/effects';
-import { CID } from '@app/constants';
+import { BANS_CID } from '@app/constants';
 import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
 import { actions } from '.';
@@ -33,7 +33,7 @@ const getBansApi = () => {
   let bansApi;
 
   bansApi = !_.isEmpty(getGlobalApiProviderValue()) ? getGlobalApiProviderValue() : (() => {
-    const bansShader = ShaderApi.useShaderStore.retriveShader("a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956")
+    const bansShader = ShaderApi.useShaderStore.retriveShader(BANS_CID)
     const bansApi = new ShaderApi(bansShader, methods);
 
     return bansApi.getRegisteredMethods();
@@ -110,7 +110,8 @@ export function* loadAllFavoritesBansSaga(
     const allFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.map(bans => bans.bansName))
 
     const allFavoritesBansToDomainPresenter = allFavoritesBansPrepare.map((bans) =>
-      getDomainPresentedData(bans, currentStateHeight, currentStateTimestamp, publicKey));
+      getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey));
+
     yield put(actions.loadAllFavoritesBans.success(allFavoritesBansToDomainPresenter));
     yield put(actions.setIsFavoriteLoaded(true))
   } catch (e) {
@@ -149,7 +150,7 @@ export function* loadContractInfoSaga(
       bandApiMethods.managerView,
     )) as any; /* ManagerViewData */
 
-    const contract = managerViewParams.contracts.find(item => item.cid === CID);
+    const contract = managerViewParams.contracts.find(item => item.cid === BANS_CID);
     if (contract) {
       yield put(actions.loadContractInfo.success(contract /* .Height */));
     }

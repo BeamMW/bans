@@ -14,6 +14,8 @@ import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { SellBansAction } from "../SellBans/SellBansAction";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
+import { useSelector } from "react-redux";
+import { selectRate } from "@app/store/BansStore/selectors";
 
 
 interface ChangePriceProps {
@@ -42,7 +44,9 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
   const handlePriceChange = (e) => {
     setAmount(e.target.value)
   }
-  const header = `Change price for ${domain.name}.beam domain`
+  const header = `Change price for ${domain.name}.beam domain`;
+  const beamPrice = useSelector(selectRate());
+
   return (
     <Modal isShown={isShown} header={header} width={'390px'}>
       <>
@@ -60,7 +64,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
             label='New price'
             onChange={handlePriceChange}
             value={amount}
-            info="0 USD"
+            info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
           </Input>
         </Box>

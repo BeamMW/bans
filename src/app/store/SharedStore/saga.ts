@@ -1,3 +1,4 @@
+import { BANS_CID } from '@app/constants';
 import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 import methods from '@app/library/bans/methods';
 import ShaderApi from '@app/library/base/api/ShaderApi';
@@ -18,7 +19,7 @@ const getBansApi = () => {
   let bansApi;
 
   bansApi = !_.isEmpty(getGlobalApiProviderValue()) ? getGlobalApiProviderValue() : (() => {
-    const bansShader = ShaderApi.useShaderStore.retriveShader("a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956")
+    const bansShader = ShaderApi.useShaderStore.retriveShader(BANS_CID)
     const bansApi = new ShaderApi(bansShader, methods);
 
     return bansApi.getRegisteredMethods();

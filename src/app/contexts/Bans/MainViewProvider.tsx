@@ -15,6 +15,9 @@ const bansStates = {
     REGISTER_CLOSED: "SEARCH",
     REGISTER_COMPLETED: "SEARCH",
   },
+  MYBANS: {
+    REGISTER_FAVORITES_DOMAIN: "REGISTER"
+  }
 }
 
 export const MainViewProvider: React.FC = props => {

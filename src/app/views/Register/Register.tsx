@@ -12,6 +12,7 @@ import { useCurrentTransactionState } from "@app/library/transaction-react/useCu
 import { RegistrationPeriod } from "@app/components/RegistrationPeriod/RegistrationPeriod";
 import { RegistrationPrice } from  "@app/components/RegistrationPrice/RegistrationPrice";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
+import moment from "moment";
 
 const Container = styled.div`
   min-width: 630px;
@@ -27,9 +28,7 @@ const Container = styled.div`
 const tillDate = (foundDomain, period) => useMemo(() => {
   if(foundDomain.expiresAt) return foundDomain.expiresAt;
 
-  const current = new Date();
-  current.setFullYear(current.getFullYear() + period);
-  return current.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+  return moment().add(1, 'years').format("LL");
 
 }, [foundDomain, period])
 
@@ -46,8 +45,7 @@ export const Register: React.FC = () => {
 
   const {name: domainName} = foundDomain;
 
-  const currentTime = new Date();
-  const now = (currentTime.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}));
+  const now = moment().format("LL");
 
   const till = tillDate(foundDomain, period);
 

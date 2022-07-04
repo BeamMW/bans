@@ -20,10 +20,11 @@ import { loadAppParams, loadRate } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
 import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
 import { selectRate } from "@app/store/BansStore/selectors";
+import { BANS_CID } from "@app/constants";
 
 
 const shadersData = Array.from([
-  ["bans", "a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956", "./bansAppShader.wasm", 0],
+  ["bans", BANS_CID, "./bansAppShader.wasm", 0],
   ["vault-anon", "a3385e50cf33afc9f769ee1d82d56b73046d680d343977f36d9a303d7bcdc4da", "./vaultAnonAppShader.wasm", 1]
 ], params => new UtilsShader(...params));
 

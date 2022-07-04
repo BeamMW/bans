@@ -34,7 +34,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
 
   const searchResult = (
     <SplitContainer leftWeight={7} rightWeight={5} border={showBorder}>
-      <SearchResultLeft domain={foundDomain} value={search + (search ? ".beam" : "")} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} handleClick={foundDomain && foundDomain.isOnSale ? () => {toggle(), console.log(777)} : proceedWithDomainHandler} />
+      <SearchResultLeft domain={foundDomain} value={search + (search ? ".beam" : "")} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler} />
       <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
     </SplitContainer>
   );

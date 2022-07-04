@@ -12,7 +12,7 @@ export const Balance:React.FC<BalanceProps> = ({balance}) => {
     <Container>
     <div>
       <div className="description">Current balance</div>
-       <Amount value="202" size='20px'/>
+       <Amount value={balance} size='20px'/>
     </div>
     {
       balance && (
