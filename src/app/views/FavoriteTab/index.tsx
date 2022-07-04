@@ -14,6 +14,7 @@ import { selectFavoritesBans, selectIsFavoriteLoaded } from "@app/store/BansStor
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { HeartIcon } from "@app/assets/icons";
+import { Amount } from "@app/components/Amount/Amount";
 interface RightSideProps {
   domain: DomainPresenterType;
 }
@@ -21,12 +22,10 @@ const RightSide: React.FC<RightSideProps> = ({domain}) => {
   const [showPopup, setShowPopup] = React.useState(false);
   return (
     <>
-      <Container sx={{ position: 'relative', justifyContent: 'flex-end' }}>
-        <Flex sx={{justifyContent:'center', alignItems: 'center'}}>
-          <Button variant='icon' pallete='opacity' onClick={() => {}} style={{marginRight: '15px'}}>
-            <HeartIcon />
-          </Button>
-          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B"}}>{domain.isYourOwn ? "your domain" : ( domain.isAvailable ? "available" : "not available")}</Text>
+      <Container sx={{ position: 'relative' }}>
+        <Flex sx={{ justifyContent: 'flex-end' }}>
+          <Amount value="200" size="14px" />
+          <Text sx={{color: domain.isAvailable ? "#00F6D2" : "#FF746B", marginLeft:'8px'}}>{domain.isAvailable ? "not available" : "not available"}</Text>
         </Flex>
       </Container>
     </>
@@ -41,7 +40,7 @@ export const FavoriteTab = (props) => {
   useEffect(() => {
     setRows(favoriteBans ?
     favoriteBans.map((domain, i) => (
-      <SplitContainer key={i} leftWeight={11} rightWeight={1}>
+      <SplitContainer key={i} leftWeight={9} rightWeight={3}>
         <LeftSide domain={domain} />
         <RightSide domain={domain} />
       </SplitContainer>
@@ -49,6 +48,5 @@ export const FavoriteTab = (props) => {
   }, [isFavoriteLoaded, favoriteBans])
 
   return (
-    isFavoriteLoaded ? <>{rows}</> : <LoadingOverlay/>
   );
 }
