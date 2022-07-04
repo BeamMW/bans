@@ -13,30 +13,37 @@ interface SearchResultLeftProps extends SearchResultStyleProps {
   handleClick: () => void;
 }
 export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
-  const { value, isAvailable, isValid, expiresAt, handleClick} = props;
+  const { value, isAvailable, isValid, expiresAt, handleClick, domain } = props;
+  const isYourOwn = domain && domain.isYourOwn;
+
   return (
     <Flex sx={containerStyles(props)} onClick={handleClick}>
       <Flex>
-      <Text>{value}</Text>
-      {
-      isAvailable && ( 
-      <Box sx={{
-        background:' rgba(0, 246, 210, 0.2)',
-        borderRadius: '4px',
-        marginLeft: '14px'
-        }}>
-      <Text sx={{
-        color:'rgba(0, 246, 210, 1)',
-        fontSize: '12px',
-        fontStyle: 'italic',
-        padding: '2px 6px 2px 6px'
-      }}>available for resale</Text>
-        
-      </Box>
-    )}
+        <Text>{value}</Text>
+        {
+          isAvailable && (
+            <Box sx={{
+              background: ' rgba(0, 246, 210, 0.2)',
+              borderRadius: '4px',
+              marginLeft: '14px'
+            }}>
+              {
+                domain && domain.isOnSale &&
+                <Text sx={{
+                  color: 'rgba(0, 246, 210, 1)',
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  padding: '2px 6px 2px 6px'
+                }}>{isYourOwn ? "you sale the domain" : "available for resale"}</Text>
+              }
+            </Box>
+          )}
       </Flex>
-      { !isAvailable && isValid && (
-          <SubText>Expires on {expiresAt}</SubText>
+      {!isAvailable && isValid && (
+        <SubText>Expires on {expiresAt}</SubText>
+      )}
+      {domain && domain.isOnSale && (
+        <SubText>Expires on {expiresAt}</SubText>
       )}
     </Flex>
   )

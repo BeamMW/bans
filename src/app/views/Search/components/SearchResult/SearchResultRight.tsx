@@ -13,6 +13,8 @@ import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
 import RedHeart from '../../../../assets/icons/red-heart.svg';
 import { Amount } from '@app/components/Amount/Amount';
+import { Decimal } from '@app/library/base/Decimal';
+import { GROTHS_IN_BEAM } from '@app/constants';
 
 const Container = styled(Flex)`
 justify-content: end;
@@ -34,9 +36,6 @@ interface SearchResultProps extends SearchResultStyleProps {
     if(isAvailable && !isOnSale) {
       return "available";
     }
-    if(isAvailable && isOnSale) {
-      return "on sale";
-    }
   }
 
 export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
@@ -49,21 +48,21 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const [liked, setLiked] = React.useState(false);
   const toggleLike = () => setLiked(!liked);
   const status = getAvailableStatusText(isValid, isAvailable, isOnSale);
-  const ONSALE = 'on sale';
 
   const handleBuyClick = () => {
-    if(status === ONSALE) {
+    /* if(status === ONSALE) {
       //do your stafe
       return;
     }
-    return;
+    return; */
   }
+  
   return (
     <Container sx={{ justifyContent: 'flex-end!important' }}>
     <Flex sx={{ mr: 4 }}>
       {
-
-        <Amount size='14px' value='400'/>
+        domain && isOnSale &&
+        <Amount size='14px' value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()}/>
       }
       {
         domain && (
@@ -75,7 +74,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
     </Flex>
     <Flex>
       <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2"} : textStyles(props)} onClick={handleBuyClick}>
-      {isYourOwn ? "your domain" : status === ONSALE ? 'buy' : status}
+      {isYourOwn ? "your domain" : (isAvailable && isOnSale ? 'on sale' : status)}
       </Text>
     </Flex>
   </Container>
