@@ -12,7 +12,7 @@ import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
 import RedHeart from '../../../../assets/icons/red-heart.svg';
-
+import { Amount } from '@app/components/Amount/Amount';
 
 const Container = styled(Flex)`
 justify-content: end;
@@ -48,10 +48,23 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
 
   const [liked, setLiked] = React.useState(false);
   const toggleLike = () => setLiked(!liked);
+  const status = getAvailableStatusText(isValid, isAvailable, isOnSale);
+  const ONSALE = 'on sale';
 
+  const handleBuyClick = () => {
+    if(status === ONSALE) {
+      //do your stafe
+      return;
+    }
+    return;
+  }
   return (
-    <Container>
+    <Container sx={{ justifyContent: 'flex-end!important' }}>
     <Flex sx={{ mr: 4 }}>
+      {
+
+        <Amount size='14px' value='400'/>
+      }
       {
         domain && (
           <Button variant='icon' pallete='opacity' onClick={heartHandler}>
@@ -61,8 +74,8 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
       }
     </Flex>
     <Flex>
-      <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2"} : textStyles(props)}>
-      {isYourOwn ? "your domain" : getAvailableStatusText(isValid, isAvailable, isOnSale)}
+      <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2"} : textStyles(props)} onClick={handleBuyClick}>
+      {isYourOwn ? "your domain" : status === ONSALE ? 'buy' : status}
       </Text>
     </Flex>
   </Container>
