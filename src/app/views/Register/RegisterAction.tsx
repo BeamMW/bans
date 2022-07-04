@@ -21,7 +21,7 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     change,
     period,
     domain,
-    isPure
+    isPure = false
 }) => {
 
     const { registeredMethods } = useBansApi();

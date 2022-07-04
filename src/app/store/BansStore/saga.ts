@@ -71,10 +71,9 @@ export function* loadParamsSaga(
       yield null;
     }
 
-
+    store.dispatch(loadPublicKey.request());
     store.dispatch(actions.loadContractInfo.request());
     store.dispatch(actions.loadUserBans.request());
-    store.dispatch(loadPublicKey.request());
 
     if (Array.isArray(state.bans.allFavoritesBans) && !state.bans.allFavoritesBans.length) {
       store.dispatch(actions.loadAllFavoritesBans.request());
