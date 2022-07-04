@@ -51,7 +51,6 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ isShown, tog
             transactionId={TRANSACTION_ID}
             change={"buyDomain"}
             domain={foundDomain}
-            isPure={true}
           >
             <ArrowRight />
             continue

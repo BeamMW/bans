@@ -1,8 +1,10 @@
+import { HeartIcon } from "@app/assets/icons";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import styled from 'styled-components';
-import { Flex, Text } from "theme-ui";
+import { Box, Flex, Text } from "theme-ui";
+import Button from "../Button";
 
 interface SubTextProps {
   isexpired: boolean;
@@ -20,16 +22,28 @@ export const SubText = styled(Text)<SubTextProps>`
 `
 interface LeftSideProps {
   domain: DomainPresenterType;
+  showHeart?: boolean
 };
 
-export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
+export const LeftSide: React.FC<LeftSideProps> = ({ domain, showHeart }) => {
   const {name, expiresAt,isExpired, isOnSale, price} = domain;
 
   return (
-    <Flex sx={{ variant: 'layout.card' }}>
-      <Text>{name}.beam</Text>
+    <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
+      <Box>
+        <Text>{name}.beam</Text>
 
-      {expiresAt ?  <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText> :<></> }
+        {expiresAt ?  <SubText isexpired={isExpired.toString()}>Block expire {expiresAt}</SubText> :<></> }
+        </Box>
+        {
+          showHeart && (
+              <Box>
+              <Button variant='icon' pallete='opacity' onClick={() => {}} style={{marginRight: '15px'}}>
+                    <HeartIcon />
+              </Button>
+              </Box>
+          )
+        }
     </Flex>
   )
 }
