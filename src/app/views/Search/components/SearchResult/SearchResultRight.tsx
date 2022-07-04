@@ -1,21 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Text } from "theme-ui";
-import Button from '../../../../components/Button';
-import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
-import Heart from '../../../../assets/icons/heart.svg';
-import HeartActive from '../../../../assets/icons/heart-active.svg';
+import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
+import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
+import Button from '@app/components/Button';
 import { createFavoriteBans, deleteFavoriteBansByName } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
 import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
-import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
-import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
-import RedHeart from '../../../../assets/icons/red-heart.svg';
 import { Amount } from '@app/components/Amount/Amount';
 import { Decimal } from '@app/library/base/Decimal';
 import { GROTHS_IN_BEAM } from '@app/constants';
 
+import Heart from '@app/assets/icons/heart.svg';
+import HeartActive from '@app/assets/icons/heart-active.svg';
+import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
 const Container = styled(Flex)`
 justify-content: end;
 align-items: center;

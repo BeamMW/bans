@@ -1,6 +1,6 @@
-import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import { Box, Flex, Text } from "theme-ui";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult.styles';
 
 

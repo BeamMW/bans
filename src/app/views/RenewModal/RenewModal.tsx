@@ -1,19 +1,18 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { Modal } from "@app/components/Modals/Modal";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
-import React, { useCallback, useEffect, useState } from "react";
 import { Divider } from "theme-ui";
-import { RegistrationPeriod } from './../../components/RegistrationPeriod/RegistrationPeriod';
+import { RegistrationPeriod } from '@app/components/RegistrationPeriod/RegistrationPeriod';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
-import Button from "@app/components/Button";
-import Renew from '../../assets/icons/renew-blue.svg';
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { RegisterAction } from "../Register/RegisterAction";
+import { RegisterAction } from "@app/views/Register/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 
+import Renew from '@app/assets/icons/renew-blue.svg';
 interface RenewModalProps {
   isModalShown: boolean;
   closeModal: () => void;

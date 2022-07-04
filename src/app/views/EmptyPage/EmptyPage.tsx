@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flex, Text } from 'theme-ui';
-import EmptyPageIcon from '../../assets/icons/empty-page.svg';
 import styled from 'styled-components';
+import { Flex, Text } from 'theme-ui';
+import EmptyPageIcon from '@app/assets/icons/empty-page.svg';
 
 const Container = styled(Flex)`
       flex-direction: column;

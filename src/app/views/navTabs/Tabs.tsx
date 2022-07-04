@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
-import Button from '../../components/Button';
-import {Tooltip, DIRECTIONS } from '../../components/Tooltip/Tooltip';
-import { useModal } from '../../components/Modals/useModal';
-import KeyModal from '../keyModal/KeyModal';
+import Button from '@app/components/Button';
+import {Tooltip, DIRECTIONS } from '@app/components/Tooltip/Tooltip';
+import { useModal } from '@app/components/Modals/useModal';
+import KeyModal from '@app/views/keyModal/KeyModal';
 import { copyToClipboard } from '../../core/appUtils';
-import FaqIcon from "../../assets/icons/faq.svg";
-import KeyIcon from "../../assets/icons/key.svg";
-import UserIcon from "../../assets/icons/user.svg";
+import FaqIcon from "@app/assets/icons/faq.svg";
+import KeyIcon from "@app/assets/icons/key.svg";
+import UserIcon from "@app/assets/icons/user.svg";
 import SendGreenIcon from '@app/assets/icons/send-green.svg';
 
 import { TabsContainer, TabsChildren } from './Tabs.style';
-import { SendBans } from '../SendBans/SendBans';
+import { SendBans } from '@app/views/SendBans/SendBans';
 
 let activeButtonStyle = {
   background: '#00F6D2',

@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "theme-ui";
-import Button from "@app/components/Button";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { Modal } from "@app/components/Modals/Modal";
-import ArrowRight from '../../assets/icons/arrow-right.svg'
+import ArrowRight from '@app/assets/icons/arrow-right.svg'
 import { Amount } from "@app/components/Amount/Amount";
 import Input from "@app/components/Input";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
-import { SellBansAction } from "../SellBans/SellBansAction";
+import { SellBansAction } from "@app/views/SellBans/SellBansAction";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
 
