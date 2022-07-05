@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@app/components/Button';
 import { Modal } from '@app/components/Modals/Modal';
-import ArrowRight from '../../assets/icons/arrow-right.svg'
+import ArrowRight from '@app/assets/icons/arrow-right.svg'
 
 import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';

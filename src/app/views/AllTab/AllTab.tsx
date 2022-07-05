@@ -1,23 +1,24 @@
 import React from "react";
 import { Flex, Text, Container } from "theme-ui";
-import Button from "../../components/Button";
-import { Popup } from "../../components/Popup/Popup";
-import { SplitContainer } from "../../components/SplitContainer/SplitContainer";
-import Copy from '././../../assets/icons/copy.svg';
-import Dots from '././../../assets/icons/dots.svg';
-import Renew from '././../../assets/icons/renew.svg';
-import Sell from '././../../assets/icons/sell.svg';
-import TransferIcon from '././../../assets/icons/gift.svg';
+import Button from "@app/components/Button";
+import { Popup } from "@app/components/Popup/Popup";
+import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { copyToClipboard } from '../../core/appUtils';
 import { useModal } from "@app/components/Modals/useModal";
-import { RenewModal } from './../RenewModal/RenewModal';
-import { PopupItem } from '@app/components/Popup/Popup.styles';
+import { RenewModal } from '@app/views/RenewModal/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { SellBansModal } from './../SellBans/SellBans';
-import { Transfer } from "../Transfer/Transfer";
-import { RemoveOrChange } from './../RemoveOrChange/RemoveOrChange';
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
+import { SellBansModal } from '@app/views/SellBans/SellBans';
+import { Transfer } from "@app/views/Transfer/Transfer";
+import { RemoveOrChange } from '@app/views/RemoveOrChange/RemoveOrChange';
+
+import Copy from '@app/assets/icons/copy.svg';
+import Dots from '@app/assets/icons/dots.svg';
+import Renew from '@app/assets/icons/renew.svg';
+import Sell from '@app/assets/icons/sell.svg';
+import TransferIcon from '@app/assets/icons/gift.svg';
+import { PopupItem } from '@app/components/Popup/Popup.styles';
 
 interface RightSideProps {
   copyToClipboard: (value: string) => void;

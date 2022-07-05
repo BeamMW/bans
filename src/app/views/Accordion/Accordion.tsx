@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Text, Divider, Paragraph } from 'theme-ui';
 
-import Minus from "../../assets/icons/minus.svg";
-import Plus from "../../assets/icons/plus.svg";
+import Minus from "@app/assets/icons/minus.svg";
+import Plus from "@app/assets/icons/plus.svg";
 const Data = [
   {
     question: 'Question#1',

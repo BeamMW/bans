@@ -1,5 +1,5 @@
 import React from "react";
-import { TransactionLink } from "../TransactionsLink/TransactionsLink";
+import { TransactionLink } from "@app/views/TransactionsLink/TransactionsLink";
 import { Container } from './FilterTabs.style';
 
 interface Tabs {

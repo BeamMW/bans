@@ -3,12 +3,11 @@ import { Box, Container, Flex, Text } from "theme-ui";
 import { Modal } from "@app/components/Modals/Modal";
 import { Select } from '@app/components/Select/Select';
 import Input from "@app/components/Input";
-import Beam from '../../assets/icons/beam.svg';
+import Beam from '@app/assets/icons/beam.svg';
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
-import { SellBtn } from './../../components/SellBtn/SellBtn';
-import { DomainPresenter, DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { SellBansAction } from "./SellBansAction";
-import Sell from '../../assets/icons/send.svg';
+import Sell from '@app/assets/icons/send.svg';
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { Decimal } from "@app/library/base/Decimal";
@@ -83,7 +82,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
         {/* <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} /> */}
         <Box sx={{ mt: '30px' }}>
           <Input
-            variant='sell'
+            variant='modalInput'
             pallete='white'
             label='Amount'
             onChange={handleChange}
@@ -94,11 +93,6 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
           </Input>
         </Box>
         <Box sx={{ my: '30px' }}>
-          {/* <Input
-          variant='sell'
-          pallete='white'
-          label="Buyer's Public Key"
-          /> */}
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>
           <Box sx={{ mr: '30px' }}>

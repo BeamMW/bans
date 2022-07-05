@@ -1,19 +1,19 @@
 import React from 'react';
 import { Flex, Container } from "theme-ui";
-import Button from "../../components/Button";
-import { Popup } from "../../components/Popup/Popup";
-import Copy from '././../../assets/icons/copy.svg';
-import Dots from '././../../assets/icons/dots.svg';
-import ChangePriceIcon from '././../../assets/icons/edit.svg';
-import RemoveFromSale from '././../../assets/icons/remove-sale.svg';
-import { PopupItem } from '@app/components/Popup/Popup.styles';
+import Button from "@app/components/Button";
+import { Popup } from "@app/components/Popup/Popup";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { RemoveModal } from '../RemoveModal/RemoveModal';
+import { RemoveModal } from '@app/views/RemoveModal/RemoveModal';
 import { Amount } from '@app/components/Amount/Amount';
-import { ChangePrice } from './../ChangePrice/ChangePrice';
+import { ChangePrice } from '@app/views/ChangePrice/ChangePrice';
 import { GROTHS_IN_BEAM } from '@app/constants';
 import { Decimal } from '@app/library/base/Decimal';
-// I think we will find more appropriate name for this Component
+
+import Dots from '././../../assets/icons/dots.svg';
+import ChangePriceIcon from '@app/assets/icons/edit.svg';
+import RemoveFromSale from '@app/assets/icons/remove-sale.svg';
+
+import { PopupItem } from '@app/components/Popup/Popup.styles';
 interface RemoveOrChangeProps {
   copyToClipboard: (value: string) => void;
   domain: DomainPresenterType;

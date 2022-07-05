@@ -1,9 +1,6 @@
 import React from "react";
-import { Decimal } from "@app/library/base/Decimal";
 import { useTransactionFunction } from "@app/library/transaction-react/useTransactionFunction";
-import { toGroths } from '@app/library/base/appUtils';
-import Plus from '../../assets/icons/blue-plus.svg';
-import Button from "../../components/Button";
+import Button from "@app/components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 

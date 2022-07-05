@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Flex, Text, Divider, Box } from 'theme-ui';
 import styled from "styled-components";
-import Plus from '../../assets/icons/blue-plus.svg';
+import Plus from '@app/assets/icons/blue-plus.svg';
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { RegisterAction } from "./RegisterAction";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";

@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
-import Button from '@app/components/Button';
+import { Box, Paragraph } from 'theme-ui';
 import { Modal } from '@app/components/Modals/Modal';
-import RemoveIcon from '../../assets/icons/remove-sale.svg'
 
 import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
-import { Box, Paragraph } from 'theme-ui';
-import Input from '@app/components/Input';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
-import { SellBansAction } from '../SellBans/SellBansAction';
+import { SellBansAction } from '@app/views/SellBans/SellBansAction';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
+import RemoveIcon from '@app/assets/icons/remove-sale.svg'
 
 interface RemoveProps {
   isShown: boolean;

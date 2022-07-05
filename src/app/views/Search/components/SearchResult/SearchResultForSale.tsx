@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
-import Button from '@app/components/Button';
-import { Modal } from '@app/components/Modals/Modal';
-import ArrowRight from '../../../../assets/icons/arrow-right.svg'
-
-import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
-import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { Box, Paragraph } from 'theme-ui';
-import { RegisterAction } from '@app/views/Register/RegisterAction';
-import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
+
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
+import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { useMainView } from '@app/contexts/Bans/BansContexts';
+import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
+import { Modal } from '@app/components/Modals/Modal';
+import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
+import { RegisterAction } from '@app/views/Register/RegisterAction';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
+import ArrowRight from '@app/assets/icons/arrow-right.svg'
 
 interface ResultForSaleProps {
   isShown: boolean;

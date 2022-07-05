@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
+import Skeleton from 'react-loading-skeleton';
 import { Paragraph, Flex, Text } from "theme-ui";
-import { SubText } from './SearchResult.styles';
-import { SplitContainer } from './../../../../components/SplitContainer/SplitContainer';
-import { SearchResultLeft } from "./SearchResultLeft";
-import { SearchResultRight } from './SearchResultRight';
-import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { RegisterAction } from "@app/views/Register/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css'
-import { SearchResultForSale } from "./SearchResultForSale";
+import { useMainView } from "@app/contexts/Bans/BansContexts";
+import { SplitContainer } from '@app/components/SplitContainer/SplitContainer';
 import { useModal } from "@app/components/Modals/useModal";
+import { SearchResultLeft } from "./SearchResultLeft";
+import { SearchResultRight } from './SearchResultRight';
+import { SearchResultForSale } from "./SearchResultForSale";
 
+import 'react-loading-skeleton/dist/skeleton.css'
+import { SubText } from './SearchResult.styles';
 export interface SearchResultProps {
   isValid: boolean;
   search: string;

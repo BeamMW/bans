@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
-import Button from '../../components/Button';
-import CopyBlue from "../../assets/icons/copy-blue.svg";
-import Copy from "../../assets/icons/copy.svg";
-import { Modal } from '../../components/Modals/Modal';  
-import { Container, Title, Content, Controls, CopyText } from './KeyModal.style';
-import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { useSelector } from 'react-redux';
+import Button from '@app/components/Button';
+import { Modal } from '@app/components/Modals/Modal';  
+import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { selectPublicKey } from '@app/store/SharedStore/selectors';
+
+import CopyBlue from "@app/assets/icons/copy-blue.svg";
+import Copy from "@app/assets/icons/copy.svg";
+import { Container, Title, Content, Controls, CopyText } from './KeyModal.style';
 
 interface KeyModalProps {
   isShown: boolean;

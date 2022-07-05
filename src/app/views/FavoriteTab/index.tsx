@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Text, Container } from "theme-ui";
-import Button from "../../components/Button";
-import { Popup } from "../../components/Popup/Popup";
-import { SplitContainer } from "../../components/SplitContainer/SplitContainer";
-import Copy from '././../../assets/icons/copy.svg';
-import Dots from '././../../assets/icons/dots.svg';
-import Renew from '././../../assets/icons/renew.svg';
-import Sell from '././../../assets/icons/sell.svg';
-import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
-import { copyToClipboard } from '../../core/appUtils';
 import { useSelector } from "react-redux";
+
+import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
+import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { selectFavoritesBans, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { HeartIcon } from "@app/assets/icons";
 import { Amount } from "@app/components/Amount/Amount";
 import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
