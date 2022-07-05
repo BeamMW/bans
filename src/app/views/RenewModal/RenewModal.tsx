@@ -8,19 +8,25 @@ import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import Button from "@app/components/Button";
 import Renew from '../../assets/icons/renew-blue.svg';
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
-import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { DomainPresenter, DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { RegisterAction } from "../Register/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 interface RenewModalProps {
-  isModalShown: boolean;
-  closeModal: () => void;
-  selectedDomain: DomainPresenterType
+  isShown: boolean;
+  closeModal?: (...args) => void;
 }
 
-export const RenewModal: React.FC<RenewModalProps> = ({ isModalShown, closeModal, selectedDomain }) => {
+export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) => {
+
+  if(!isShown) return <></>;
+
+  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+
+  closeModal = closeModal ?? close;
 
   const TRANSACTION_ID = "DOMAIN_EXTENDED";
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
@@ -30,26 +36,26 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isModalShown, closeModal
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      return () => closeModal();
+      closeModal(null);
     }
 
   }, [transactionState]);
 
 
   return (
-    <Modal isShown={isModalShown} header="Renew subscription">
+    <Modal isShown={isShown} header="Renew subscription">
       <>
-        <RegistrationHeader search={selectedDomain.name} />
+        <RegistrationHeader search={domain.name} />
         <Divider sx={{ my: 5 }} />
         <RegistrationPeriod period={period} setPeriod={setPeriod} />
-        <RegistrationPrice price={selectedDomain.price} period={period} />
+        <RegistrationPrice price={domain.price} period={period} />
         <ButtonContainer>
           <CloseBtn toggle={closeModal} />
           <RegisterAction
             transactionId={TRANSACTION_ID}
             change={"renewDomainExpiration"}
             period={period}
-            domain={selectedDomain}
+            domain={domain}
           >
             <Renew />
             renew

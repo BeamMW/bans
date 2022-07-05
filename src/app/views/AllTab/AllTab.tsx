@@ -17,6 +17,7 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { SellBansModal } from './../SellBans/SellBans';
 import { Transfer } from "../Transfer/Transfer";
 import { RemoveOrChange } from './../RemoveOrChange/RemoveOrChange';
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 interface RightSideProps {
   copyToClipboard: (value: string) => void;
@@ -24,20 +25,17 @@ interface RightSideProps {
   domains: any;
 }
 const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains }) => {
-  const [showPopup, setShowPopup] = React.useState(false);
-  const [showSellModal, setShowSellModal] = React.useState(false);
-  const [showTransfer, setShowTransfer] = React.useState(false);
+  const [showPopup, setShowPopup] = React.useState(null);
+  const {open} = useModalContext();
 
-  const { isShown, toggle } = useModal();
-
-  const toggleShowSellModal = () => {
+  /* const toggleShowSellModal = () => {
     setShowSellModal(!showSellModal)
   }
 
   const toggleShowTranferModal = () => {
     setShowTransfer(!showTransfer);
   }
-
+ */
   const hideTip = () => {
     setShowPopup(false);
   };
@@ -56,23 +54,20 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
-          <PopupItem onClick={() => { toggle(); hideTip() }}>
+          <PopupItem onClick={(event) => open(event)("modal-renew")({domain: domain})(hideTip)}>
             <Renew />
             renew subscription
           </PopupItem>
-          <PopupItem onClick={() => { toggleShowSellModal(); hideTip() }}>
+          <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain})(hideTip) }>
             <Sell />
             sell BANS
           </PopupItem>
-          <PopupItem onClick={toggleShowTranferModal}>
+          <PopupItem onClick={(event) => open(event)("modal-transfer")({domain: domain})(hideTip) }>
             <TransferIcon />
             Transfer
           </PopupItem>
         </Popup>
       </Container>
-      {domains && <RenewModal selectedDomain={domain} isModalShown={isShown} closeModal={toggle} />}
-      {domains && <SellBansModal domain={domain} domains={domains} toggle={toggleShowSellModal} isShown={showSellModal} />}
-      {domains && <Transfer domain={domain} isShown={showTransfer} toggleClose={toggleShowTranferModal} />}
     </>
   )
 }
@@ -94,6 +89,19 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   return (
     <>
       {rows}
+      <ModalManager/>
     </>
   );
 }
+
+const ModalManager: React.FC = () => {
+  const {current, close} = useModalContext();
+
+  return (
+    <>
+      <RenewModal isShown={current == "modal-renew"} />
+      <SellBansModal isShown={current == "modal-sell"} />
+      <Transfer isShown={current == "modal-transfer"} />
+    </>
+  );
+};

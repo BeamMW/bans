@@ -12,20 +12,28 @@ import { useCurrentTransactionState } from '@app/library/transaction-react/useCu
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
 interface TranferProps {
   isShown: boolean;
-  toggleClose: () => void;
-  domain: DomainPresenterType
+  closeModal?: (...args) => void;
 }
-export const Transfer: React.FC<TranferProps> = ({ isShown, toggleClose, domain }) => {
+export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
+  
+  if(!isShown) return <></>;
+
+  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+
+  closeModal = closeModal ?? close;
+
   const TRANSACTION_ID = "DOMAIN_TRANSFERRING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      toggleClose();
+      closeModal(null);
+      
       return () => {
         //store.dispatch()
       }
@@ -51,7 +59,7 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, toggleClose, domain 
           />
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={toggleClose} />
+          <CloseBtn toggle={closeModal} />
           <TransferAction
             transactionId={TRANSACTION_ID}
             change={"transferBans"}

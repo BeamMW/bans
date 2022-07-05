@@ -26,6 +26,7 @@ import Transactions from './pages/Transactions/Transactions';
 import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 import { MainViewProvider } from './contexts/Bans/MainViewProvider';
+import { ModalProvider } from './contexts/Modal/ModalProvider';
 
 const App = () => {
   const navigate = useNavigate();
@@ -38,16 +39,18 @@ const App = () => {
         <BansApiProvider>
           <MainViewProvider>
             <TransactionProvider>
-              <BansLayout>
-                <Routes>
-                  <Route index element={<Main />} />
-                  <Route path="/" element={<Main />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="faq" element={<Faq />} />
-                  <Route path="my-page" element={<MyPage />} />
-                  <Route path="transactions" element={<Transactions />} />
-                </Routes>
-              </BansLayout>
+              <ModalProvider>
+                <BansLayout>
+                  <Routes>
+                    <Route index element={<Main />} />
+                    <Route path="/" element={<Main />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="faq" element={<Faq />} />
+                    <Route path="my-page" element={<MyPage />} />
+                    <Route path="transactions" element={<Transactions />} />
+                  </Routes>
+                </BansLayout>
+              </ModalProvider>
               <TransactionMonitor transactions={[]} />
             </TransactionProvider>
           </MainViewProvider>

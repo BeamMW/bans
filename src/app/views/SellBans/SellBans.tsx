@@ -14,27 +14,40 @@ import { IsTransactionPending } from "@app/library/transaction-react/IsTransacti
 import { Decimal } from "@app/library/base/Decimal";
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 interface SellBansModalProps {
   isShown: boolean;
-  toggle: () => void;
-  domains: Array<DomainPresenterType>,
-  domain: DomainPresenterType
+  closeModal?: (...args) => void;
 }
 
-export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, domains, domain: passedDomain }) => {
+export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModal }) => {
+
+  if (!isShown) return <></>;
+
+  const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
+
+  closeModal = closeModal ?? close;
+
+  
+
+  let domains = [];
+  
+
+
+  
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   const [activeItem, setActiveItem] = React.useState('');
   const [amount, setAmount] = useState<number | string | null>("");
-  const [selectedDomain, setSelectedDomain] = useState<DomainPresenterType>(passedDomain);
+  const [selectedDomain, setSelectedDomain] = useState<DomainPresenterType>(domain);
 
-  const domainsSelect: any = domains.map((domain, i) => new Object({
+  const domainsSelect: any = !!domains && domains.length ? domains.map((domain, i) => new Object({
     id: i,
     name: domain.name
-  }));
+  })) : [];
 
   /*   setActiveItem(
       domainsSelect.filter(domainSelect => domain.name == domainSelect.name).pop().id
@@ -45,7 +58,9 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      toggle();
+
+      closeModal(null);
+
       return () => {
         //store.dispatch()
       }
@@ -65,7 +80,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
             <Text>{`ALREADY ON SALE for ${selectedDomain.price.amount}!`}</Text>
           </Flex> : <></>
         }
-        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} />
+        {/* <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} /> */}
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='sell'
@@ -87,7 +102,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, toggle, d
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>
           <Box sx={{ mr: '30px' }}>
-            <CloseBtn toggle={toggle} />
+            <CloseBtn toggle={closeModal} />
           </Box>
           <SellBansAction
             transactionId={TRANSACTION_ID}
