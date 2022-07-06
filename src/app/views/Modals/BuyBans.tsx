@@ -36,8 +36,8 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request();
-      
+      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request());
+
       closeModal(null);
 
       return () => {
