@@ -10,20 +10,27 @@ import { useCurrentTransactionState } from '@app/library/transaction-react/useCu
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import RemoveIcon from '@app/assets/icons/remove-sale.svg'
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
 interface RemoveProps {
   isShown: boolean;
-  toggleClose: () => void;
-  domain: DomainPresenterType;
+  closeModal?: (...args) => void;
 }
-export const RemoveModal: React.FC<RemoveProps> = ({ isShown, toggleClose, domain }) => {
+export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
+
+  if(!isShown) return <></>;
+
+  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+
+  closeModal = closeModal ?? close;
+
   const TRANSACTION_ID = "DOMAIN_REMOVE_FROM_SALE";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      toggleClose();
+      closeModal(null);
       return () => {
         //store.dispatch()
       }
@@ -37,11 +44,11 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, toggleClose, domai
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>Are you sure you want to remove domain batboy.beam from sale?</Paragraph>
+          <Paragraph sx={{ textAlign: 'center' }}>Are you sure you want to remove domain {domain.name}.beam from sale?</Paragraph>
         </Box>
 
         <ButtonContainer>
-          <CloseBtn toggle={toggleClose} />
+          <CloseBtn toggle={closeModal} />
           <SellBansAction
             transactionId={TRANSACTION_ID}
             change={"sellBans"}

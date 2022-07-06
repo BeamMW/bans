@@ -12,6 +12,10 @@ import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { SearchResultForSale } from "../Search/components/SearchResult/SearchResultForSale";
 import { useModal } from "@app/components/Modals/useModal";
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
+import { BuyBans } from "../Modals/BuyBans";
+import { useMainView } from "@app/contexts/Bans/BansContexts";
+import { Register } from "../Register/Register";
 interface RightSideProps {
   domain: DomainPresenterType;
 }
@@ -44,9 +48,11 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
 }
 
 export const FavoriteTab = (props) => {
-  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded())
-  const favoriteBans = useSelector(selectFavoritesBans())
-  const { isShown, toggle } = useModal();
+  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
+  const favoriteBans = useSelector(selectFavoritesBans());
+
+  const { open } = useModalContext();
+  const { setFoundDomain, setCurrentView, view } = useMainView();
 
   let [rows, setRows] = useState(null);
 
@@ -56,21 +62,32 @@ export const FavoriteTab = (props) => {
         <>
           <SplitContainer key={i} leftWeight={9} rightWeight={3} handleClick={
             domain && !domain.isYourOwn && domain.isOnSale ?
-              () => toggle() :
-              null}>
+              (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
+              (
+                domain && !domain.isYourOwn && !domain.isOnSale ? () => {setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")} : null
+              )}>
             <LeftSide domain={domain} showHeart={true} />
             <RightSide domain={domain} />
           </SplitContainer>
-
         </>
-
       )) : <></>);
   }, [isFavoriteLoaded, favoriteBans])
 
   return (
     isFavoriteLoaded ? <>
       {rows}
-      <SearchResultForSale isShown={isShown} toggleClose={toggle} />
+      <ModalManager/>
     </> : <LoadingOverlay />
+  );
+}
+
+
+const ModalManager: React.FC = () => {
+  const { current, close } = useModalContext();
+
+  return (
+    <>
+      <BuyBans isShown={current == "modal-search-result-for-sale"} closeModal={close} />
+    </>
   );
 }

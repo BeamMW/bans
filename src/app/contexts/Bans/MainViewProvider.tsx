@@ -16,8 +16,12 @@ const bansStates = {
     REGISTER_COMPLETED: "SEARCH",
   },
   MYBANS: {
-    REGISTER_FAVORITES_DOMAIN: "REGISTER"
-  }
+    REGISTER_FAVORITES_DOMAIN: "MYBANS_REGISTER",
+  },
+  MYBANS_REGISTER: {
+    REGISTER_CLOSED: "MYBANS",
+    REGISTER_COMPLETED: "MYBANS",
+  },
 }
 
 export const MainViewProvider: React.FC = props => {
@@ -30,7 +34,7 @@ export const MainViewProvider: React.FC = props => {
   const viewRef = useRef(view);
 
   const setCurrentView = useCallback((event: any /* BansEvent */) => {
-    const nextView = bansStates[viewRef.current][event] ?? view;
+    let nextView = bansStates[viewRef.current][event] ?? view;
 
     setView(nextView);
   }, []);
@@ -38,7 +42,10 @@ export const MainViewProvider: React.FC = props => {
   const setFoundDomain = (rawData, currentStateTimestamp, currentStateHeight, publicKey) => {
     //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
     _setFoundDomain(
-      !!rawData ? getDomainPresentedData(rawData, currentStateTimestamp, currentStateHeight, publicKey) : null
+      //@TODO: refactor this mess!
+      !!rawData && !/* (rawData as DomainPresenterType) */ !(typeof rawData == "object") ?
+        getDomainPresentedData(rawData, currentStateTimestamp, currentStateHeight, publicKey) :
+        (!!rawData && /* rawData as DomainPresenterType */ typeof rawData == "object") ? rawData : null
     )
   };
 
@@ -48,7 +55,8 @@ export const MainViewProvider: React.FC = props => {
 
 
   useEffect(() => {
-    location.pathname == "/"  && setView("SEARCH"); 
+    location.pathname == "/" && setView("SEARCH");
+    location.pathname == "/my-page" && setView("MYBANS");
   }, [location])
 
   const provider = {

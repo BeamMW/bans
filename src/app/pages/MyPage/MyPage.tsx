@@ -3,7 +3,7 @@ import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { FilterTabs } from '../../views/filterTabs/FilterTabs';
 import EmptyPage from '../../views/EmptyPage/EmptyPage';
 import { AllTab } from '../../views/AllTab/AllTab';
-import { useBansApi } from '@app/contexts/Bans/BansContexts';
+import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
@@ -12,6 +12,7 @@ import { FavoriteTab } from '@app/views/FavoriteTab';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { useSelector } from 'react-redux';
 import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
+import { Register } from '@app/views/Register/Register';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
@@ -20,6 +21,8 @@ const MyPage = () => {
   const [domains, setDomains] = useState(null);
   const [active, setActive] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { setFoundDomain, setCurrentView, view } = useMainView();
 
   const { registeredMethods } = useBansApi();
 
@@ -36,7 +39,7 @@ const MyPage = () => {
 
     active === 1 && publicKey && registeredMethods.userView().then(response => {
       !!domains && forceUpdate();
-      
+
       setDomains(response.domains.map(
         //for future logic
         domain => getDomainPresentedData(
@@ -68,18 +71,24 @@ const MyPage = () => {
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (
     <>
-      <PageTitle title='My Page' />
-      {domains &&
-        <FilterTabs tabs={tabs} active={active} setActive={setActive} />
-      }
       {
-        domains ? (
-          +active == 1 ?
-            <AllTab domains={domains} /> :
-            (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
-        ) : <EmptyPage />
+        view === "MYBANS" ? (
+          <>
+            <PageTitle title='My Page' />
+            {domains &&
+              <FilterTabs tabs={tabs} active={active} setActive={setActive} />
+            }
+            {
+              domains ? (
+                +active == 1 ?
+                  <AllTab domains={domains} /> :
+                  (active == 2 ? <FavoriteTab /> : <></>)
+              ) : <EmptyPage />
+            }
+            {isLoading && <LoadingOverlay />}
+          </>
+        ) : (view === "MYBANS_REGISTER" ? <Register /> : <></>)
       }
-      {isLoading && <LoadingOverlay />}
     </>
   );
 }

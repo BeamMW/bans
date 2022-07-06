@@ -15,22 +15,28 @@ import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 
 interface ChangePriceProps {
   isShown: boolean;
-  toggleClose: () => void;
-  domain: DomainPresenterType;
+  closeModal?: (...args) => void;
 }
 
-export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, domain }) => {
+export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal }) => {
+  if(!isShown) return <></>;
+
+  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+
+  closeModal = closeModal ?? close;
+
   const TRANSACTION_ID = "DOMAIN_ADJUSTE_SALE";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      toggleClose();
+      closeModal(null);
       return () => {
         //store.dispatch()
       }
@@ -68,7 +74,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, toggleClose, 
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={toggleClose} />
+          <CloseBtn toggle={closeModal} />
           <SellBansAction
             transactionId={TRANSACTION_ID}
             change={"adjustSellingBans"}

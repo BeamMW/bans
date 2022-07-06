@@ -2,6 +2,7 @@ import produce from 'immer';
 import { ActionType, createReducer } from 'typesafe-actions';
 import * as actions from './actions';
 import { Decimal } from '@app/library/base/Decimal';
+import _ from "lodash";
 
 type Action = ActionType<typeof actions>;
 
@@ -67,6 +68,14 @@ const reducer = createReducer<any, Action>(
     produce(state, nextState => {
       nextState.allFavoritesBans =
         action.payload;
+    }),
+  )
+  .handleAction(actions.updateSpecificFavoritesBans.success, (state, action) =>
+    produce(state, nextState => {
+      const updatedBans = action.payload;
+      const originalBans = nextState.allFavoriteBans;
+
+      nextState.allFavoritesBans = _.unionBy(updatedBans, originalBans, "name")
     }),
   )
   .handleAction(actions.setIsFavoriteLoaded, (state, action) =>

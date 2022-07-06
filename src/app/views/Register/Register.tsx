@@ -13,6 +13,9 @@ import { RegistrationPeriod } from "@app/components/RegistrationPeriod/Registrat
 import { RegistrationPrice } from  "@app/components/RegistrationPrice/RegistrationPrice";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import store from "index";
+import { loadAllFavoritesBans } from "@app/store/BansStore/actions";
 
 const Container = styled.div`
   min-width: 630px;
@@ -46,11 +49,13 @@ export const Register: React.FC = () => {
   const {name: domainName} = foundDomain;
 
   const now = moment().format("LL");
-
   const till = tillDate(foundDomain, period);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      
+      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request())
+
       //dispatch to the main search view and clear found domain data
       setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null); 
 

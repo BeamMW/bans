@@ -14,6 +14,7 @@ import ChangePriceIcon from '@app/assets/icons/edit.svg';
 import RemoveFromSale from '@app/assets/icons/remove-sale.svg';
 
 import { PopupItem } from '@app/components/Popup/Popup.styles';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 interface RemoveOrChangeProps {
   copyToClipboard: (value: string) => void;
   domain: DomainPresenterType;
@@ -23,16 +24,7 @@ interface RemoveOrChangeProps {
 
 export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard, domain, domains }) => {
   const [showPopup, setShowPopup] = React.useState(false);
-  const [showSetPrice, setShowSetPrice] = React.useState(false);
-  const [showRemove, setShowRemove] = React.useState(false);
-
-  const toggleshowSetPriceModal = () => {
-    setShowSetPrice(!showSetPrice)
-  }
-
-  const toggleShowRemoveModal = () => {
-    setShowRemove(!showRemove);
-  }
+  const {open} = useModalContext();
 
   const hideTip = () => {
       setShowPopup(false);
@@ -53,19 +45,28 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
-          <PopupItem onClick={() => { toggleshowSetPriceModal(); hideTip() }}>
+          <PopupItem onClick={(event) => open(event)("modal-adjust-sale")({domain: domain})(hideTip)}>
             <ChangePriceIcon />
             change price
           </PopupItem>
-          <PopupItem onClick={() => {toggleShowRemoveModal(); hideTip()}}>
+          <PopupItem onClick={(event) => open(event)("modal-remove-from-sale")({domain: domain})(hideTip)}>
             <RemoveFromSale/>
             remove from Sale
           </PopupItem>
         </Popup>
       </Container>
-
-      <RemoveModal domain={domain} isShown={showRemove} toggleClose={toggleShowRemoveModal}/>
-      <ChangePrice domain={domain} isShown={showSetPrice} toggleClose={toggleshowSetPriceModal} />
     </>
   )
 }
+
+
+export const ModalManager: React.FC = () => {
+  const {current, close} = useModalContext();
+
+  return (
+    <>
+      <RemoveModal isShown={current == "modal-remove-from-sale"} />
+      <ChangePrice isShown={current == "modal-adjust-sale"} />
+    </>
+  );
+};

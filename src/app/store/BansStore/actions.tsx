@@ -37,4 +37,10 @@ export const loadAllFavoritesBans = createAsyncAction(
     '@@MAIN/LOAD_ALL_FAVORITES_BANS',
     '@@MAIN/LOAD_ALL_FAVORITES_BANS_SUCCESS',
     '@@MAIN/LOAD_ALL_FAVORITES_BANS_FAILURE',
-)<void, any, any>();  
+)<void, any, any>();
+
+export const updateSpecificFavoritesBans = createAsyncAction(
+    '@@MAIN/UPDATE_FAVORITES_BANS',
+    '@@MAIN/UPDATE_FAVORITES_BANS_SUCCESS',
+    '@@MAIN/UPDATE_FAVORITES_BANS_FAILURE',
+)<Array<string>, any, any>();

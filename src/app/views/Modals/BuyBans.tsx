@@ -11,21 +11,23 @@ import { RegisterAction } from '@app/views/Register/RegisterAction';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import ArrowRight from '@app/assets/icons/arrow-right.svg'
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import store from 'index';
+import { loadAllFavoritesBans } from '@app/store/BansStore/actions';
 
 interface ResultForSaleProps {
   isShown: boolean;
-  toggleClose: () => void;
-  domain?: DomainPresenterType;
+  closeModal?: (...args) => void;
 }
-export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isShown, toggleClose }) => {
-  //@TODO:refactor this mess!
-  const { foundDomain, setFoundDomain, setCurrentView } = !domain ? useMainView() : {
-    foundDomain: domain,
-    setFoundDomain: () => null,
-    setCurrentView: () => null
-  };
+export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) => {
 
-  if(!foundDomain) return <></>;
+  if(!isShown) return <></>;
+
+  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+
+  closeModal = closeModal ?? close;
+
+  if(!domain) return <></>;
 
   const TRANSACTION_ID = "DOMAIN_BUYING";
 
@@ -34,30 +36,32 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      toggleClose(), setFoundDomain(null);
+      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request();
+      
+      closeModal(null);
 
       return () => {
         //store.dispatch()
       }
     }
 
-  }, [transactionState, setCurrentView]);
+  }, [transactionState]);
 
   return (
     <Modal isShown={isShown} header="Attention">
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - {foundDomain.expiresAt}. </Paragraph>
+          <Paragraph sx={{ textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - {domain.expiresAt}. </Paragraph>
           <Paragraph sx={{ textAlign: 'center' }}>You will need to renew your subscription before the expiring date.</Paragraph>
         </Box>
 
         <ButtonContainer>
-          <CloseBtn toggle={toggleClose} text="cancel" />
+          <CloseBtn toggle={closeModal} text="cancel" />
           <RegisterAction
             transactionId={TRANSACTION_ID}
             change={"buyDomain"}
-            domain={foundDomain}
+            domain={domain}
           >
             <ArrowRight />
             continue

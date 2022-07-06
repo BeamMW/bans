@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { Box, Flex, Text } from "theme-ui";
 import Button from "../Button";
 import Heart from '@app/assets/icons/heart.svg';
-import GiftIcon from '@app/assets/icons/gift.svg';
+import SaleIcon from '@app/assets/icons/sell.svg';
 
 import HeartActive from '@app/assets/icons/heart-active.svg';
 
@@ -40,9 +40,13 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showHeart }) => {
 
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
-      <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
-        <GiftIcon/>
-      </Flex>
+
+      {domain.isOnSale ?
+        <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
+          <SaleIcon />
+        </Flex> : <></>
+      }
+
       <Box>
         <Text>{name}.beam</Text>
 

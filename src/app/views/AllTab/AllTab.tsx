@@ -11,7 +11,7 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { SellBansModal } from '@app/views/SellBans/SellBans';
 import { Transfer } from "@app/views/Transfer/Transfer";
-import { RemoveOrChange } from '@app/views/RemoveOrChange/RemoveOrChange';
+import { RemoveOrChange, ModalManager as RightSideModalManager } from '@app/views/RemoveOrChange/RemoveOrChange';
 
 import Copy from '@app/assets/icons/copy.svg';
 import Dots from '@app/assets/icons/dots.svg';
@@ -91,6 +91,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
     <>
       {rows}
       <ModalManager/>
+      <RightSideModalManager/>
     </>
   );
 }

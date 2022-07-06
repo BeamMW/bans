@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select, takeEvery, getContext } from 'redux-saga/effects';
+import { call, put, takeLatest, select, takeEvery, getContext, take } from 'redux-saga/effects';
 import { BANS_CID } from '@app/constants';
 import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
@@ -89,10 +89,30 @@ export function* loadParamsSaga(
   }
 }
 
+function* loadFavoritesRequestParams():any {
+  try {
+    const state = (yield select()) as { shared };
+
+    const {
+      systemState: { current_height: currentStateHeight },
+      systemState: { current_state_timestamp: currentStateTimestamp },
+      publicKey
+    } = state.shared;
+
+    if (currentStateHeight && currentStateTimestamp && publicKey)
+      return new Promise(resolve => [currentStateHeight, currentStateTimestamp, publicKey]) ;
+
+  } catch (err) {
+    throw new Error(err);
+  }
+
+}
+
 export function* loadAllFavoritesBansSaga(
   action: ReturnType<typeof actions.loadAllFavoritesBans.request>
 ) {
   try {
+    //@TODO: remove duplicates
     const state = (yield select()) as { shared };
 
     const {
@@ -103,8 +123,6 @@ export function* loadAllFavoritesBansSaga(
 
     if (!(currentStateHeight && currentStateTimestamp && publicKey))
       return false;
-
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
 
     const allFavoritesBans = yield call(readAllFavoriteBans);
     const allFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.map(bans => bans.bansName))
@@ -117,6 +135,35 @@ export function* loadAllFavoritesBansSaga(
   } catch (e) {
     console.log(e);
     yield put(actions.loadAllFavoritesBans.failure(e));
+  }
+
+}
+
+export function* updateSpecificFavoritesBans(
+  action: ReturnType<typeof actions.updateSpecificFavoritesBans.request>
+) {
+  try {
+
+    if (!action.payload) return false;
+
+    const specificFavoriteBans: Array<string> = action.payload;
+
+    const response = call(loadFavoritesRequestParams);
+    debugger;
+    const allFavoritesBans = yield call(readAllFavoriteBans);
+    const updatedFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.filter((bans) => {
+      return specificFavoriteBans.includes(bans.name);
+    }))
+
+    if (!updatedFavoritesBansPrepare.length) return false;
+
+    const updatedFavoritesBansToDomainPresenter = updatedFavoritesBansPrepare.map((bans) =>
+      getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey));
+
+    yield put(actions.updateSpecificFavoritesBans.success(updatedFavoritesBansToDomainPresenter));
+  } catch (e) {
+    console.log(e);
+    yield put(actions.updateSpecificFavoritesBans.failure(e));
   }
 
 }
@@ -187,6 +234,7 @@ function* bansSaga() {
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
   yield takeLatest(actions.loadRate.request, loadRate);
   yield takeLatest(actions.loadAllFavoritesBans.request, loadAllFavoritesBansSaga);
+  yield takeLatest(actions.updateSpecificFavoritesBans.request, updateSpecificFavoritesBans)
 }
 
 export default bansSaga;
