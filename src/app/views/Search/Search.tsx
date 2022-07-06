@@ -74,7 +74,7 @@ const Search: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!search.length) return;
+    if (!search || !search.length) return;
 
     fetchDomain(search, currentStateTimestamp, currentStateHeight).catch((error) => {
       setIsValid(false);
