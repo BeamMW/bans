@@ -64,7 +64,9 @@ export const FavoriteTab = (props) => {
             domain && !domain.isYourOwn && domain.isOnSale ?
               (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
               (
-                domain && !domain.isYourOwn && !domain.isOnSale ? () => {setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")} : null
+                domain && !domain.isYourOwn && !domain.isOnSale ? () => {
+                  setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
+                } : null
               )}>
             <LeftSide domain={domain} showHeart={true} />
             <RightSide domain={domain} />
@@ -76,7 +78,7 @@ export const FavoriteTab = (props) => {
   return (
     isFavoriteLoaded ? <>
       {rows}
-      <ModalManager/>
+      <ModalManager />
     </> : <LoadingOverlay />
   );
 }
