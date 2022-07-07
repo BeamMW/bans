@@ -14,6 +14,7 @@ import RemoveIcon from "@app/assets/icons/remove.svg";
 import Sell from '@app/assets/icons/send.svg';
 import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
 import { useSearchValidator } from '@app/hooks/useSearchValidator';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
@@ -21,6 +22,7 @@ const Search: React.FC = () => {
   const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isLoading, setIsLoading] = useState(false);
+  const {open} = useModalContext();
 
   useFetchDomainAndConvert(search)
     .then(domain => {
@@ -64,7 +66,7 @@ const Search: React.FC = () => {
 
       <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
-        <Button>
+        <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)}>
           <Sell />
           send funds to the BANS
         </Button>

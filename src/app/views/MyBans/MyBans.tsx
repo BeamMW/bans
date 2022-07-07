@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Paragraph, Text, Flex } from "theme-ui";
+import { Paragraph, Text, Flex, Heading } from "theme-ui";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { Amount } from "@app/components/Amount/Amount";
@@ -9,6 +9,7 @@ import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import { useSelector } from "react-redux";
 import { selectPublicKey, selectSystemState } from "@app/store/SharedStore/selectors";
 import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
+import _ from "lodash";
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -43,8 +44,8 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
     current_state_timestamp: currentStateTimestamp
   } = useSelector(selectSystemState());
 
+  //@TODO: REFACTOR, OPTIMIZE!!!
   useEffect(() => {
-
     publicKey && registeredMethods.userView().then(response => {
       setDomains(response.domains.map(
         //for future logic
@@ -65,12 +66,12 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
     <>
       <Paragraph sx={{ mt:'53px', mb:5, letterSpacing:'3.1px', color:'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
       {
-        domains ? domains.map((domain, i) => (
+        _.isArray(domains) && domains.length ? domains.map((domain, i) => (
           <SplitContainer key={i} leftWeight={10} rightWeight={2}>
             <LeftSide domain={domain} />
             <RightSide domain={domain} />
           </SplitContainer>
-        )) : <></>
+        )) : <><Heading>Waiting for contract methods</Heading> </>
       }
     </>
   );
