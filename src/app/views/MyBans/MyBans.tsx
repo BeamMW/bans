@@ -67,7 +67,7 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
       <Paragraph sx={{ mt:'53px', mb:5, letterSpacing:'3.1px', color:'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
       {
         _.isArray(domains) && domains.length ? domains.map((domain, i) => (
-          <SplitContainer key={i} leftWeight={10} rightWeight={2}>
+          <SplitContainer key={i} leftWeight={9} rightWeight={3}>
             <LeftSide domain={domain} />
             <RightSide domain={domain} />
           </SplitContainer>
