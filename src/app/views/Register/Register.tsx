@@ -25,6 +25,7 @@ const Container = styled.div`
   background-color: rgba(255,255,255,0.05);
   padding: 37px 20px 40px 20px;
   margin: 0 auto;
+  user-select: none;
 `;
 
 
