@@ -15,6 +15,7 @@ import RemoveIcon from './remove.svg';
 import SearchIcon from './search.svg';
 import UserIcon from './user.svg';
 import RecieveIcon from './recieve.svg';
+import GiftIcon from './gidt.svg';
 
 export {
   ActionsIcon,
@@ -33,5 +34,6 @@ export {
   RemoveIcon,
   SearchIcon,
   UserIcon,
-  RecieveIcon
+  RecieveIcon,
+  GiftIcon
 }

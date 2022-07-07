@@ -2,6 +2,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
   target: 'web',
@@ -51,6 +52,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new DefinePlugin({
+      'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
+    }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
     }),

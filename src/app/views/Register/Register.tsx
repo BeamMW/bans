@@ -10,7 +10,7 @@ import { useTransactionState } from "@app/library/transaction-react/context/Tran
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { RegistrationPeriod } from "@app/components/RegistrationPeriod/RegistrationPeriod";
-import { RegistrationPrice } from  "@app/components/RegistrationPrice/RegistrationPrice";
+import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -29,7 +29,7 @@ const Container = styled.div`
 
 
 const tillDate = (foundDomain, period) => useMemo(() => {
-  if(foundDomain.expiresAt) return foundDomain.expiresAt;
+  if (foundDomain.expiresAt) return foundDomain.expiresAt;
 
   return moment().add(1, 'years').format("LL");
 
@@ -39,25 +39,25 @@ export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
-  const isTransactionPending = IsTransactionPending({transactionIdPrefix: TRANSACTION_ID});
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   const [period, setPeriod] = useState<number>(1);
-  const {foundDomain, setFoundDomain, setCurrentView} = useMainView();
+  const { foundDomain, setFoundDomain, setCurrentView } = useMainView();
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
-  const {name: domainName} = foundDomain;
+  const { name: domainName } = foundDomain;
 
   const now = moment().format("LL");
   const till = tillDate(foundDomain, period);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      
+
       /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request())
 
       //dispatch to the main search view and clear found domain data
-      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null); 
+      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null);
 
       return () => {
         //store.dispatch()
@@ -68,7 +68,7 @@ export const Register: React.FC = () => {
 
   return (
     <>
-      <Flex sx={{ justifyContent: 'center',mb: 40 }}>
+      <Flex sx={{ justifyContent: 'center', mb: 40 }}>
         <BackButton handler={backButtonHandler} text="back" />
       </Flex>
 
@@ -76,21 +76,23 @@ export const Register: React.FC = () => {
         <Box>
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 5 }} />
-          <RegistrationPeriod period={period} setPeriod={setPeriod}/>
-          <RegistrationPrice price={foundDomain.price} period={period}/>
-          <Flex sx={{ flexDirection: 'column'}}>
-            <Text variant="panelHeader" sx={{mb:30}}>
+          <RegistrationPeriod period={period} setPeriod={setPeriod} />
+          <RegistrationPrice price={foundDomain.price} period={period} />
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Text variant="panelHeader" sx={{ mb: 30 }}>
               Current domain will be available from {now} till {till}.
             </Text>
-            <RegisterAction
-              transactionId={"DOMAIN_REGISTER"}
-              change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
-              period={period}
-              domain={foundDomain}
-            >
-              <Plus />
-              register
-            </RegisterAction>
+            <Flex sx={{justifyContent: "center"}}>
+              <RegisterAction
+                transactionId={"DOMAIN_REGISTER"}
+                change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
+                period={period}
+                domain={foundDomain}
+              >
+                <Plus />
+                register
+              </RegisterAction>
+            </Flex>
           </Flex>
         </Box>
         {isTransactionPending && <LoadingOverlay />}

@@ -11,7 +11,9 @@ import UserIcon from "@app/assets/icons/user.svg";
 import SendGreenIcon from '@app/assets/icons/send-green.svg';
 
 import { TabsContainer, TabsChildren } from './Tabs.style';
-import { SendBans } from '@app/views/SendBans/SendBans';
+import { SendFunds } from '@app/views/SendFunds/SendFunds';
+import { useMainView } from '@app/contexts/Bans/BansContexts';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
 let activeButtonStyle = {
   background: '#00F6D2',
@@ -30,17 +32,12 @@ const passiveIconStyle = {
 }
 
 const Tabs:FC = () => {
+  const {open, current} = useModalContext();
+
   const { isShown, toggle } = useModal();
-  const [isSendFundsShown, setSendFundsShown] = React.useState(false);
   const [active, setActive] = React.useState('');
   let location = useLocation();
 
-  const onCloseSendFunds = () =>  setSendFundsShown(false);
-
-  const onToggleSendFunds = () =>{
-    setSendFundsShown(!isSendFundsShown);
-  }
-  
   const handleClick = (tab: string) => {
       setActive(tab);
   }
@@ -59,11 +56,11 @@ const Tabs:FC = () => {
           variant='icon'
           pallete='opacity'
           id='sendFunds'
-          onClick={onToggleSendFunds}
-          style={ isSendFundsShown ? activeButtonStyle : passiveButtonStyle }
+          onClick={(event) => open(event)("modal-send-funds")(null)(null)}
+          style={ current == "modal-send-funds" ? activeButtonStyle : passiveButtonStyle }
           >
             <SendGreenIcon 
-              style={ isSendFundsShown ? activeIconStyle : passiveIconStyle }
+              style={ current == "modal-send-funds" ? activeIconStyle : passiveIconStyle }
             />
           </Button>
         </Tooltip>
@@ -114,7 +111,7 @@ const Tabs:FC = () => {
     </TabsChildren>
   </TabsContainer>
   <KeyModal isShown={isShown} toggle={toggle} copyToClipboard={copyToClipboard}/>
-  <SendBans isShown={isSendFundsShown} toggleModalClose={onCloseSendFunds} />
+  <SendFunds isShown={current == "modal-send-funds"} />
   </>
   )
 }

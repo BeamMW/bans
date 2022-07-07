@@ -34,6 +34,8 @@ const MyPage = () => {
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
+
+  //@TODO:refactor fetching domains every time instead put in store!
   useEffect(() => {
     setIsLoading(true);
 

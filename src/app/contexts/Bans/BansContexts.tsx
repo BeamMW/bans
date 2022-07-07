@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 type BansApiContextType = {
-    registeredMethods: any/* IRegisteredMethods<ShaderActions> */
+    registeredMethods/* IRegisteredMethods<ShaderActions> */
 };
 
 export const BansApiContext = createContext<BansApiContextType | null>(null);

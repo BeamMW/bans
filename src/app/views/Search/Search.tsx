@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Box, Container,Flex,Text } from 'theme-ui';
+import { Box, Container, Flex, Text } from 'theme-ui';
 import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '@app/components/Input';
 import debounce from 'lodash.debounce';
@@ -12,56 +12,25 @@ import Button from '@app/components/Button';
 import SearchIcon from "@app/assets/icons/search.svg";
 import RemoveIcon from "@app/assets/icons/remove.svg";
 import Sell from '@app/assets/icons/send.svg';
+import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
+import { useSearchValidator } from '@app/hooks/useSearchValidator';
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
-  const { registeredMethods } = useBansApi();
 
   const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isLoading, setIsLoading] = useState(false);
 
-  const publicKey = useSelector(selectPublicKey());
-  const {
-    current_height: currentStateHeight,
-    current_state_timestamp: currentStateTimestamp
-  } = useSelector(selectSystemState());
-
-  const searchValidator = useCallback((search) => {
-    if (search.length < 3) return false;
-    
-    if(!search.match(/^[a-zA-Z0-9\-\_\~]*$/i)) return false;
-    
-    return true;
-  }, []);
-
-  const fetchDomain = async (search, currentStateTimestamp, currentStateHeight) => {
-    if (!isValid) {
-      setFoundDomain(null)
-      return;
-    }
-
-    const response = await registeredMethods.managerViewName({ name: search });
-
-    if (Object.keys(response).length !== 0 && response.res?.error) {
-      return response.error /* && setIsValid(true) */;
-    }
-
-    Object.keys(response).length !== 0 && response?.hExpire && setFoundDomain(
-      { ...response, ...{ searchName: search } },
-      currentStateTimestamp,
-      currentStateHeight,
-      publicKey
-    );
-
-    Object.keys(response).length === 0 && setFoundDomain(
-      { searchName: search, isAvailable: true },
-      currentStateTimestamp,
-      currentStateHeight,
-      publicKey
-    );
-
-  }
+  useFetchDomainAndConvert(search)
+    .then(domain => {
+      setFoundDomain(domain);
+      domain ? setIsValid(true) : setIsValid(false);
+    })
+    .catch(err => {
+      setIsValid(false);
+      console.error
+    });
 
   //@TODO: maybe refactor this logic into another
   //when component re-render we check is foundedDomain object exists
@@ -73,19 +42,7 @@ const Search: React.FC = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (!search || !search.length) return;
-
-    fetchDomain(search, currentStateTimestamp, currentStateHeight).catch((error) => {
-      setIsValid(false);
-      console.error
-    });
-  }, [search, currentStateTimestamp, currentStateHeight]);
-
-  const handleChange = (e) => {
-    searchValidator(e.target.value) ? setIsValid(true) : setIsValid(false);
-    setSearch(e.target.value);
-  }
+  const handleChange = (e) => setSearch(e.target.value);
 
   const debouncedHandleChange = useMemo(
     () => debounce(handleChange, 100, { leading: false, trailing: true })
@@ -106,9 +63,9 @@ const Search: React.FC = () => {
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
 
       <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-        <Text sx={{ display:'inline-block', my:'30px' }}>or</Text>
+        <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
         <Button>
-          <Sell/>
+          <Sell />
           send funds to the BANS
         </Button>
       </Flex>

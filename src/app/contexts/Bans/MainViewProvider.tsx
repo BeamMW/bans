@@ -43,9 +43,9 @@ export const MainViewProvider: React.FC = props => {
     //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
     _setFoundDomain(
       //@TODO: refactor this mess!
-      !!rawData && /* (rawData as DomainPresenterType) */ !(typeof rawData == "object") ?
+      !!rawData && /* (rawData as DomainPresenterType) */ 'searchName' in rawData ?
         getDomainPresentedData(rawData, currentStateTimestamp, currentStateHeight, publicKey) :
-        (!!rawData && /* rawData as DomainPresenterType */ typeof rawData == "object") ? rawData : null
+        (!!rawData && /* rawData as DomainPresenterType */ !('searchName' in rawData))  ? rawData : null
     )
   };
 
