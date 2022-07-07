@@ -19,6 +19,7 @@ import methods from '@app/library/bans/methods';
 import { useEffect, useState } from 'react';
 import { readAllFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
+import { getBansApi } from '@app/utils/getBansApi';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -26,20 +27,6 @@ const RATE_PARAMS = 'ids=beam&vs_currencies=usd';
 
 export function* handleParams(payload: any) {
   yield put(actions.setAppParams(payload));
-}
-
-
-const getBansApi = () => {
-  let bansApi;
-
-  bansApi = !_.isEmpty(getGlobalApiProviderValue()) ? getGlobalApiProviderValue() : (() => {
-    const bansShader = ShaderApi.useShaderStore.retriveShader(BANS_CID)
-    const bansApi = new ShaderApi(bansShader, methods);
-
-    return bansApi.getRegisteredMethods();
-  })()
-
-  return bansApi;
 }
 
 const fetchBansFromShader = async (bans: Array<string>) => {

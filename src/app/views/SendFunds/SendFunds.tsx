@@ -64,8 +64,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setIsButtonDisabled(domain ? false : true);
-
     setValues({
       ...values,
       [name]: value,
@@ -74,9 +72,10 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   const beamPrice = useSelector(selectRate());
 
-  useFetchDomainAndConvert(values.domain).then(domain => setDomain(
-    domain
-  ));
+  useFetchDomainAndConvert(values.domain).then(domain => {
+    setIsButtonDisabled(domain && !domain.isAvailable && !domain.isYourOwn && values.amount ? false : true);
+    setDomain(domain);
+  });
   
   //const convert = useConvertToDomainPresenter();
 

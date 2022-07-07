@@ -41,7 +41,7 @@ export const SendFundsAction: React.FC<RegisterActionProps> = ({
     );
 
     return (
-        <Button pallete="green" onClick={!disabled ? sendTransaction : null}>
+        <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}} onClick={!disabled ? sendTransaction : null}>
             {children}
         </Button>
     );
