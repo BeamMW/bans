@@ -76,7 +76,7 @@ export const Register: React.FC = () => {
       <Container>
         <Box>
           <RegistrationHeader search={domainName} />
-          <Divider sx={{ my: 5 }} />
+          <Divider sx={{ my: 4 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod} />
           <RegistrationPrice price={foundDomain.price} period={period} />
           <Flex sx={{ flexDirection: 'column' }}>
