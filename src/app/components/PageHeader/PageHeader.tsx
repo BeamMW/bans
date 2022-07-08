@@ -10,7 +10,7 @@ export const PageHeader:FC<PageHeaderProps> = ({ title, icon: IconComponent }) =
   return (
     <Flex sx={{flexDirection: 'column', alignItems: 'center' }}>
        { !!IconComponent && <IconComponent/> }
-      <Text sx={{mt: 5}}>{ title }</Text>
+      <Text sx={{mt: 5, textTransform:'uppercase', letterSpacing:'3.1px', fontWeight:700}}>{ title }</Text>
     </Flex>
   )
 }

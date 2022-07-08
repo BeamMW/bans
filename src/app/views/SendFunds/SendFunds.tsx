@@ -20,6 +20,7 @@ import { useSearchValidator } from "@app/hooks/useSearchValidator";
 import { useConvertToDomainPresenter } from "@app/hooks/useConvertToDomainPresenter";
 import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { Box, Flex, Text } from "theme-ui";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -94,7 +95,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
         {isTransactionPending && <LoadingOverlay />}
         <Input
           variant='modalInput'
-          pallete='purple'
+          pallete='white'
           label='Domain*'
           name='domain'
           onChange={handleChange}
@@ -102,6 +103,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
         >
           <CheckedIcon />
         </Input>
+        <Box sx={{mt: '30px'}}>
         <Input
           variant='modalInput'
           pallete='purple'
@@ -112,9 +114,11 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
           type="number"
           info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
         >
-          <BeamIcon />
+          <Flex sx={{justifyContent: 'center'}}>
+          <BeamIcon /> <Text sx={{ marginLeft:'10px', marginTop:'1px' }}>BEAM</Text>
+          </Flex>
         </Input>
-
+        </Box>
         <ButtonContainer>
           <CloseBtn toggle={closeModal} text="cancel" />
           <SendFundsAction

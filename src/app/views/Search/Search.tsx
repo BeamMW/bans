@@ -57,6 +57,7 @@ const Search: React.FC = () => {
         value={search}
         maxLength={30}
         pattern="[A-Za-z0-9]"
+        placeholder='Search a name'
       >
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>

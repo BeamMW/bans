@@ -34,7 +34,7 @@ const ButtonStyled = styled(BaseButtonStyled)`
   border-radius: 22px;
   background-color: ${({ pallete }) => `var(--color-${pallete})`};
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 14px;
   color: var(--color-dark-blue);
 
@@ -134,6 +134,7 @@ const LinkButtonStyled = styled(IconButtonStyled)`
 const CustomButtonStyled = styled(BaseButtonStyled)`
   font-family: 'SFProDisplay', sans-serif;
   white-space: nowrap;
+  font-weight: 700;
   box-sizing: border-box;
   display: flex;
   align-items: center;

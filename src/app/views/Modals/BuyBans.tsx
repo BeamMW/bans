@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Paragraph } from 'theme-ui';
+import { Box, Paragraph, Text } from 'theme-ui';
 
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
@@ -48,12 +48,12 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   }, [transactionState]);
 
   return (
-    <Modal isShown={isShown} header="Attention">
+    <Modal isShown={true} header="Attention">
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - {domain.expiresAt}. </Paragraph>
-          <Paragraph sx={{ textAlign: 'center' }}>You will need to renew your subscription before the expiring date.</Paragraph>
+          <Paragraph sx={{ textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
+          <Paragraph sx={{ textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
         </Box>
 
         <ButtonContainer>
