@@ -18,7 +18,7 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";
 import { useSearchValidator } from "@app/hooks/useSearchValidator";
 import { useConvertToDomainPresenter } from "@app/hooks/useConvertToDomainPresenter";
-import { selectPublicKey, selectSystemState } from "@app/store/SharedStore/selectors";
+import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 
 interface SendFundsProps {
@@ -36,6 +36,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   if (!isShown) return <></>;
 
   const { close }: { close: any } = useModalContext();
+
+  //if domain exists
+  const {data: { domain: passedDomain } = null} = useModalContext() ?? {data: {domain: null}};
 
   closeModal = closeModal ?? close;
 
@@ -57,9 +60,8 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   }, [transactionState]);
 
   const [values, setValues] = React.useState(initialValues);
-  const [domain, setDomain] = React.useState<DomainPresenterType>(null);
+  const [domain, setDomain] = React.useState<DomainPresenterType>(passedDomain);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -76,21 +78,20 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     setIsButtonDisabled(domain && !domain.isAvailable && !domain.isYourOwn && values.amount ? false : true);
     setDomain(domain);
   });
-  
-  //const convert = useConvertToDomainPresenter();
 
-  /* useEffect(() => {
-    searchValidator && fetchDomain(values.domain).then(domain => setDomain(
-      domain
-    )
-    );
-  }, [values.domain]) */
+  //first loading!
+  useEffect(() => {
+    domain && setValues({
+      ...values,
+      ["domain"]: domain.name,
+    });
+  }, [])
 
 
   return (
     <Modal isShown={isShown} header="Send funds to the BANS">
       <>
-      {isTransactionPending && <LoadingOverlay />}
+        {isTransactionPending && <LoadingOverlay />}
         <Input
           variant='modalInput'
           pallete='purple'

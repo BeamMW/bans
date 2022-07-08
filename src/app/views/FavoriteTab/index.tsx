@@ -24,11 +24,18 @@ interface RightSideProps {
   domain: DomainPresenterType;
 }
 const RightSide: React.FC<RightSideProps> = ({ domain }) => {
-  const [showPopup, setShowPopup] = React.useState(false);
+  const { open } = useModalContext();
+
   return (
     <>
       <Container sx={{ position: 'relative' }}>
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
+          {
+            !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
+            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={(event) => open(event)("modal-send-funds")({domain: domain})(null)}>
+              send funds
+            </Button>
+          }
           <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
           </Button>

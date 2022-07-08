@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { selectSystemState } from '@app/store/SharedStore/selectors';
 import { Register } from '@app/views/Register/Register';
 import { selectFavoritesDomains, selectPublicKey, selectUserDomains } from '@app/store/BansStore/selectors';
+import store from 'index';
+import { ANTIOPTIMIZEDreloadAllUserInfo } from '@app/store/BansStore/actions';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
@@ -38,14 +40,18 @@ const MyPage = () => {
 
   //@TODO:refactor fetching domains every time instead put in store!
   useEffect(() => {
-
+    
+    //@TODO:temporary solution! remove in the future
+    store.dispatch(ANTIOPTIMIZEDreloadAllUserInfo.request());
+    
+    
     !!domains && forceUpdate();
 
     active === 1 && setDomains(userBans);
     active === 2 && setDomains(favoriteBans);
 
     setIsLoaded(true);
-  }, [active, userBans, favoriteBans])
+  }, [active, /* userBans, favoriteBans */])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (

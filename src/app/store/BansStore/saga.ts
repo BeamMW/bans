@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading } from 'redux-saga/effects';
+import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading, all } from 'redux-saga/effects';
 import { BANS_CID } from '@app/constants';
 import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
+import { action } from 'typesafe-actions';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -296,6 +297,18 @@ export function* loadPublicKeySaga(
   }
 }
 
+//@TODO: generator in antioptimized! remove in the future!
+export function* reloadAllUserInfoSaga() {
+  try {
+    yield all([
+      call(loadUserViewSaga, null),
+      call(loadAllFavoritesDomainsSaga, null),
+    ])
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function* bansSaga() {
   yield takeEvery(actions.loadAppParams.request, loadParamsSaga);
   yield takeEvery(actions.loadUserView.request, loadUserViewSaga);
@@ -306,6 +319,9 @@ function* bansSaga() {
   yield takeLatest(actions.loadAllFavoritesDomains.request, loadAllFavoritesDomainsSaga);
   yield takeLatest(actions.updateSpecificFavoritesDomains.request, updateSpecificFavoritesDomains)
   yield takeLatest(actions.loadPublicKey.request, loadPublicKeySaga);
+
+  // not optimized!
+  yield takeEvery(actions.ANTIOPTIMIZEDreloadAllUserInfo.request, reloadAllUserInfoSaga);
 }
 
 export default bansSaga;

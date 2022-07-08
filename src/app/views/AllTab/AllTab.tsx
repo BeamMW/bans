@@ -28,14 +28,6 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
   const [showPopup, setShowPopup] = React.useState(null);
   const {open} = useModalContext();
 
-  /* const toggleShowSellModal = () => {
-    setShowSellModal(!showSellModal)
-  }
-
-  const toggleShowTranferModal = () => {
-    setShowTransfer(!showTransfer);
-  }
- */
   const hideTip = () => {
     setShowPopup(false);
   };
