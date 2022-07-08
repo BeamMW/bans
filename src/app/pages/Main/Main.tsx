@@ -11,7 +11,7 @@ const Main = () => {
 
   return (
     <>
-      <Flex sx={{ justifyContent: 'center', mt: 79, mb: 50 }}>
+      <Flex sx={{ justifyContent: 'center', mt: 35, mb: 35 }}>
         <PageHeader icon={LogoIcon} title='Beam Anonymous Name Service' />
       </Flex>
       {

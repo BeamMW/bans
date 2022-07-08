@@ -25,6 +25,7 @@ const Container = styled.div`
   background-color: rgba(255,255,255,0.05);
   padding: 37px 20px 40px 20px;
   margin: 0 auto;
+  user-select: none;
 `;
 
 
@@ -75,7 +76,7 @@ export const Register: React.FC = () => {
       <Container>
         <Box>
           <RegistrationHeader search={domainName} />
-          <Divider sx={{ my: 5 }} />
+          <Divider sx={{ my: 4 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod} />
           <RegistrationPrice price={foundDomain.price} period={period} />
           <Flex sx={{ flexDirection: 'column' }}>
