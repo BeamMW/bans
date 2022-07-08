@@ -30,19 +30,6 @@ function* sharedSaga() {
       yield put(actions.setTransactionsFailure(e));
     }
   });
-
-  yield takeLatest(actions.loadPublicKey.request, function* (action): Generator {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
-
-    if(!bandApiMethods) yield null;
-    
-    try {
-      const result = yield call(bandApiMethods.userMyKey);
-      yield put(actions.loadPublicKey.success(result));
-    } catch (e) {
-      yield put(actions.loadPublicKey.failure(e));
-    }
-  });
 }
 
 export default sharedSaga;

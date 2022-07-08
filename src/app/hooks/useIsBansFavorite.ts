@@ -3,6 +3,6 @@ import { useLiveQuery } from "dexie-react-hooks";
 
 export const useIsBansFavorite = (search) => {
     return useLiveQuery(
-        () => userDatabase.favoriteBans.where({ bansName: search }).toArray(),
+        () => userDatabase.favoriteDomains.where({ domainName: search }).toArray(),
         [search])
 };

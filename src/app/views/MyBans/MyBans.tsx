@@ -7,9 +7,10 @@ import Button from "@app/components/Button";
 import { WithDrawButton } from "@app/components/WithdrawButton/WithDrawButton";
 import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import { useSelector } from "react-redux";
-import { selectPublicKey, selectSystemState } from "@app/store/SharedStore/selectors";
+import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
 import _ from "lodash";
+import { selectPublicKey } from "@app/store/BansStore/selectors";
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -36,7 +37,6 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
 
   const { registeredMethods } = useBansApi();
   const [domains, setDomains] = useState(null);
-  const myKey = useSelector(selectPublicKey());
 
   const publicKey = useSelector(selectPublicKey());
   const {
@@ -58,12 +58,14 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
       ));
     });
 
-  }, [myKey, currentStateHeight, currentStateTimestamp])
+  }, [publicKey, currentStateHeight, currentStateTimestamp])
 
   //const isExpiredText = isExpired ? 'Paid term of usage is over. Your domain will be disconnected on June 30, 2022' : 'Expires on June 29, 2022';
 
   return (
     <>
+      <><Flex sx={{mt:40,mb:40,textAlign:"center"}}><Heading>Waiting for contract methods! Lack of functionality! </Heading> </Flex></>
+      
       <Paragraph sx={{ mt:'53px', mb:5, letterSpacing:'3.1px', color:'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
       {
         _.isArray(domains) && domains.length ? domains.map((domain, i) => (
@@ -71,7 +73,7 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
             <LeftSide domain={domain} />
             <RightSide domain={domain} />
           </SplitContainer>
-        )) : <><Heading>Waiting for contract methods</Heading> </>
+        )) : <></>
       }
     </>
   );

@@ -22,15 +22,9 @@ const initialState: SharedStateType = {
   transactions: [],
   isLoaded: false,
   dappVersion: {},
-  publicKey: "",
 };
 
 const reducer = createReducer<SharedStateType, Action>(initialState)
-  .handleAction(actions.loadPublicKey.success, (state, action) =>
-    produce(state, nextState => {
-      nextState.publicKey = action.payload.key;
-    }),
-  )
   .handleAction(actions.setDappVersion, (state, action) => produce(state, (nextState) => {
     nextState.dappVersion = action.payload;
   }))

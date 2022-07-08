@@ -1,8 +1,8 @@
 import { AbstractEntity } from "./AbstractDomain";
 
-export class FavoriteBans extends AbstractEntity {
+export class FavoriteDomains extends AbstractEntity {
     constructor(
-        public bansName: string,
+        public domainName: string,
         gid?: string) {
             super(gid)
    }

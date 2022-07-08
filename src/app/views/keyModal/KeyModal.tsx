@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Button from '@app/components/Button';
 import { Modal } from '@app/components/Modals/Modal';  
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
-import { selectPublicKey } from '@app/store/SharedStore/selectors';
+import { selectPublicKey } from '@app/store/BansStore/selectors';
 
 import CopyBlue from "@app/assets/icons/copy-blue.svg";
 import Copy from "@app/assets/icons/copy.svg";

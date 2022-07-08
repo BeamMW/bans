@@ -7,30 +7,41 @@ import _ from "lodash";
 type Action = ActionType<typeof actions>;
 
 const initialState = {
-    assetPrice: (Decimal.ZERO),
-    fees: (Decimal.ZERO),
-    appParams: {
-    },
-    contract: {
-      
-    },
-    //currentCurrency: "beam",
-    total: Decimal.ZERO,
+  assetPrice: (Decimal.ZERO),
+  fees: (Decimal.ZERO),
 
-    is_moderator: false,
-    public_key: '',
-    contractHeight: 0,
-    userView: false,
-    allFavoritesBans: [],
-    setIsFavoriteLoaded: false
+  appParams: {
+  },
+
+  contract: {
+
+  },
+  
+  //currentCurrency: "beam",
+
+  is_moderator: false,
+  contractHeight: 0,
+
+  publicKey: null,
+
+  userView: {
+    domains: [],
+    funds: {
+      total: 0,
+      revenue: [],
+      transferred: [],
+    }
+  },
+  allFavoritesDomains: [],
+  setIsFavoriteLoaded: false,
 };
 
 const reducer = createReducer<any, Action>(
   initialState,
 )
-  .handleAction(actions.setUserView, (state, action) =>
+.handleAction(actions.loadPublicKey.success, (state, action) =>
     produce(state, nextState => {
-      nextState.userView = action.payload ? action.payload.my_trove : false;
+      nextState.publicKey = action.payload.key;
     }),
   )
   .handleAction(actions.setIsModerator, (state, action) =>
@@ -45,12 +56,7 @@ const reducer = createReducer<any, Action>(
   )
   .handleAction(actions.loadAppParams.success, (state, action) =>
     produce(state, nextState => {
-      nextState.appParams = {...action.payload, tcr: Decimal.from(action.payload.tcr ? action.payload.tcr : 0)};
-    }),
-  )
-  .handleAction(actions.loadUserBans.success, (state, action) =>
-    produce(state, nextState => {
-      nextState.troves = action.payload;
+      nextState.appParams = { ...action.payload, tcr: Decimal.from(action.payload.tcr ? action.payload.tcr : 0) };
     }),
   )
   .handleAction(actions.loadRate.success, (state, action) =>
@@ -64,24 +70,35 @@ const reducer = createReducer<any, Action>(
       nextState.contractHeight/* Height */ = action.payload.Height;
     }),
   )
-  .handleAction(actions.loadAllFavoritesBans.success, (state, action) =>
+  .handleAction(actions.loadAllFavoritesDomains.success, (state, action) =>
     produce(state, nextState => {
-      nextState.allFavoritesBans =
+      nextState.allFavoritesDomains =
         action.payload;
     }),
   )
-  .handleAction(actions.updateSpecificFavoritesBans.success, (state, action) =>
+  .handleAction(actions.updateSpecificFavoritesDomains.success, (state, action) =>
     produce(state, nextState => {
-      const updatedBans = action.payload;
-      const originalBans = nextState.allFavoriteBans;
+      const updatedDomains = action.payload;
+      const originalDomains = nextState.allFavoriteDomains;
 
-      nextState.allFavoritesBans = _.unionBy(updatedBans, originalBans, "name")
+      nextState.allFavoritesDomains = _.unionBy(updatedDomains, originalDomains, "name")
     }),
   )
   .handleAction(actions.setIsFavoriteLoaded, (state, action) =>
     produce(state, nextState => {
       nextState.isFavoriteLoaded =
         action.payload;
+    }),
+  )
+  .handleAction(actions.setUserFunds, (state, action) =>
+    produce(state, nextState => {
+      nextState.userView.funds =
+        action.payload;
+    }),
+  )
+  .handleAction(actions.setUserDomains, (state, action) =>
+    produce(state, nextState => {
+      nextState.userView.domains = action.payload;
     }),
   );
 

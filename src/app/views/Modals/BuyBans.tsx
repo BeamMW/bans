@@ -13,7 +13,7 @@ import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import ArrowRight from '@app/assets/icons/arrow-right.svg'
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import store from 'index';
-import { loadAllFavoritesBans } from '@app/store/BansStore/actions';
+import { loadAllFavoritesDomains } from '@app/store/BansStore/actions';
 
 interface ResultForSaleProps {
   isShown: boolean;
@@ -36,7 +36,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesBans.request());
+      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesDomains.request());
 
       closeModal(null);
 

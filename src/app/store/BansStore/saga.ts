@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select, takeEvery, getContext, take } from 'redux-saga/effects';
+import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading } from 'redux-saga/effects';
 import { BANS_CID } from '@app/constants';
 import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
@@ -10,14 +10,13 @@ import {
   setIsLoaded,
   navigate,
   setError,
-  loadPublicKey,
 } from '@app/store/SharedStore/actions';
 import { Base64DecodeUrl, fromGroths } from '@app/library/base/appUtils';
 import { Decimal } from '@app/library/base/Decimal';
 import ShaderApi from '@app/library/base/api/ShaderApi';
 import methods from '@app/library/bans/methods';
 import { useEffect, useState } from 'react';
-import { readAllFavoriteBans } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
+import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
 
@@ -58,13 +57,19 @@ export function* loadParamsSaga(
       yield null;
     }
 
-    store.dispatch(loadPublicKey.request());
-    store.dispatch(actions.loadContractInfo.request());
-    store.dispatch(actions.loadUserBans.request());
-
-    if (Array.isArray(state.bans.allFavoritesBans) && !state.bans.allFavoritesBans.length) {
-      store.dispatch(actions.loadAllFavoritesBans.request());
+    if (!state.bans.publicKey) {
+      yield call(loadPublicKeySaga, null)
+      //store.dispatch(actions.loadPublicKey.request());
+      store.dispatch(actions.loadContractInfo.request());
     }
+
+
+
+    Array.isArray(state.bans.userView.domains) && !state.bans.userView.domains.length &&
+      store.dispatch(actions.loadUserView.request());
+
+    Array.isArray(state.bans.allFavoritesDomains) && !state.bans.allFavoritesDomains.length &&
+      store.dispatch(actions.loadAllFavoritesDomains.request());
 
     if (!state.shared.isLoaded) {
       store.dispatch(setIsLoaded(true));
@@ -76,18 +81,19 @@ export function* loadParamsSaga(
   }
 }
 
-function* loadFavoritesRequestParams():any {
+function* loadFavoritesRequestParams(): any {
   try {
-    const state = (yield select()) as { shared };
+    const state = (yield select()) as { shared; bans };
 
     const {
       systemState: { current_height: currentStateHeight },
       systemState: { current_state_timestamp: currentStateTimestamp },
-      publicKey
     } = state.shared;
 
+    const { publicKey } = state.bans;
+
     if (currentStateHeight && currentStateTimestamp && publicKey)
-      return new Promise(resolve => [currentStateHeight, currentStateTimestamp, publicKey]) ;
+      return new Promise(resolve => [currentStateHeight, currentStateTimestamp, publicKey]);
 
   } catch (err) {
     throw new Error(err);
@@ -95,68 +101,66 @@ function* loadFavoritesRequestParams():any {
 
 }
 
-export function* loadAllFavoritesBansSaga(
-  action: ReturnType<typeof actions.loadAllFavoritesBans.request>
+export function* loadAllFavoritesDomainsSaga(
+  action: ReturnType<typeof actions.loadAllFavoritesDomains.request>
 ) {
   try {
     //@TODO: remove duplicates
-    const state = (yield select()) as { shared };
+    const state = (yield select()) as { shared; bans };
 
     const {
       systemState: { current_height: currentStateHeight },
       systemState: { current_state_timestamp: currentStateTimestamp },
-      publicKey
     } = state.shared;
 
-    if (!(currentStateHeight && currentStateTimestamp && publicKey))
-      return false;
+    const { publicKey } = state.bans;
 
-    const allFavoritesBans = yield call(readAllFavoriteBans);
-    const allFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.map(bans => bans.bansName))
+    const allFavoritesDomains = yield call(readAllFavoriteDomains);
+    const allFavoritesDomainsPrepare = yield call(fetchBansFromShader, allFavoritesDomains.map(domain => domain.domainName))
 
-    const allFavoritesBansToDomainPresenter = allFavoritesBansPrepare.map((bans) =>
-      getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey));
+    const allFavoritesDomainsToDomainPresenter = allFavoritesDomainsPrepare.map((rawDomain) =>
+      getDomainPresentedData(rawDomain, currentStateTimestamp, currentStateHeight, publicKey));
 
-    yield put(actions.loadAllFavoritesBans.success(allFavoritesBansToDomainPresenter));
+    yield put(actions.loadAllFavoritesDomains.success(allFavoritesDomainsToDomainPresenter));
     yield put(actions.setIsFavoriteLoaded(true))
   } catch (e) {
     console.log(e);
-    yield put(actions.loadAllFavoritesBans.failure(e));
+    yield put(actions.loadAllFavoritesDomains.failure(e));
   }
 
 }
 
-export function* updateSpecificFavoritesBans(
-  action: ReturnType<typeof actions.updateSpecificFavoritesBans.request>
+export function* updateSpecificFavoritesDomains(
+  action: ReturnType<typeof actions.updateSpecificFavoritesDomains.request>
 ) {
   try {
 
     if (!action.payload) return false;
 
-    const specificFavoriteBans: Array<string> = action.payload;
+    const specificFavoriteDomains: Array<string> = action.payload;
 
-    const response = call(loadFavoritesRequestParams);
-    debugger;
-    const allFavoritesBans = yield call(readAllFavoriteBans);
-    const updatedFavoritesBansPrepare = yield call(fetchBansFromShader, allFavoritesBans.filter((bans) => {
-      return specificFavoriteBans.includes(bans.name);
+    const response = yield call(loadFavoritesRequestParams);
+
+    const allFavoritesDomains = yield call(readAllFavoriteDomains);
+    const updatedFavoritesDomainsPrepare = yield call(fetchBansFromShader, allFavoritesDomains.filter((bans) => {
+      return specificFavoriteDomains.includes(bans.name);
     }))
 
-    if (!updatedFavoritesBansPrepare.length) return false;
+    if (!updatedFavoritesDomainsPrepare.length) return false;
 
-    const updatedFavoritesBansToDomainPresenter = updatedFavoritesBansPrepare.map((bans) =>
+    const updatedFavoritesBansToDomainPresenter = updatedFavoritesDomainsPrepare.map((bans) =>
       getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey));
 
-    yield put(actions.updateSpecificFavoritesBans.success(updatedFavoritesBansToDomainPresenter));
+    yield put(actions.updateSpecificFavoritesDomains.success(updatedFavoritesBansToDomainPresenter));
   } catch (e) {
     console.log(e);
-    yield put(actions.updateSpecificFavoritesBans.failure(e));
+    yield put(actions.updateSpecificFavoritesDomains.failure(e));
   }
 
 }
 
-export function* loadUserBansSaga(
-  action: ReturnType<typeof actions.loadUserBans.request>
+export function* loadUserViewSaga(
+  action: ReturnType<typeof actions.loadUserView.request>
 ) {
   try {
     const bandApiMethods: any/* ShaderActions */ = getBansApi();
@@ -165,13 +169,68 @@ export function* loadUserBansSaga(
       bandApiMethods.userView
     );
 
-    yield put(actions.loadUserBans.success(resultUserViewParams));
+    const domains = "domains" in resultUserViewParams ? resultUserViewParams.domains : [];
+
+    const funds = resultUserViewParams?.raw || resultUserViewParams?.anon ?
+      { transferred: resultUserViewParams?.anon, revenue: resultUserViewParams?.raw } :
+      false;
+
+    /* store.dispatch(actions.setUserDomains(domains))
+    store.dispatch(actions.setUserFunds(funds)) */
+    yield call(setUserDomainsSaga, domains)
+
+  } catch (err) {
+    console.log(err);
+    actions.loadUserView.failure(err);
+  }
+}
+
+export function* setUserDomainsSaga(
+  action//: ReturnType<typeof actions.setUserDomains>
+) {
+  try {
+    if (!action/* .payload */.length) return false;
+
+    let domains: Array<any> = action/* .payload */;
+    const state = (yield select()) as { shared; bans };
+
+    const {
+      systemState: { current_height: currentStateHeight },
+      systemState: { current_state_timestamp: currentStateTimestamp },
+    } = state.shared;
+
+    const { publicKey } = state.bans;
+
+    domains = domains.map(domain => getDomainPresentedData(
+      { ...domain, ...{ searchName: domain.name } },
+      currentStateTimestamp,
+      currentStateHeight,
+      publicKey
+    ));
+
+    yield put(actions.setUserDomains(domains));
 
   } catch (e) {
     console.log(e);
-    yield put(actions.loadUserBans.failure(e));
+    //yield put(actions.loadUserBans.failure(e));
   }
 
+}
+
+export function* setUserFundsSaga(
+  action: ReturnType<typeof actions.setUserFunds>
+) {
+  try {
+    const funds = action.payload;
+    const total = [...funds.revenue, ...funds.transferred].reduce(
+      (acc, current) => acc.add(current.amount)
+      , Decimal.from(0));
+
+    yield put(actions.setUserFunds({ total: total, ...action.payload }));
+
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export function* loadContractInfoSaga(
@@ -215,13 +274,38 @@ export function* loadRate() {
   }
 }
 
+export function* loadPublicKeySaga(
+  action: ReturnType<typeof actions.loadPublicKey.request>,
+): Generator {
+  try {
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+    const response = yield call(bandApiMethods.userMyKey);
+
+    if (response) {
+
+      yield put(actions.loadPublicKey.success(response));
+
+      /* store.dispatch(actions.loadUserView.request());
+      store.dispatch(actions.loadAllFavoritesDomains.request()); */
+    }
+
+  } catch (e) {
+    console.log(e);
+    yield put(actions.loadPublicKey.failure(e))
+  }
+}
+
 function* bansSaga() {
   yield takeEvery(actions.loadAppParams.request, loadParamsSaga);
-  yield takeEvery(actions.loadUserBans.request, loadUserBansSaga);
+  yield takeEvery(actions.loadUserView.request, loadUserViewSaga);
+  yield takeLatest(actions.setUserDomains, setUserDomainsSaga);
+  yield takeLatest(actions.setUserFunds, setUserFundsSaga);
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
   yield takeLatest(actions.loadRate.request, loadRate);
-  yield takeLatest(actions.loadAllFavoritesBans.request, loadAllFavoritesBansSaga);
-  yield takeLatest(actions.updateSpecificFavoritesBans.request, updateSpecificFavoritesBans)
+  yield takeLatest(actions.loadAllFavoritesDomains.request, loadAllFavoritesDomainsSaga);
+  yield takeLatest(actions.updateSpecificFavoritesDomains.request, updateSpecificFavoritesDomains)
+  yield takeLatest(actions.loadPublicKey.request, loadPublicKeySaga);
 }
 
 export default bansSaga;

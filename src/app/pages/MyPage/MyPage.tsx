@@ -11,64 +11,41 @@ import useGetFavoritesDomains from '@app/hooks/useGetFavoritesDomains';
 import { FavoriteTab } from '@app/views/FavoriteTab';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { useSelector } from 'react-redux';
-import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
+import { selectSystemState } from '@app/store/SharedStore/selectors';
 import { Register } from '@app/views/Register/Register';
+import { selectFavoritesDomains, selectPublicKey, selectUserDomains } from '@app/store/BansStore/selectors';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
 
 const MyPage = () => {
   const [domains, setDomains] = useState(null);
-  const [active, setActive] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [active, _setActive] = useState(1);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const { setFoundDomain, setCurrentView, view } = useMainView();
+  const setActive = (value) => {
+    setIsLoaded(false);
+    return _setActive(value);
+  }
 
-  const { registeredMethods } = useBansApi();
+  const { view } = useMainView();
 
-  const publicKey = useSelector(selectPublicKey());
-  const {
-    current_height: currentStateHeight,
-    current_state_timestamp: currentStateTimestamp
-  } = useSelector(selectSystemState());
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
+  const favoriteBans = useSelector(selectFavoritesDomains());
+  const userBans = useSelector(selectUserDomains());
 
   //@TODO:refactor fetching domains every time instead put in store!
   useEffect(() => {
-    setIsLoading(true);
 
-    active === 1 && publicKey && registeredMethods.userView().then(response => {
-      !!domains && forceUpdate();
+    !!domains && forceUpdate();
 
-      setDomains(response.domains.map(
-        //for future logic
-        domain => getDomainPresentedData(
-          { ...domain, ...{ searchName: domain.name } },
-          currentStateTimestamp,
-          currentStateHeight,
-          publicKey
-        )
-      ));
-    });
+    active === 1 && setDomains(userBans);
+    active === 2 && setDomains(favoriteBans);
 
-    active === 2 && useGetFavoritesDomains().then(response => {
-      !!domains && forceUpdate();
-
-      setDomains(response.domains.map(
-        //for future logic
-        domain => getDomainPresentedData(
-          { ...domain, ...{ searchName: domain.name } },
-          currentStateTimestamp,
-          currentStateHeight,
-          publicKey
-        )
-      ));
-    });
-
-    setIsLoading(false);
-  }, [publicKey, active, currentStateHeight, currentStateTimestamp])
+    setIsLoaded(true);
+  }, [active, userBans, favoriteBans])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (
@@ -77,17 +54,17 @@ const MyPage = () => {
         view === "MYBANS" ? (
           <>
             <PageTitle title='My Page' />
-            {domains &&
+            {!!domains &&
               <FilterTabs tabs={tabs} active={active} setActive={setActive} />
             }
-            {
-              domains ? (
-                +active == 1 ?
-                  <AllTab domains={domains} /> :
-                  (active == 2 ? <FavoriteTab /> : <></>)
-              ) : <EmptyPage />
+            {isLoaded ? (
+                domains && domains.length ? (
+                  +active == 1 ?
+                    <AllTab domains={domains} /> :
+                    (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
+                ) : <EmptyPage emptyText={active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null)} />
+              ) : <LoadingOverlay />
             }
-            {isLoading && <LoadingOverlay />}
           </>
         ) : (view === "MYBANS_REGISTER" ? <Register /> : <></>)
       }

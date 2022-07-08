@@ -1,2 +1,2 @@
 export {UserWallet} from "./UserWallet";
-export {FavoriteBans} from "./FavoriteBans";
+export {FavoriteDomains} from "./FavoriteDomains";

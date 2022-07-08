@@ -5,7 +5,6 @@ import { Popup } from "@app/components/Popup/Popup";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { copyToClipboard } from '../../core/appUtils';
-import { useModal } from "@app/components/Modals/useModal";
 import { RenewModal } from '@app/views/RenewModal/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";

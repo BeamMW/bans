@@ -35,7 +35,7 @@ const walletEventhandler = ({ walletEventPayload }) => {
       switch (walletEventPayload.id) {
         case 'ev_system_state':
           store.dispatch(setSystemState(walletEventPayload.result));
-          store.dispatch(loadAppParams.request(null));
+          //store.dispatch(loadAppParams.request(null));
 
           break;
 

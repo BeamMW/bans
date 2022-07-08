@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { FavoriteBans } from './domainObject/FavoriteBans';
+import { FavoriteDomains } from './domainObject/FavoriteDomains';
 import { UserWallet } from './domainObject/UserWallet';
 
 export interface Friend {
@@ -45,7 +45,7 @@ export class Database extends Dexie {
     async clearAllTables(database) {
         try {
             await Promise.all([
-                database.favoriteBans.clear()
+                database.favoriteDomains.clear()
             ]);
         } catch (err) {
             console.error
@@ -59,7 +59,7 @@ export class Database extends Dexie {
  * For specific purposes like several tables special realtion methods
  */
 export class UserBansDatabase extends Database implements IUserDatabase {
-    public favoriteBans!: Table<FavoriteBans, string>
+    public favoriteDomains!: Table<FavoriteDomains, string>
     //public userWallet: Table<UserWallet, string>
 
     constructor(databaseName: string) {
@@ -91,8 +91,8 @@ class InitializeDatabase {
 }
 
 
-const databaseInstance = new InitializeDatabase('user-favorite-bans', {
-    favoriteBans: '&gid, bansName',
+const databaseInstance = new InitializeDatabase('user-favorite-domains', {
+    favoriteDomains: '&gid, domainName',
 });
 
 export const userDatabase = databaseInstance.userDatabase;

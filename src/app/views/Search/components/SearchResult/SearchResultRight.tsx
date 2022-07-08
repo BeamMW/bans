@@ -4,9 +4,6 @@ import { Flex, Text } from "theme-ui";
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import Button from '@app/components/Button';
-import { createFavoriteBans, deleteFavoriteBansByName } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
-import { userDatabase } from '@app/library/bans/userLocalDatabase/database';
-import { FavoriteBans } from '@app/library/bans/userLocalDatabase/domainObject';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
 import { Amount } from '@app/components/Amount/Amount';
 import { Decimal } from '@app/library/base/Decimal';
@@ -41,6 +38,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   const { isValid, isAvailable, domain, search } = props;
   const isBansLove = useIsBansFavorite(search);
   const heartHandler = useHandleHeartAction(isBansLove, search);
+  
   const isYourOwn = domain && domain.isYourOwn;
   const isOnSale =  domain && domain.isOnSale;
 

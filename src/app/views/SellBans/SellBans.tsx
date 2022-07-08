@@ -87,6 +87,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             label='Amount'
             onChange={handleChange}
             value={amount}
+            type="number"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
             <Beam />

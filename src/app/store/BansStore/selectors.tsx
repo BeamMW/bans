@@ -6,7 +6,8 @@ const selectMain = (state: AppState) => state.bans;
 export const selectBansAppParams = () => createSelector(selectMain, (state) => state);
 
 export const selectContractHeight = () => createSelector(selectMain, (state) => state.contractHeight);
-export const selectUserView = () => createSelector(selectMain, (state) => state.userView);
+//export const selectUserView = () => createSelector(selectMain, (state) => state.userView);
+export const selectUserDomains = () => createSelector(selectMain, (state) => state.userView.domains);
 export const selectTotalsView = () => createSelector(selectMain, (state) => state.totalsView);
 export const selectIsModerator = () => createSelector(selectMain, (state) => state.is_moderator);
 
@@ -18,6 +19,8 @@ export const selectPopupsState = () => createSelector(selectMain,
     (state) => state.popupsState);
 
 
-export const selectFavoritesBans = () => createSelector(selectMain, (state) => state.allFavoritesBans);
+export const selectFavoritesDomains = () => createSelector(selectMain, (state) => state.allFavoritesDomains);
 export const selectIsFavoriteLoaded = () => createSelector(selectMain, (state) => state.isFavoriteLoaded);
+export const selectFundsTotal = () => createSelector(selectMain, (state) => state.userView.funds.total);
+export const selectPublicKey = () => createSelector(selectMain, (state) => state.publicKey);
 

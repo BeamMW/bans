@@ -44,6 +44,8 @@ export const TransactionMonitor: React.FC<{transactions: any}> = ({transactions}
                 type: "completed",
                 id
               });
+
+              console.log("complete test log!");
             } else {
               //const reason = await tryToGetRevertReason(provider, receipt.rawReceipt);
   

@@ -4,7 +4,7 @@ import { Amount } from './../Amount/Amount';
 import { Container } from './Balance.style';
 import { WithDrawButton } from "../WithdrawButton/WithDrawButton";
 import { useSelector } from "react-redux";
-import { selectPublicKey } from "@app/store/SharedStore/selectors";
+import { selectPublicKey } from "@app/store/BansStore/selectors";
 import { useBansApi } from "@app/contexts/Bans/BansContexts";
 
 interface BalanceProps {

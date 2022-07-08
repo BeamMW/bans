@@ -11,12 +11,14 @@ const Container = styled(Flex)`
       width: 95%;
 `
 
-const EmptyPage = () => {
+const EmptyPage: React.FC<any> = ({emptyText}) => {
+  const text = emptyText || "You do not hold any domains";
+  
   return (
     <>
     <Container>
       <EmptyPageIcon style={{filter:' brightness(50%)', marginBottom: '30px'}}/>
-      <Text sx={{color: 'rgba(255,255,255,0.5)'}}>You do not hold any domains</Text>
+      <Text sx={{color: 'rgba(255,255,255,0.5)'}}>{text}</Text>
     </Container>
     </>
   );

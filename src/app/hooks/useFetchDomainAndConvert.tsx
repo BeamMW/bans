@@ -9,8 +9,9 @@ import { useConvertToDomainPresenter } from "./useConvertToDomainPresenter";
 import { useSearchValidator } from "./useSearchValidator";
 import _ from "lodash";
 import { useSelector } from "react-redux";
-import { selectPublicKey, selectSystemState } from "@app/store/SharedStore/selectors";
+import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { getBansApi } from "@app/utils/getBansApi";
+import { selectPublicKey } from "@app/store/BansStore/selectors";
 
 export const useFetchDomainAndConvert = async (search): Promise<DomainPresenterType> => {
   const [prepare, setPrepare] = useState(null);

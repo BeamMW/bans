@@ -6,28 +6,17 @@ import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import _ from "lodash";
 import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
+import { useSelector } from "react-redux";
+import { selectFundsTotal } from "@app/store/BansStore/selectors";
 
 const Transactions: React.FC = () => {
-  const [total, setTotal] = useState<Decimal>(null);
-
   const { registeredMethods } = useBansApi();
-
-  useEffect(() => {
-    registeredMethods.userView().then(response => {
-      
-      const total = [...response.raw, ...response.anon].reduce(
-        (acc, current) => acc.add(current.amount)
-      , Decimal.from(0))
-
-      setTotal(total.div(GROTHS_IN_BEAM));
-    });
-
-  }, []);
+  const total = useSelector(selectFundsTotal());
 
   return (
     <>
       <PageTitle title="BANS' transactions"/>
-      <Balance balance={total ? total.toString() : 0} />
+      <Balance balance={total ? total.toString() : "0"} />
       <MyBans/>
     </>
   );

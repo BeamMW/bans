@@ -18,7 +18,7 @@ export const useTransactionFunction = (
          * Send direct api transaction call
          */
         const tx/* : return promise function */ = await send();
-  
+
         setTransactionState({
           type: "waitingForConfirmation",
           id,

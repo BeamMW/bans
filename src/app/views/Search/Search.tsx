@@ -4,9 +4,7 @@ import { SearchResult } from './components/SearchResult/SearchResult';
 import Input from '@app/components/Input';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
-import { useBansApi, useMainView } from '@app/contexts/Bans/BansContexts';
-import { useSelector } from 'react-redux';
-import { selectPublicKey, selectSystemState } from '@app/store/SharedStore/selectors';
+import { useMainView } from '@app/contexts/Bans/BansContexts';
 import Button from '@app/components/Button';
 
 import SearchIcon from "@app/assets/icons/search.svg";

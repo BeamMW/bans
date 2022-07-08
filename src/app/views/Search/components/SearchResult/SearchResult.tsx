@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import Skeleton from 'react-loading-skeleton';
 import { Paragraph, Flex, Text } from "theme-ui";
-import { RegisterAction } from "@app/views/Register/RegisterAction";
-import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
-import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { SplitContainer } from '@app/components/SplitContainer/SplitContainer';
 import { useModal } from "@app/components/Modals/useModal";
@@ -24,9 +21,9 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { isShown, toggle } = useModal();
 
   const { search, isValid, isLoading } = props;
-  const { isAvailable, expiresAt } = foundDomain ?? { isAvailable: true, expireBlock: 0 };
+  const { isAvailable, expiresAt, isYourOwn } = foundDomain ?? { isAvailable: true, expireBlock: 0, isYourOwn: false };
 
-  const showBorder = isAvailable && isValid;
+  const showBorder = (isYourOwn || isAvailable) && isValid;
 
   const proceedWithDomainHandler = () => {
     isValid && isAvailable && !foundDomain.isYourOwn && !foundDomain.isOnSale && setCurrentView("REGISTER_DOMAIN");

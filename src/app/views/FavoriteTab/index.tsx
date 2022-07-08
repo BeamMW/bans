@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
-import { selectFavoritesBans, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
+import { selectFavoritesDomains, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { Amount } from "@app/components/Amount/Amount";
@@ -16,6 +16,10 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { BuyBans } from "../Modals/BuyBans";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { Register } from "../Register/Register";
+import Button from "@app/components/Button";
+import Copy from '@app/assets/icons/copy.svg';
+import { copyToClipboard } from '../../core/appUtils';
+
 interface RightSideProps {
   domain: DomainPresenterType;
 }
@@ -24,7 +28,10 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   return (
     <>
       <Container sx={{ position: 'relative' }}>
-        <Flex sx={{ justifyContent: 'flex-end' }}>
+        <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
+          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+            <Copy />
+          </Button>
           {
             !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" />
           }
@@ -47,9 +54,8 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   )
 }
 
-export const FavoriteTab = (props) => {
+export const FavoriteTab = ({ domains: favoriteBans }) => {
   const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
-  const favoriteBans = useSelector(selectFavoritesBans());
 
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
@@ -60,11 +66,11 @@ export const FavoriteTab = (props) => {
     setRows(favoriteBans ?
       favoriteBans.map((domain, i) => (
         <>
-          <SplitContainer key={i} leftWeight={9} rightWeight={3} handleClick={
+          <SplitContainer key={i} leftWeight={8} rightWeight={4} handleClick={
             domain && !domain.isYourOwn && domain.isOnSale ?
               (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
               (
-                domain && !domain.isYourOwn && !domain.isOnSale ? () => {
+                domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
                   setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                 } : null
               )}>
