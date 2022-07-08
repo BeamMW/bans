@@ -91,6 +91,7 @@ const LabelStyled = styled.div<InputProps>`
 const InfoStyled = styled.div<InputProps>`
   text-align: start;
   margin-top: 6px;
+  margin-left: 15px;
   font-family: 'SFProDisplay';
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);

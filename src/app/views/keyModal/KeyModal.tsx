@@ -29,7 +29,7 @@ return (
   <>
     <Modal isShown={isShown}>
       <Container>
-        <Title>Public Key</Title>
+        <Title>Public key</Title>
         <Content>
           <span>{publicKey}</span>
           <Button variant='icon' pallete='transparent' onClick={handleCopy}>

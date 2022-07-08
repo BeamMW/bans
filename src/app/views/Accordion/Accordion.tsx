@@ -10,7 +10,7 @@ const Data = [
     answer: 'Brian NFT collection by Braindom Games is a limited collection of 5,000 unique 3D NFTs with hundreds of unique attributes captured on Ethereum blockchain. Brian NFT collection is inspired by one of the most popular puzzle and brain teaser games ever - Braindom.'
   },
   {
-    question: 'Question#3',
+    question: 'Question#2',
     answer: 'Brian NFT collection by Braindom Games is a limited collection of 5,000 unique 3D NFTs with hundreds of unique attributes captured on Ethereum blockchain. Brian NFT collection is inspired by one of the most popular puzzle and brain teaser games ever - Braindom.'
   },
   {
