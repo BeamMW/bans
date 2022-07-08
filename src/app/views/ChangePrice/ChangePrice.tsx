@@ -69,6 +69,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             label='New price'
             onChange={handlePriceChange}
             value={amount}
+            type="number"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
           </Input>

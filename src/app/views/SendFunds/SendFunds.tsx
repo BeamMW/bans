@@ -109,6 +109,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
           name='amount'
           onChange={handleChange}
           value={values.amount}
+          type="number"
           info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
         >
           <BeamIcon />

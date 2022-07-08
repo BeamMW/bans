@@ -17,7 +17,7 @@ export const RegistrationPrice: React.FC<PriceProps> = ({ price, isOnSale, perio
       <Text variant="panelHeader">
         {isOnSale ? "Selling price" : "Registration price"}
       </Text>
-      <Amount value={String(price.amount)}  size="14px" showConvertedToUsd={true}/>
+      <Amount value={Decimal.from(price.amount ?? 0).div(GROTHS_IN_BEAM).toString()}  size="14px" showConvertedToUsd={true}/>
     </Flex>
   )
 }
