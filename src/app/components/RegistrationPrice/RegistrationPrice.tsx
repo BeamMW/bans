@@ -12,12 +12,13 @@ interface PriceProps {
 }
 
 export const RegistrationPrice: React.FC<PriceProps> = ({ price, isOnSale, period }) => {
+  const computedPrice = price.amount * period;
   return (
     <Flex sx={{ mt: 24, mb: 5 }}>
       <Text variant="panelHeader">
         {isOnSale ? "Selling price" : "Registration price"}
       </Text>
-      <Amount value={Decimal.from(price.amount ?? 0).div(GROTHS_IN_BEAM).toString()}  size="14px" showConvertedToUsd={true}/>
+      <Amount value={Decimal.from(computedPrice ?? 0).div(GROTHS_IN_BEAM).toString()}  size="14px" showConvertedToUsd={true}/>
     </Flex>
   )
 }

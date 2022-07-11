@@ -59,7 +59,7 @@ const MyPage = () => {
       {
         view === "MYBANS" ? (
           <>
-            <PageTitle title='My Page' />
+            <PageTitle title='My Domains' />
             {!!domains &&
               <FilterTabs tabs={tabs} active={active} setActive={setActive} />
             }

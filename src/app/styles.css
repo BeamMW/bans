@@ -43,30 +43,6 @@
     font-style: normal;
   }
   
-  /* 
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-Black.otf');
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-  
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-BlackItalic.otf');
-    font-weight: 400;
-    font-style: italic;
-  }
-  
-  
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-BoldItalic.otf');
-    font-weight: 700;
-    font-style: italic;
-  }
-  */
   
       * {
         box-sizing: border-box;
@@ -122,5 +98,25 @@
       input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
+      }
+
+      ::-webkit-scrollbar {
+        width: 11px;
+        height: 10px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .2);
+        border: 3px solid rgba(0, 0, 0, 0);
+        background-clip: padding-box;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      ::-webkit-scrollbar-button {
+        display: none;
       }
   
