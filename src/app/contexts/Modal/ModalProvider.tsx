@@ -6,7 +6,11 @@ export const ModalProvider: React.FC = props => {
     const { children } = props;
     
     const [currentModal, setCurrentModal] = useState<string>(null);
-    const [modalData, setModalData] = useState({});
+    const [modalData, _setModalData] = useState({});
+
+    const setModalData = (data) => {
+        return _setModalData(data ?? {});
+    }
 
     const openModal = event => modal => data => callback => {
         
