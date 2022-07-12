@@ -178,6 +178,7 @@ export function* loadUserViewSaga(
 
     /* store.dispatch(actions.setUserDomains(domains))
     store.dispatch(actions.setUserFunds(funds)) */
+    yield call(setUserFundsSaga, funds)
     yield call(setUserDomainsSaga, domains)
 
   } catch (err) {
@@ -219,10 +220,10 @@ export function* setUserDomainsSaga(
 }
 
 export function* setUserFundsSaga(
-  action: ReturnType<typeof actions.setUserFunds>
+  action/* : ReturnType<typeof actions.setUserFunds> */
 ) {
   try {
-    const funds = action.payload;
+    const funds = action/* .payload */;
     const total = [...funds.revenue, ...funds.transferred].reduce(
       (acc, current) => acc.add(current.amount)
       , Decimal.from(0));
@@ -321,7 +322,7 @@ function* bansSaga() {
   yield takeLatest(actions.loadPublicKey.request, loadPublicKeySaga);
 
   // not optimized!
-  yield takeEvery(actions.ANTIOPTIMIZEDreloadAllUserInfo.request, reloadAllUserInfoSaga);
+  yield takeEvery(actions.reloadAllUserInfo.request, reloadAllUserInfoSaga);
 }
 
 export default bansSaga;

@@ -14,6 +14,8 @@ import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 import Renew from '@app/assets/icons/renew-blue.svg';
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import store from "index";
 interface RenewModalProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -36,8 +38,12 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       closeModal(null);
-    }
+      store.dispatch(reloadAllUserInfo.request());
 
+      return () => {
+        store.dispatch(reloadAllUserInfo.request());
+      }
+    }
   }, [transactionState]);
 
 

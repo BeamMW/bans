@@ -6,6 +6,8 @@ import { WithDrawButton } from "../WithdrawButton/WithDrawButton";
 import { useSelector } from "react-redux";
 import { selectPublicKey } from "@app/store/BansStore/selectors";
 import { useBansApi } from "@app/contexts/Bans/BansContexts";
+import { GROTHS_IN_BEAM } from "@app/constants";
+import { Decimal } from "@app/library/base/Decimal";
 
 interface BalanceProps {
   balance: string
@@ -27,7 +29,7 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
     <Container>
       <div>
         <div className="description">Current balance</div>
-        <Amount value={balance} size='20px' />
+        <Amount value={Decimal.from(balance).div(GROTHS_IN_BEAM).toString()} size='20px' />
       </div>
       {
         balance && (

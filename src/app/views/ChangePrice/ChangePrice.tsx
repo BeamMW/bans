@@ -38,7 +38,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       closeModal(null);
       return () => {
-        //store.dispatch()
+        store.dispatch(reloadAllUserInfo.request());
       }
     }
 

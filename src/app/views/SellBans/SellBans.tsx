@@ -14,6 +14,8 @@ import { Decimal } from "@app/library/base/Decimal";
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import store from "index";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -28,12 +30,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
 
   closeModal = closeModal ?? close;
 
-  
-
   let domains = [];
-  
-
-
   
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
@@ -61,7 +58,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
       closeModal(null);
 
       return () => {
-        //store.dispatch()
+        store.dispatch(reloadAllUserInfo.request());
       }
     }
 

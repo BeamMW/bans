@@ -12,6 +12,8 @@ import { IsTransactionPending } from '@app/library/transaction-react/IsTransacti
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import store from 'index';
+import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 
 interface TranferProps {
   isShown: boolean;
@@ -34,7 +36,7 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
       closeModal(null);
       
       return () => {
-        //store.dispatch()
+        store.dispatch(reloadAllUserInfo.request());
       }
     }
 

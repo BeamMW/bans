@@ -54,7 +54,7 @@ export const loadPublicKey = createAsyncAction(
 )<void, any, any>();
 
 
-export const ANTIOPTIMIZEDreloadAllUserInfo = createAsyncAction(
+export const reloadAllUserInfo = createAsyncAction(
     '@@MAIN/RELOAD_ALL_USER_INFO',
     '@@MAIN/RELOAD_ALL_USER_INFO_SUCCESS',
     '@@MAIN/RELOAD_ALL_USER_INFO_FAILURE',

@@ -60,6 +60,7 @@ export class Database extends Dexie {
  */
 export class UserBansDatabase extends Database implements IUserDatabase {
     public favoriteDomains!: Table<FavoriteDomains, string>
+    public notifications!: Table<FavoriteDomains, string>
     //public userWallet: Table<UserWallet, string>
 
     constructor(databaseName: string) {
@@ -91,8 +92,9 @@ class InitializeDatabase {
 }
 
 
-const databaseInstance = new InitializeDatabase('user-favorite-domains', {
+const databaseInstance = new InitializeDatabase('user-bans', {
     favoriteDomains: '&gid, domainName',
+    notifications: '&gid, type, state, deffered, notifyData',
 });
 
 export const userDatabase = databaseInstance.userDatabase;

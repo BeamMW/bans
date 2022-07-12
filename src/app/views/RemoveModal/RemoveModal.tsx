@@ -32,7 +32,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       closeModal(null);
       return () => {
-        //store.dispatch()
+        store.dispatch(reloadAllUserInfo.request());
       }
     }
 
