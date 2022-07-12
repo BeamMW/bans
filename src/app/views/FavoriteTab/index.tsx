@@ -17,14 +17,22 @@ import { BuyBans } from "../Modals/BuyBans";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { Register } from "../Register/Register";
 import Button from "@app/components/Button";
-import Copy from '@app/assets/icons/copy.svg';
-import { copyToClipboard } from '../../core/appUtils';
+import SendGreenIcon from '@app/assets/icons/send-green.svg';
+import Dots from '@app/assets/icons/dots.svg';
+import { Popup } from "@app/components/Popup/Popup";
+import { PopupItem } from "@app/components/Popup/Popup.styles";
+import Heart from '@app/assets/icons/heart.svg';
+import { useHandleHeartAction } from "@app/hooks/useHandleHeartAction";
+import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
 
 interface RightSideProps {
   domain: DomainPresenterType;
 }
 const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   const { open } = useModalContext();
+  const [showPopup, setShowPopup] = React.useState(null);
+  const isBansLove = useIsBansFavorite(domain.name);
+  const heartHandler = useHandleHeartAction(isBansLove, domain.name);
 
   return (
     <>
@@ -33,29 +41,23 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
             <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={(event) => open(event)("modal-send-funds")({domain: domain})(null)}>
+              <SendGreenIcon />
               send funds
             </Button>
           }
-          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
-            <Copy />
-          </Button>
           {
             !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" />
           }
-          <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B" }}>{
-            domain.isYourOwn ?
-              "your already own" :
-              (
-                domain.isAvailable && !domain.isOnSale ?
-                  "available" :
-                  (
-                    domain.isOnSale ?
-                      "on sale" :
-                      "not available"
-                  )
-              )
-          }</Text>
+          <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
+            <Dots />
+          </Button>
         </Flex>
+        <Popup isVisible={showPopup}>
+          <PopupItem onClick={heartHandler}>
+            <Heart />
+            remove from favorites
+          </PopupItem>
+        </Popup>
       </Container>
     </>
   )
@@ -81,7 +83,7 @@ export const FavoriteTab = ({ domains: favoriteBans }) => {
                   setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                 } : null
               )}>
-            <LeftSide domain={domain} showHeart={true} />
+            <LeftSide domain={domain} />
             <RightSide domain={domain} />
           </SplitContainer>
         </>

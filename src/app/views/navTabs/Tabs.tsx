@@ -71,7 +71,7 @@ const Tabs:FC = () => {
              </Button>
            </Tooltip>
          </NavLink>
-         <Tooltip content='Public Key' direction={DIRECTIONS.BOTTOM}>
+         <Tooltip content='Public key' direction={DIRECTIONS.BOTTOM}>
           <Button
             variant='icon'
             pallete='opacity'
@@ -117,7 +117,7 @@ const Tabs:FC = () => {
         </Tooltip>
       </NavLink>
       <NavLink to='my-page'>
-        <Tooltip content='My page' direction={DIRECTIONS.BOTTOM} customClass="page">
+        <Tooltip content='My domains' direction={DIRECTIONS.BOTTOM} customClass="page">
           <Button
             variant='icon'
             pallete='opacity'
