@@ -10,14 +10,14 @@ interface SearchResultLeftProps extends SearchResultStyleProps {
   value: string;
   isValid: boolean;
   expiresAt: string;
-  handleClick: () => void;
 }
+
 export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
-  const { value, isAvailable, isValid, expiresAt, handleClick, domain } = props;
+  const { value, isAvailable, isValid, expiresAt, domain } = props;
   const isYourOwn = domain && domain.isYourOwn;
 
   return (
-    <Flex sx={containerStyles(props)} onClick={handleClick}>
+    <Flex sx={containerStyles(props)}>
       <Flex>
         <Text>{value}</Text>
         {

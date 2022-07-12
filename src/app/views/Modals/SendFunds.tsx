@@ -21,7 +21,7 @@ import { useConvertToDomainPresenter } from "@app/hooks/useConvertToDomainPresen
 import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { Box, Flex, Text } from "theme-ui";
-
+import { SelectWithInput } from '@app/components/Select/SelectWithInput';
 interface SendFundsProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -63,6 +63,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [values, setValues] = React.useState(initialValues);
   const [domain, setDomain] = React.useState<DomainPresenterType>(passedDomain);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [activeItem, setActiveItem] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,21 +89,20 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     });
   }, [])
 
+  const testData = [
+    {id:'1', name:'test'},
+    {id:'2', name:'test2'},
+    {id:'3', name:'unique'},
+    {id:'4', name:'find'},
+    {id:'5', name:'by'}
+
+  ]
 
   return (
     <Modal isShown={isShown} header="Send funds to the BANS">
       <>
         {isTransactionPending && <LoadingOverlay />}
-        <Input
-          variant='modalInput'
-          pallete='white'
-          label='Domain*'
-          name='domain'
-          onChange={handleChange}
-          value={values.domain}
-        >
-          <CheckedIcon />
-        </Input>
+          <SelectWithInput items={testData} setActiveItem={setActiveItem} activeItem={activeItem}/>
         <Box sx={{mt: '30px'}}>
         <Input
           variant='modalInput'

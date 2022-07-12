@@ -76,7 +76,13 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             <Text>{`ALREADY ON SALE for ${selectedDomain.price.amount}!`}</Text>
           </Flex> : <></>
         }
-        {/* <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} /> */}
+        {/* <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem}> 
+              <div className="selected" onClick={() => setShow(true)}>
+                {activeItem ? activeItem : items[0].name}
+                <ArrowDown className="arrow"/>
+              </div>
+            </Select>
+        */}
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'
