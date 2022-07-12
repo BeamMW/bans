@@ -12,7 +12,7 @@ import SendGreenIcon from '@app/assets/icons/send-green.svg';
 import WalletIcon from '@app/assets/icons/wallet.svg';
 
 import { TabsContainer, TabsChildren } from './Tabs.style';
-import { SendFunds } from '@app/views/SendFunds/SendFunds';
+import { SendFunds } from '@app/views/Modals/SendFunds';
 import { useMainView } from '@app/contexts/Bans/BansContexts';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 

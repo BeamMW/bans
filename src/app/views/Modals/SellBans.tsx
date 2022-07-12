@@ -6,7 +6,7 @@ import Input from "@app/components/Input";
 import Beam from '@app/assets/icons/beam.svg';
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { SellBansAction } from "./SellBansAction";
+import { SellBansAction } from "@app/views/Actions/SellBansAction";
 import Sell from '@app/assets/icons/send.svg';
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";

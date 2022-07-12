@@ -10,12 +10,14 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
-import { SellBansAction } from "@app/views/SellBans/SellBansAction";
+import { SellBansAction } from "@app/views/Actions/SellBansAction";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
+import store from "index";
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 
 
 interface ChangePriceProps {

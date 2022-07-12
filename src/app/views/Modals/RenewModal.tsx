@@ -7,7 +7,7 @@ import { RegistrationPeriod } from '@app/components/RegistrationPeriod/Registrat
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { RegisterAction } from "@app/views/Register/RegisterAction";
+import { RegisterAction } from "@app/views/Actions/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";

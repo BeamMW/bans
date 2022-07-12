@@ -5,10 +5,10 @@ import { Popup } from "@app/components/Popup/Popup";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { copyToClipboard } from '../../core/appUtils';
-import { RenewModal } from '@app/views/RenewModal/RenewModal';
+import { RenewModal } from '@app/views/Modals/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
-import { SellBansModal } from '@app/views/SellBans/SellBans';
+import { SellBansModal } from '@app/views/Modals/SellBans';
 import { Transfer } from "@app/views/Transfer/Transfer";
 import { RemoveOrChange, ModalManager as RightSideModalManager } from '@app/views/RemoveOrChange/RemoveOrChange';
 

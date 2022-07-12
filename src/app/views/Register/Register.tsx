@@ -3,7 +3,7 @@ import { Flex, Text, Divider, Box } from 'theme-ui';
 import styled from "styled-components";
 import Plus from '@app/assets/icons/blue-plus.svg';
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
-import { RegisterAction } from "./RegisterAction";
+import { RegisterAction } from "@app/views/Actions/RegisterAction";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { BackButton } from "@app/components/BackButton/BackButton";
 import { useTransactionState } from "@app/library/transaction-react/context/TransactionContext";

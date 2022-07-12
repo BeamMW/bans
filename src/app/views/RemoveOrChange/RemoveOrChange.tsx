@@ -3,9 +3,9 @@ import { Flex, Container } from "theme-ui";
 import Button from "@app/components/Button";
 import { Popup } from "@app/components/Popup/Popup";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
-import { RemoveModal } from '@app/views/RemoveModal/RemoveModal';
+import { RemoveModal } from '@app/views/Modals/RemoveModal';
 import { Amount } from '@app/components/Amount/Amount';
-import { ChangePrice } from '@app/views/ChangePrice/ChangePrice';
+import { ChangePrice } from '@app/views/Modals/ChangePrice';
 import { GROTHS_IN_BEAM } from '@app/constants';
 import { Decimal } from '@app/library/base/Decimal';
 

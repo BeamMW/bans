@@ -12,7 +12,7 @@ import { IsTransactionPending } from "@app/library/transaction-react/IsTransacti
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { Decimal } from "@app/library/base/Decimal";
-import { SendFundsAction } from "./SendFundsAction";
+import { SendFundsAction } from "@app/views/Actions/SendFundsAction";
 import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";

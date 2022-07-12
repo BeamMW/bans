@@ -5,12 +5,14 @@ import { Modal } from '@app/components/Modals/Modal';
 import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
-import { SellBansAction } from '@app/views/SellBans/SellBansAction';
+import { SellBansAction } from '@app/views/Actions/SellBansAction';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import RemoveIcon from '@app/assets/icons/remove-sale.svg'
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import store from 'index';
+import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 
 interface RemoveProps {
   isShown: boolean;
