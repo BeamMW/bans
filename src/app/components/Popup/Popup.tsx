@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from './Popup.styles';
 
 interface PopupProps {
-  children: React.ReactElement[];
+  children: React.ReactElement[] | React.ReactElement;
   isVisible: boolean;
 }
 

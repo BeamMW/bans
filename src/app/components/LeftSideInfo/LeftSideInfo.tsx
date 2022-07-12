@@ -7,10 +7,10 @@ import React from "react";
 import styled from 'styled-components';
 import { Box, Flex, Text } from "theme-ui";
 import Button from "../Button";
-import Heart from '@app/assets/icons/heart.svg';
+import { copyToClipboard } from '../../core/appUtils';
 import SaleIcon from '@app/assets/icons/sell.svg';
+import Copy from '@app/assets/icons/copy.svg';
 
-import HeartActive from '@app/assets/icons/heart-active.svg';
 
 interface SubTextProps {
   isexpired: boolean;
@@ -28,10 +28,9 @@ export const SubText = styled(Text) <SubTextProps>`
 `
 interface LeftSideProps {
   domain: DomainPresenterType;
-  showHeart?: boolean
 };
 
-export const LeftSide: React.FC<LeftSideProps> = ({ domain, showHeart }) => {
+export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
   const { name, expiresAt, isExpired, isOnSale, price } = domain;
 
   //refactor move to another compnent for optimization issues
@@ -47,20 +46,29 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showHeart }) => {
         </Flex> : <></>
       }
 
-      <Box>
-        <Text>{name}.beam</Text>
+        <Box>
+          <Text>{name}.beam</Text>
+          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+            <Copy />
+          </Button>
 
-        {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></>}
-      </Box>
-      {
-        showHeart && (
-          <Box>
-            <Button variant='icon' pallete='opacity' onClick={heartHandler}>
-              {!!isBansLove && isBansLove.length ? <HeartActive /> : <Heart />}
-            </Button>
-          </Box>
-        )
-      }
+        <Flex>
+          {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></>}
+          <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B", padding: '4px 0px 0px 20px' }}>{
+            domain.isYourOwn ?
+              "your already own" :
+              (
+                domain.isAvailable && !domain.isOnSale ?
+                  "available" :
+                  (
+                    domain.isOnSale ?
+                      "on sale" :
+                      "not available"
+                  )
+              )
+          }</Text>
+        </Flex>
+        </Box>
     </Flex>
   )
 }

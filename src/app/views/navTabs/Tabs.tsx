@@ -9,6 +9,7 @@ import FaqIcon from "@app/assets/icons/faq.svg";
 import KeyIcon from "@app/assets/icons/key.svg";
 import UserIcon from "@app/assets/icons/user.svg";
 import SendGreenIcon from '@app/assets/icons/send-green.svg';
+import WalletIcon from '@app/assets/icons/wallet.svg';
 
 import { TabsContainer, TabsChildren } from './Tabs.style';
 import { SendFunds } from '@app/views/SendFunds/SendFunds';
@@ -51,7 +52,42 @@ const Tabs:FC = () => {
     <>
   <TabsContainer>
     <TabsChildren>
-        <Tooltip content='send funds' direction={DIRECTIONS.BOTTOM}>
+      {
+        location.pathname == '/my-page' && (
+          <>
+          <NavLink
+          to="/faq">
+           <Tooltip content='FAQ' direction={DIRECTIONS.BOTTOM}>
+             <Button
+               variant='icon'
+               pallete='opacity'
+               id='faq'
+               onClick={e => handleClick('faq')}
+               style={ active === 'faq' ? activeButtonStyle : passiveButtonStyle }
+             >
+               <FaqIcon 
+                 style={ active === 'faq' ? activeIconStyle : passiveIconStyle }
+               />
+             </Button>
+           </Tooltip>
+         </NavLink>
+         <Tooltip content='Public key' direction={DIRECTIONS.BOTTOM}>
+          <Button
+            variant='icon'
+            pallete='opacity'
+            id='key'
+            onClick={toggle}
+            style={ isShown ? activeButtonStyle : passiveButtonStyle }
+          >
+            <KeyIcon 
+              style={ isShown ? activeIconStyle : passiveIconStyle }
+            />
+          </Button>
+       </Tooltip>
+      </>
+        )
+      }
+      <Tooltip content='send funds' direction={DIRECTIONS.BOTTOM}>
           <Button
           variant='icon'
           pallete='opacity'
@@ -63,38 +99,25 @@ const Tabs:FC = () => {
               style={ current == "modal-send-funds" ? activeIconStyle : passiveIconStyle }
             />
           </Button>
-        </Tooltip>
+      </Tooltip>
       <NavLink
-       to="/faq">
-        <Tooltip content='FAQ' direction={DIRECTIONS.BOTTOM}>
+       to="/transactions">
+        <Tooltip content='Transactions' direction={DIRECTIONS.BOTTOM}>
           <Button
             variant='icon'
             pallete='opacity'
-            id='faq'
-            onClick={e => handleClick('faq')}
-            style={ active === 'faq' ? activeButtonStyle : passiveButtonStyle }
+            id='transactions'
+            onClick={e => handleClick('transactions')}
+            style={ active === 'transactions' ? activeButtonStyle : passiveButtonStyle }
           >
-            <FaqIcon 
-              style={ active === 'faq' ? activeIconStyle : passiveIconStyle }
+            <WalletIcon 
+              style={ active === 'transactions' ? activeIconStyle : passiveIconStyle }
             />
           </Button>
         </Tooltip>
       </NavLink>
-      <Tooltip content='Public Key' direction={DIRECTIONS.BOTTOM}>
-        <Button
-          variant='icon'
-          pallete='opacity'
-          id='key'
-          onClick={toggle}
-          style={ isShown ? activeButtonStyle : passiveButtonStyle }
-        >
-          <KeyIcon 
-            style={ isShown ? activeIconStyle : passiveIconStyle }
-          />
-        </Button>
-      </Tooltip>
       <NavLink to='my-page'>
-        <Tooltip content='My page' direction={DIRECTIONS.BOTTOM} customClass="page">
+        <Tooltip content='My domains' direction={DIRECTIONS.BOTTOM} customClass="page">
           <Button
             variant='icon'
             pallete='opacity'
