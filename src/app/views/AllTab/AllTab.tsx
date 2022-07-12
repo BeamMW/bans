@@ -68,7 +68,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   //This name is in grace period, and needs to be renewed by June 30, 2022
   const rows =
     domains.map((domain, i) => (
-      <SplitContainer key={i} leftWeight={10} rightWeight={2}>
+      <SplitContainer key={i} leftWeight={9} rightWeight={3}>
         <LeftSide domain={domain} />
         {
           domain.isOnSale ?

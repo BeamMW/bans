@@ -95,7 +95,7 @@ export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActi
     setShow(false);
   }
 
-  useOnClickOutside(ref, handleClickOutside)
+  useOnClickOutside(ref, handleClickOutside);
   
   useEffect(() => {
     setFilteredResults(items)

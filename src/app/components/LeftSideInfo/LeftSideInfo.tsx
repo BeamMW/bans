@@ -53,7 +53,9 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
           </Button>
 
         <Flex>
-          {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></>}
+          {expiresAt ? 
+          <>
+          <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText>
           <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B", padding: '4px 0px 0px 20px' }}>{
             domain.isYourOwn ?
               "your already own" :
@@ -66,7 +68,26 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
                       "not available"
                   )
               )
-          }</Text>
+          } 
+           </Text>
+          </>
+          : (
+            <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B" }}>{
+              domain.isYourOwn ?
+                "your already own" :
+                (
+                  domain.isAvailable && !domain.isOnSale ?
+                    "available" :
+                    (
+                      domain.isOnSale ?
+                        "on sale" :
+                        "not available"
+                    )
+                )
+            } 
+             </Text>
+          )
+          }
         </Flex>
         </Box>
     </Flex>

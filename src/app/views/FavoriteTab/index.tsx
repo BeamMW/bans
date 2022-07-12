@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Text, Container } from "theme-ui";
+import { Flex, Text, Container, Box } from "theme-ui";
 import { useSelector } from "react-redux";
 
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
@@ -24,19 +24,36 @@ import { PopupItem } from "@app/components/Popup/Popup.styles";
 import Heart from '@app/assets/icons/heart.svg';
 import { useHandleHeartAction } from "@app/hooks/useHandleHeartAction";
 import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
+import useOnClickOutside from '@app/hooks/outsideClickHandlers/useOnClickOutside';
 
+interface IPopup {
+  [id: string]: boolean
+}
 interface RightSideProps {
   domain: DomainPresenterType;
+  showPopup: IPopup;
+  openModal: (name:string) => void;
+  setShowPopup: (data:IPopup) => void;
 }
-const RightSide: React.FC<RightSideProps> = ({ domain }) => {
+
+const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, setShowPopup}) => {
   const { open } = useModalContext();
-  const [showPopup, setShowPopup] = React.useState(null);
   const isBansLove = useIsBansFavorite(domain.name);
   const heartHandler = useHandleHeartAction(isBansLove, domain.name);
+  const ref = React.useRef(null)
 
+  const handleClickOutside = () => {
+    console.log('called')
+    setShowPopup({
+      [domain.name]: false
+    });
+  }
+
+  useOnClickOutside(ref, handleClickOutside);
   return (
     <>
-      <Container sx={{ position: 'relative' }}>
+      <Container sx={{ position: 'relative' }}
+        >
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
@@ -48,12 +65,12 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
           {
             !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" />
           }
-          <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
+          <Button variant='icon' pallete='transparent' onClick={() => openModal(domain.name)}>
             <Dots />
           </Button>
         </Flex>
-        <Popup isVisible={showPopup}>
-          <PopupItem onClick={heartHandler}>
+        <Popup isVisible={showPopup[domain.name]}>
+          <PopupItem onClick={heartHandler} ref={ref}>
             <Heart />
             remove from favorites
           </PopupItem>
@@ -65,17 +82,24 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
 
 export const FavoriteTab = ({ domains: favoriteBans }) => {
   const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
-
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
-
   let [rows, setRows] = useState(null);
+  const [showPopup, setShowPopup] = React.useState<IPopup>({});
+
+  const openPopup = (id:string) => {
+    setShowPopup({
+          [id]: true
+    });
+ };
+
 
   useEffect(() => {
     setRows(favoriteBans ?
       favoriteBans.map((domain, i) => (
-        <>
-          <SplitContainer key={i} leftWeight={8} rightWeight={4} handleClick={
+        <React.Fragment key={domain.name}>
+          <SplitContainer key={i} leftWeight={8} rightWeight={4}>
+            <Box onClick={
             domain && !domain.isYourOwn && domain.isOnSale ?
               (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
               (
@@ -83,12 +107,13 @@ export const FavoriteTab = ({ domains: favoriteBans }) => {
                   setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                 } : null
               )}>
-            <LeftSide domain={domain} />
-            <RightSide domain={domain} />
+                <LeftSide domain={domain} />
+            </Box>
+            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup}/>
           </SplitContainer>
-        </>
+        </React.Fragment>
       )) : <></>);
-  }, [isFavoriteLoaded, favoriteBans])
+  }, [isFavoriteLoaded, favoriteBans, showPopup])
 
   return (
     isFavoriteLoaded ? <>
