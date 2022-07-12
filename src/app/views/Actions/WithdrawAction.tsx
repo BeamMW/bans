@@ -5,14 +5,14 @@ import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { toGroths } from "@app/library/base/appUtils";
 
-type RegisterActionProps = {
+type WithdrawActionProps = {
     transactionId: string;
     change: any;
-    domain: DomainPresenterType;
-    amount: number;
+    domain?: DomainPresenterType;
+    amount?: number;
 };
 
-export const WithdrawAction: React.FC<RegisterActionProps> = ({
+export const WithdrawAction: React.FC<WithdrawActionProps> = ({
     children,
     transactionId,
     change,
@@ -27,9 +27,14 @@ export const WithdrawAction: React.FC<RegisterActionProps> = ({
         switch (change) {
             case "withdrawAll":
                 {
+                    return () => registeredMethods.userReceiveAll();
+                }
+            case "withdraw":
+                {
                     return () => registeredMethods.userReceive({ name: domain.name, amount: toGroths(amount) });
                 }
         }
+
     }
 
     const [sendTransaction] = useTransactionFunction(

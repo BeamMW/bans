@@ -19,7 +19,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   return (
     <Flex sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
     <Amount value="0" size="14px" />
-    <WithDrawButton text='withdraw' />
+    {/* <WithDrawButton text='withdraw' /> */}
     {
       domain.isExpired &&  (
         <Button variant="ghostBordered" pallete="green" style={{ margin: '0 0 0 20px' }}>
@@ -33,7 +33,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
 }
 interface MyBansProps {
 }
-export const MyBans: React.FC<MyBansProps> = ({}) => {
+export const MyTransactions: React.FC<MyBansProps> = ({}) => {
 
   const { registeredMethods } = useBansApi();
   const [domains, setDomains] = useState(null);
@@ -79,4 +79,4 @@ export const MyBans: React.FC<MyBansProps> = ({}) => {
   );
 }
 
-export default MyBans;
+export default MyTransactions;

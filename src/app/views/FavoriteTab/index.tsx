@@ -40,7 +40,9 @@ const RightSide: React.FC<RightSideProps> = ({ domain }) => {
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
-            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={(event) => open(event)("modal-send-funds")({domain: domain})(null)}>
+            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={
+              (event) => open(event)("modal-send-funds")({ domain: domain })(null)
+            }>
               <SendGreenIcon />
               send funds
             </Button>

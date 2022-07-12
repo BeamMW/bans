@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "theme-ui";
 import { Amount } from './../Amount/Amount';
 import { Container } from './Balance.style';
@@ -8,22 +8,34 @@ import { selectPublicKey } from "@app/store/BansStore/selectors";
 import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
+import { WithdrawAction } from "@app/views/Actions/WithdrawAction";
+import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import store from "index";
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 
 interface BalanceProps {
   balance: string
 }
 export const Balance: React.FC<BalanceProps> = ({ balance }) => {
 
+  const TRANSACTION_ID = "WITHDRAW ALL";
+
   const publicKey = useSelector(selectPublicKey());
   const { registeredMethods } = useBansApi();
 
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
-  const withdrawHandler = () => {
-    /* registeredMethods.userReceive().then(response =>
-      registeredMethods.userReceive().then(response => {
-        console.log(response);
-      })) */
-  }
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+
+      return () => {
+        store.dispatch(reloadAllUserInfo.request());
+      }
+    }
+
+  }, [transactionState]);
 
   return (
     <Container>
@@ -34,7 +46,12 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
       {
         balance && (
           <div className="withdraw">
-            <WithDrawButton handler={withdrawHandler} text='withdraw all' />
+            <WithdrawAction
+              transactionId={TRANSACTION_ID}
+              change={"withdrawAll"}
+            >
+              <WithDrawButton text='withdraw all' />
+            </WithdrawAction>
           </div>
         )
       }
