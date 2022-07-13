@@ -57,7 +57,9 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
-            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={(event) => open(event)("modal-send-funds")({domain: domain})(null)}>
+            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={
+              (event) => open(event)("modal-send-funds")({ domain: domain })(null)
+            }>
               <SendGreenIcon />
               send funds
             </Button>
@@ -80,10 +82,12 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
   )
 }
 
-export const FavoriteTab = ({ domains: favoriteBans }) => {
+export const FavoriteTab = ({ domains: favoriteDomains }) => {
   const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
+  //const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
+
   let [rows, setRows] = useState(null);
   const [showPopup, setShowPopup] = React.useState<IPopup>({});
 
@@ -95,25 +99,27 @@ export const FavoriteTab = ({ domains: favoriteBans }) => {
 
 
   useEffect(() => {
-    setRows(favoriteBans ?
-      favoriteBans.map((domain, i) => (
-        <React.Fragment key={domain.name}>
+    const suggestedSendFundsDomains = favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn);
+    
+    setRows(favoriteDomains ?
+      favoriteDomains.map((domain, i) => (
+        <React.Fragment key={i}>
           <SplitContainer key={i} leftWeight={8} rightWeight={4}>
             <Box onClick={
             domain && !domain.isYourOwn && domain.isOnSale ?
-              (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
+              (event) => open(event)("modal-search-result-for-sale")({ domain: domain, suggestedDomains: suggestedSendFundsDomains })(null) :
               (
                 domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
                   setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                 } : null
               )}>
-                <LeftSide domain={domain} />
-            </Box>
+                <LeftSide domain={domain}/>
+              </Box>
             <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup}/>
           </SplitContainer>
         </React.Fragment>
       )) : <></>);
-  }, [isFavoriteLoaded, favoriteBans, showPopup])
+  }, [isFavoriteLoaded, favoriteDomains])
 
   return (
     isFavoriteLoaded ? <>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { PageTitle } from '../../components/PageTitle/PageTitle';
-import { Balance } from '../../components/Balance/Balance';
-import { MyBans } from './../../views/MyBans/MyBans';
+import { PageTitle } from '@app/components/PageTitle/PageTitle';
+import { Balance } from '@app/components/Balance/Balance';
+import { MyTransactions } from '@app/views/MyTransactions/MyTransactions';
 import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import _ from "lodash";
 import { Decimal } from "@app/library/base/Decimal";
@@ -10,14 +10,13 @@ import { useSelector } from "react-redux";
 import { selectFundsTotal } from "@app/store/BansStore/selectors";
 
 const Transactions: React.FC = () => {
-  const { registeredMethods } = useBansApi();
   const total = useSelector(selectFundsTotal());
 
   return (
     <>
       <PageTitle title="BANS' transactions"/>
       <Balance balance={total ? total.toString() : "0"} />
-      <MyBans/>
+      <MyTransactions/>
     </>
   );
 }

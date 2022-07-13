@@ -5,7 +5,7 @@ import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { toGroths } from "@app/library/base/appUtils";
 
-type RegisterActionProps = {
+type SendFundsActionProps = {
     transactionId: string;
     change: any;
     domain: DomainPresenterType;
@@ -13,7 +13,7 @@ type RegisterActionProps = {
     disabled: boolean;
 };
 
-export const SendFundsAction: React.FC<RegisterActionProps> = ({
+export const SendFundsAction: React.FC<SendFundsActionProps> = ({
     children,
     transactionId,
     change,
@@ -32,7 +32,6 @@ export const SendFundsAction: React.FC<RegisterActionProps> = ({
                     return () => registeredMethods.managerPay({ name: domain.name, amount: toGroths(amount) });
                 }
         }
-
     }
 
     const [sendTransaction] = useTransactionFunction(

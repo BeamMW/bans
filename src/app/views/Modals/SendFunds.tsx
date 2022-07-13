@@ -3,7 +3,6 @@ import Input from "@app/components/Input";
 import { Modal } from "@app/components/Modals/Modal";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
-import Button from "@app/components/Button";
 import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
@@ -13,15 +12,13 @@ import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { Decimal } from "@app/library/base/Decimal";
 import { SendFundsAction } from "@app/views/Actions/SendFundsAction";
-import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";
-import { useSearchValidator } from "@app/hooks/useSearchValidator";
-import { useConvertToDomainPresenter } from "@app/hooks/useConvertToDomainPresenter";
-import { selectSystemState } from "@app/store/SharedStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { Box, Flex, Text } from "theme-ui";
 import { SelectWithInput } from '@app/components/Select/SelectWithInput';
+
 interface SendFundsProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -29,7 +26,7 @@ interface SendFundsProps {
 
 const initialValues = {
   domain: '',
-  amount: 0
+  amount: null
 }
 
 export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => {
@@ -39,7 +36,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const { close }: { close: any } = useModalContext();
 
   //if domain exists
-  const {data: { domain: passedDomain } = null} = useModalContext() ?? {data: {domain: null}};
+  const { data: { domain: passedDomain, suggestedDomains = [] } } = useModalContext() ?? { data: { domain: null, suggestedDomains: [] } };
 
   closeModal = closeModal ?? close;
 
@@ -63,6 +60,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [values, setValues] = React.useState(initialValues);
   const [domain, setDomain] = React.useState<DomainPresenterType>(passedDomain);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +75,8 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const beamPrice = useSelector(selectRate());
 
   useFetchDomainAndConvert(values.domain).then(domain => {
-    setIsButtonDisabled(domain && !domain.isAvailable && !domain.isYourOwn && values.amount ? false : true);
+    setIsValid(domain && !domain.isAvailable && !domain.isYourOwn);
+    setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
   });
 
@@ -88,36 +87,38 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
       ["domain"]: domain.name,
     });
   }, [])
-
-  const testData = [
-    {id:'1', name:'test'},
-    {id:'2', name:'test2'},
-    {id:'3', name:'unique'},
-    {id:'4', name:'find'},
-    {id:'5', name:'by'}
-
-  ]
-
+  
   return (
     <Modal isShown={isShown} header="Send funds to the BANS">
       <>
         {isTransactionPending && <LoadingOverlay />}
-          <SelectWithInput items={testData} setActiveItem={setActiveItem} activeItem={activeItem}/>
-        <Box sx={{mt: '30px'}}>
-        <Input
-          variant='modalInput'
-          pallete='purple'
-          label='Amount*'
-          name='amount'
-          onChange={handleChange}
-          value={values.amount}
-          type="number"
-          info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
-        >
-          <Flex sx={{justifyContent: 'center'}}>
-          <BeamIcon /> <Text sx={{ marginLeft:'10px', marginTop:'1px' }}>BEAM</Text>
-          </Flex>
-        </Input>
+        {suggestedDomains && suggestedDomains.length ?
+          <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
+          <Input
+            variant='modalInput'
+            pallete='white'
+            label='Domain*'
+            name='domain'
+            onChange={handleChange}
+            value={values.domain}
+          >
+            {isValid ? <CheckedIcon /> : <></>}
+          </Input>}
+        <Box sx={{ mt: '30px' }}>
+          <Input
+            variant='modalInput'
+            pallete='purple'
+            label='Amount*'
+            name='amount'
+            onChange={handleChange}
+            value={values.amount}
+            type="number"
+            info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
+          >
+            <Flex sx={{ justifyContent: 'center' }}>
+              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
+            </Flex>
+          </Input>
         </Box>
         <ButtonContainer>
           <CloseBtn toggle={closeModal} text="cancel" />

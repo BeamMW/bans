@@ -157,7 +157,7 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
         );
     }
 
-    async callMethod<T = any>(params: object): Promise<T> {
+    async callMethod<T = any>(params: object | null): Promise<T> {
         try {
             let txId = await Utils.invokeContractAsyncAndMakeTx(
                 this.convertContractParams(params),

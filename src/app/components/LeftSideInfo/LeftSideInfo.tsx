@@ -1,6 +1,3 @@
-import { HeartIcon } from "@app/assets/icons";
-import { GROTHS_IN_BEAM } from "@app/constants";
-import { useHandleHeartAction } from "@app/hooks/useHandleHeartAction";
 import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
@@ -28,19 +25,16 @@ export const SubText = styled(Text) <SubTextProps>`
 `
 interface LeftSideProps {
   domain: DomainPresenterType;
+  showBelonging?: boolean;
 };
 
-export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
-  const { name, expiresAt, isExpired, isOnSale, price } = domain;
-
-  //refactor move to another compnent for optimization issues
-  const isBansLove = useIsBansFavorite(domain.name);
-  const heartHandler = useHandleHeartAction(isBansLove, domain.name);
+export const LeftSide: React.FC<LeftSideProps> = ({ domain, showBelonging = true }) => {
+  const { name, expiresAt, isExpired, isOnSale } = domain;
 
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
 
-      {domain.isOnSale ?
+      {isOnSale ?
         <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
           <SaleIcon />
         </Flex> : <></>
@@ -63,9 +57,13 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
                 domain.isAvailable && !domain.isOnSale ?
                   "available" :
                   (
-                    domain.isOnSale ?
-                      "on sale" :
-                      "not available"
+                    domain.isAvailable && !domain.isOnSale ?
+                      "available" :
+                      (
+                        domain.isOnSale ?
+                          "on sale" :
+                          "not available"
+                      )
                   )
               )
           } 
