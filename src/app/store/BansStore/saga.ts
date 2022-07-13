@@ -1,6 +1,5 @@
 import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading, all } from 'redux-saga/effects';
 import { BANS_CID } from '@app/constants';
-import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 
 import { actions } from '.';
 import store from '../../../index';
@@ -11,15 +10,11 @@ import {
   navigate,
   setError,
 } from '@app/store/SharedStore/actions';
-import { Base64DecodeUrl, fromGroths } from '@app/library/base/appUtils';
 import { Decimal } from '@app/library/base/Decimal';
-import ShaderApi from '@app/library/base/api/ShaderApi';
-import methods from '@app/library/bans/methods';
-import { useEffect, useState } from 'react';
 import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
-import { action } from 'typesafe-actions';
+import { eventChannel, END } from 'redux-saga'
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -224,7 +219,13 @@ export function* setUserFundsSaga(
 ) {
   try {
     const funds = action/* .payload */;
-    const total = [...funds.revenue, ...funds.transferred].reduce(
+    
+    if(typeof funds === "undefined") return false;
+
+    const total = [
+      ...funds.revenue, 
+      ...funds.transferred
+    ].reduce(
       (acc, current) => acc.add(current.amount)
       , Decimal.from(0));
 
@@ -310,9 +311,28 @@ export function* reloadAllUserInfoSaga() {
   }
 }
 
+
+function userViewInterval(delay) {
+  return eventChannel(emitter => {
+    const interval = setInterval(() => {
+      if (!delay) {
+        emitter(END)
+      }
+
+      emitter(true)
+    }, delay);
+
+    return () => {
+      clearInterval(interval)
+    }
+  }
+  )
+}
+
 function* bansSaga() {
   yield takeEvery(actions.loadAppParams.request, loadParamsSaga);
   yield takeEvery(actions.loadUserView.request, loadUserViewSaga);
+
   yield takeLatest(actions.setUserDomains, setUserDomainsSaga);
   yield takeLatest(actions.setUserFunds, setUserFundsSaga);
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
@@ -320,6 +340,13 @@ function* bansSaga() {
   yield takeLatest(actions.loadAllFavoritesDomains.request, loadAllFavoritesDomainsSaga);
   yield takeLatest(actions.updateSpecificFavoritesDomains.request, updateSpecificFavoritesDomains)
   yield takeLatest(actions.loadPublicKey.request, loadPublicKeySaga);
+
+  yield takeEvery(
+    yield call(userViewInterval, 5000),
+    function* () {
+      store.dispatch(actions.reloadAllUserInfo.request())
+    }
+  );
 
   // not optimized!
   yield takeEvery(actions.reloadAllUserInfo.request, reloadAllUserInfoSaga);
