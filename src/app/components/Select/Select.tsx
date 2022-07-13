@@ -16,7 +16,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
 
   return (
     <div>
-        <Label>Domain</Label>
+    <Label>Domain</Label>
     <CustomSelect>
       <div className="selected" onClick={() => setShow(true)}>
         {activeItem ? activeItem : items[0].name}

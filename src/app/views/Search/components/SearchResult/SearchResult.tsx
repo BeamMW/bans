@@ -10,6 +10,7 @@ import { SearchResultForSale } from "./SearchResultForSale";
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { SubText } from './SearchResult.styles';
+
 export interface SearchResultProps {
   isValid: boolean;
   search: string;
@@ -30,8 +31,8 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
   }
 
   const searchResult = (
-    <SplitContainer leftWeight={7} rightWeight={5} border={showBorder}>
-      <SearchResultLeft domain={foundDomain} value={search + (search ? ".beam" : "")} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler} />
+    <SplitContainer leftWeight={7} rightWeight={5} border={showBorder} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler}>
+      <SearchResultLeft domain={foundDomain} value={search + (search ? ".beam" : "")} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} />
       <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
     </SplitContainer>
   );

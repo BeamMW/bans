@@ -51,7 +51,9 @@ const InputGrayStyled = styled(InputStyled)`
 `;
 
 const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
-  font-size: 16px;
+  font-family: 'SFProDisplay', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
   font-weight: normal;
   color: ${({ pallete }) => `var(--color-${pallete})`};
   height: 45px;

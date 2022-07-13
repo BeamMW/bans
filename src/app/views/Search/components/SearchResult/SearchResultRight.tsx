@@ -12,6 +12,7 @@ import { GROTHS_IN_BEAM } from '@app/constants';
 import Heart from '@app/assets/icons/heart.svg';
 import HeartActive from '@app/assets/icons/heart-active.svg';
 import { textStyles, SearchResultStyleProps } from './SearchResult.styles';
+
 const Container = styled(Flex)`
 justify-content: end;
 align-items: center;
