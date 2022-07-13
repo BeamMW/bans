@@ -2,7 +2,8 @@ import { AbstractEntity } from "./AbstractDomain";
 
 enum NotificationType {
     favorites,
-    sold
+    sold,
+    transferred,
 }
 
 enum NotificationState {

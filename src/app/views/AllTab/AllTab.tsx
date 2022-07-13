@@ -66,7 +66,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   const rows =
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={9} rightWeight={3}>
-        <LeftSide domain={domain} showBelonging={false} />
+        <LeftSide domain={domain} showBelonging={false} showSaleIcon={true} />
         {
           domain.isOnSale ?
             <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain} /> :

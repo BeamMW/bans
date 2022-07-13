@@ -26,68 +26,75 @@ export const SubText = styled(Text) <SubTextProps>`
 interface LeftSideProps {
   domain: DomainPresenterType;
   showBelonging?: boolean;
+  showSaleIcon?: boolean;
 };
 
-export const LeftSide: React.FC<LeftSideProps> = ({ domain, showBelonging = true }) => {
+export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true, showBelonging = true }) => {
   const { name, expiresAt, isExpired, isOnSale } = domain;
 
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
 
-      {isOnSale ?
+      {showSaleIcon && isOnSale ?
         <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
           <SaleIcon />
         </Flex> : <></>
       }
 
-        <Box>
-          <Text>{name}.beam</Text>
-          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
-            <Copy />
-          </Button>
+      <Box>
+        <Text>{name}.beam</Text>
+        <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+          <Copy />
+        </Button>
 
-        <Flex sx={{alignItems:'baseline'}}>
-          {expiresAt ? 
-          <>
-          <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText>
-          <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B", padding: '4px 0px 0px 20px' }}>{
-            domain.isYourOwn ?
-              "your already own" :
-              (
-                domain.isAvailable && !domain.isOnSale ?
-                  "available" :
-                  (
-                    domain.isAvailable && !domain.isOnSale ?
-                      "available" :
+        <Flex sx={{ alignItems: 'baseline' }}>
+          {expiresAt ?
+            <>
+              <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText>
+              {
+                showBelonging && <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B", padding: '4px 0px 0px 20px' }}>
+                  {
+                    domain.isYourOwn ?
+                      "your already own" :
                       (
-                        domain.isOnSale ?
-                          "on sale" :
-                          "not available"
+                        domain.isAvailable && !domain.isOnSale ?
+                          "available" :
+                          (
+                            domain.isAvailable && !domain.isOnSale ?
+                              "available" :
+                              (
+                                domain.isOnSale ?
+                                  "on sale" :
+                                  "not available"
+                              )
+                          )
                       )
-                  )
-              )
-          } 
-           </Text>
-          </>
-          : (
-            <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B" }}>{
-              domain.isYourOwn ?
-                "your already own" :
-                (
-                  domain.isAvailable && !domain.isOnSale ?
-                    "available" :
-                    (
-                      domain.isOnSale ?
-                        "on sale" :
-                        "not available"
-                    )
-                )
-            } 
-             </Text>
-          )
-          } 
-            {
-            domain.isOnSale &&  (
+                  }
+                </Text>}
+            </>
+            :
+            <>
+              {
+                showBelonging && <Text sx={{ color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B" }}>
+                  {
+                    domain.isYourOwn ?
+                      "your already own" :
+                      (
+                        domain.isAvailable && !domain.isOnSale ?
+                          "available" :
+                          (
+                            domain.isOnSale ?
+                              "on sale" :
+                              "not available"
+                          )
+                      )
+                  }
+                </Text>
+              }
+            </>
+          }
+          {
+            showBelonging && domain.isOnSale && (
               <Box sx={{
                 background: ' rgba(0, 246, 210, 0.2)',
                 borderRadius: '4px',
@@ -101,9 +108,9 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showBelonging = true
                 }}>on sale</Text>
               </Box>
             )
-            }
+          }
         </Flex>
-        </Box>
+      </Box>
     </Flex>
   )
 }

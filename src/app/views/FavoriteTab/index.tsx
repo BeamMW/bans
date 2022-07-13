@@ -91,12 +91,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
   let [rows, setRows] = useState(null);
   const [showPopup, setShowPopup] = React.useState<IPopup>({});
 
-  const openPopup = (id:string) => {
-    setShowPopup({
-          [id]: true
-    });
- };
-
+  const openPopup = (id:string) => setShowPopup({[id]: true});
 
   useEffect(() => {
     const suggestedSendFundsDomains = favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn);
@@ -113,7 +108,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
                   setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                 } : null
               )}>
-                <LeftSide domain={domain}/>
+                <LeftSide domain={domain} showSaleIcon={false} showBelonging={true}/>
               </Box>
             <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup}/>
           </SplitContainer>
