@@ -21,7 +21,7 @@ import SaleIcon from '@app/assets/icons/sell.svg';
 
 interface RightSideProps {
   domain: DomainPresenterType;
-  funds: Array<{ amount: number, transferred: any }>;
+  funds: any/* Array<{ amount: number, transferred: any }> */;
 }
 
 const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
@@ -52,14 +52,15 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       {funds.transferred.length ? (
         isTransactionPending ? <LoadingOverlay /> :
-          <WithdrawAction
+          /* <WithdrawAction
             transactionId={TRANSACTION_ID}
             change={"withdrawFromDomain"}
             domain={domain}
             pkKeys={pkKeys}
           >
             <WithDrawButton text='withdraw' />
-          </WithdrawAction>
+          </WithdrawAction> */
+          <WithDrawButton text='withdraw' />
 
       ) : <></>}
       {

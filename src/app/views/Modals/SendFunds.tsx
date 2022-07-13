@@ -36,7 +36,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const { close }: { close: any } = useModalContext();
 
   //if domain exists
-  const { data: { domain: passedDomain, suggestedDomains = [] } = null } = useModalContext() ?? { data: { domain: null, suggestedDomains: [] } };
+  const { data: { domain: passedDomain, suggestedDomains = [] } } = useModalContext() ?? { data: { domain: null, suggestedDomains: [] } };
 
   closeModal = closeModal ?? close;
 

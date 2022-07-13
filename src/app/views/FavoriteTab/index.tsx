@@ -70,16 +70,13 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
 
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
-  const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
+  //const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
 
   let [rows, setRows] = useState(null);
 
   useEffect(() => {
-    const test = favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn);
-    setSuggestedSendFundsDomains(
-      test
-    );
-
+    const suggestedSendFundsDomains = favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn);
+    
     setRows(favoriteDomains ?
       favoriteDomains.map((domain, i) => (
         <>
