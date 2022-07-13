@@ -21,7 +21,6 @@ const Container = styled.div<ContainerStyles>`
   font-size: ${props => props.size};
   font-weight: 700;
   display: flex;
-  align-items: flex-start;
   font-family: 'SFProDisplay', sans-serif;
   font-weight: bolder;
   margin-right: 4px;

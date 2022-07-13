@@ -70,7 +70,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
                 <Flex>
                   {
                     !isValid && (
-                      <SubText sx={{ fontSize: '14px' }}>Domain should contain at least 3 characters, only latin letters, numbers and special signs - _ ~ are allowed</SubText>
+                      <SubText sx={{ fontSize: '14px' }}>Domain should contain at least 3 characters, only latin letters, numbers are allowed</SubText>
                     )
                   }
                   {

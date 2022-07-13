@@ -64,6 +64,7 @@ const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
 
   &::placeholder {
     font-size: 16px;
+    font-style: italic;
   }
 `;
 
