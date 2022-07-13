@@ -1,80 +1,176 @@
-import React, { useEffect, useState } from "react";
-import { Paragraph, Text, Flex, Heading } from "theme-ui";
+import React, { useEffect, useMemo, useState } from "react";
+import { Paragraph, Text, Flex, Heading, Box } from "theme-ui";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
-import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
+import { SubText } from "@app/components/LeftSideInfo/LeftSideInfo";
 import { Amount } from "@app/components/Amount/Amount";
 import Button from "@app/components/Button";
 import { WithDrawButton } from "@app/components/WithdrawButton/WithDrawButton";
-import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import { useSelector } from "react-redux";
-import { selectSystemState } from "@app/store/SharedStore/selectors";
-import { DomainPresenterType, getDomainPresentedData } from "@app/library/bans/DomainPresenter";
+import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import _ from "lodash";
-import { selectPublicKey } from "@app/store/BansStore/selectors";
+import { selectUserDomains, selectUserFunds } from "@app/store/BansStore/selectors";
+import { WithdrawAction } from "../Actions/WithdrawAction";
+import store from "index";
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { Decimal } from "@app/library/base/Decimal";
+import { GROTHS_IN_BEAM } from "@app/constants";
+import SaleIcon from '@app/assets/icons/sell.svg';
 
 interface RightSideProps {
   domain: DomainPresenterType;
+  funds: Array<{ amount: number, transferred: any }>;
 }
-const RightSide: React.FC<RightSideProps> = ({ domain }) => {
-  return (
-    <Flex sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
-    <Amount value="0" size="14px" />
-    {/* <WithDrawButton text='withdraw' /> */}
-    {
-      domain.isExpired &&  (
-        <Button variant="ghostBordered" pallete="green" style={{ margin: '0 0 0 20px' }}>
-          renew subscription
-        </Button>
-      )
+
+const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
+  const TRANSACTION_ID = `WITHDRAW FROM ${domain.name.toUpperCase()}.beam`
+
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
+
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+
+      return () => {
+        store.dispatch(reloadAllUserInfo.request());
+      }
     }
+
+  }, [transactionState]);
+
+  const amount = Decimal.from(
+    funds.amount
+  ).div(GROTHS_IN_BEAM).toString();
+
+  const pkKeys = funds.length && funds.map(transferred => transferred.pkKey);
+
+  return (
+    <Flex sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+      <Amount value={amount} size="14px" />
+
+      {funds.transferred.length ? (
+        isTransactionPending ? <LoadingOverlay /> :
+          <WithdrawAction
+            transactionId={TRANSACTION_ID}
+            change={"withdrawFromDomain"}
+            domain={domain}
+            pkKeys={pkKeys}
+          >
+            <WithDrawButton text='withdraw' />
+          </WithdrawAction>
+
+      ) : <></>}
+      {
+        domain.isExpired && (
+          <Button variant="ghostBordered" pallete="green" style={{ margin: '0 0 0 20px' }}>
+            renew subscription
+          </Button>
+        )
+      }
     </Flex>
- 
+
   )
 }
+
+interface LeftSideProps {
+  domain: DomainPresenterType;
+}
+
+const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
+
+  return (
+    <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
+
+
+      {domain.isOnSale ?
+        <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
+          <SaleIcon />
+        </Flex> : <></>
+      }
+
+      <Box>
+        <Text>{domain.name}.beam</Text>
+
+        <Flex>
+          {domain.expiresAt ? <SubText isexpired={domain.isExpired.toString()}>Expires on {domain.expiresAt}</SubText> : <></>}
+        </Flex>
+      </Box>
+    </Flex>
+  )
+
+}
+
 interface MyBansProps {
 }
-export const MyTransactions: React.FC<MyBansProps> = ({}) => {
 
-  const { registeredMethods } = useBansApi();
-  const [domains, setDomains] = useState(null);
+export const MyTransactions: React.FC<MyBansProps> = ({ }) => {
 
-  const publicKey = useSelector(selectPublicKey());
-  const {
-    current_height: currentStateHeight,
-    current_state_timestamp: currentStateTimestamp
-  } = useSelector(selectSystemState());
+  const [fundDomains, setFundsDomains] = useState<Map<DomainPresenterType, object>>(null);
+  //const [rows, setRows] = useState(null);
 
-  //@TODO: REFACTOR, OPTIMIZE!!!
+  const domains = useSelector(selectUserDomains());
+  const funds = useSelector(selectUserFunds());
+
+
   useEffect(() => {
-    publicKey && registeredMethods.userView().then(response => {
-      setDomains(response.domains.map(
-        //for future logic
-        domain => getDomainPresentedData(
-          { ...domain, ...{ searchName: domain.name } },
-          currentStateTimestamp,
-          currentStateHeight,
-          publicKey
-        )
-      ));
-    });
+    //try {
+    const fundsMap = new Map();
 
-  }, [publicKey, currentStateHeight, currentStateTimestamp])
+    domains.forEach(
+      domain => {
+        const transferred = funds?.transferred.length && funds.transferred.filter(
+          transferred => transferred.domain === domain.name
+        );
+
+        fundsMap.set(
+          domain, {
+          amount: transferred ? _.reduce(transferred, (acc, fund) => {
+            return Decimal.from(fund.amount).add(acc)
+          }, 0) : 0,
+          transferred: transferred
+        }
+        )
+      }
+    );
+
+    const sortedFundsMap = new Map([...fundsMap.entries()]
+      .sort((a, b) => a[1].amount < b[1].amount ? 1 : -1)
+    )
+
+    setFundsDomains(sortedFundsMap);
+    //} catch (e) {
+    //  throw new Error("something with domain/funds");
+    //}
+
+  }, [domains, funds])
+
+
+  const rows = useMemo(() => {
+    if (!_.isMap(fundDomains) || !fundDomains.size) return <></>;
+
+    let rows = [];
+
+    for (const [domain, funds] of fundDomains) {
+      rows.push(
+        <SplitContainer key={domain.name} leftWeight={9} rightWeight={3}>
+          <LeftSide domain={domain} />
+          <RightSide domain={domain} funds={funds} />
+        </SplitContainer>
+      )
+    }
+
+    return rows;
+
+  }, [fundDomains])
 
   //const isExpiredText = isExpired ? 'Paid term of usage is over. Your domain will be disconnected on June 30, 2022' : 'Expires on June 29, 2022';
 
   return (
     <>
-      <><Flex sx={{mt:40,mb:40,textAlign:"center"}}><Heading>Waiting for contract methods! Lack of functionality! </Heading> </Flex></>
-      
-      <Paragraph sx={{ mt:'53px', mb:5, letterSpacing:'3.1px', color:'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
-      {
-        _.isArray(domains) && domains.length ? domains.map((domain, i) => (
-          <SplitContainer key={i} leftWeight={9} rightWeight={3}>
-            <LeftSide domain={domain} />
-            <RightSide domain={domain} />
-          </SplitContainer>
-        )) : <></>
-      }
+      <Paragraph sx={{ mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
+      {rows}
     </>
   );
 }

@@ -23,7 +23,7 @@ const BackBtn = styled.div`
 export const BackButton: React.FC<{handler?:Function, text:string}> = ({handler, text}) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    return handler ? handler() : navigate('/')
+    return handler ? handler() : navigate(-1)
   };
 
   return (

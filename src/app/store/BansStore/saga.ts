@@ -228,7 +228,7 @@ export function* setUserFundsSaga(
       (acc, current) => acc.add(current.amount)
       , Decimal.from(0));
 
-    yield put(actions.setUserFunds({ total: total, ...action.payload }));
+    yield put(actions.setUserFunds({ total: total, ...funds }));
 
   } catch (e) {
     console.log(e)

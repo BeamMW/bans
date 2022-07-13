@@ -38,9 +38,6 @@ const RightSide: React.FC<RightSideProps> = ({ copyToClipboard, domain, domains 
         onMouseLeave={hideTip}
       >
         <Flex sx={{justifyContent: 'flex-end'}}>
-          <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
-            <Copy />
-          </Button>
           <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
             <Dots />
           </Button>
@@ -69,7 +66,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   const rows =
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={10} rightWeight={2}>
-        <LeftSide domain={domain} />
+        <LeftSide domain={domain} showBelonging={false} />
         {
           domain.isOnSale ?
             <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain} /> :

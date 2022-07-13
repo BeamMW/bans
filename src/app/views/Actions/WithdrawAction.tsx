@@ -10,6 +10,7 @@ type WithdrawActionProps = {
     change: any;
     domain?: DomainPresenterType;
     amount?: number;
+    pkKeys?: Array<string>
 };
 
 export const WithdrawAction: React.FC<WithdrawActionProps> = ({
@@ -28,6 +29,10 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
             case "withdrawAll":
                 {
                     return () => registeredMethods.userReceiveAll();
+                }
+            case "withdrawFromDomain":
+                {
+                    //return () => registeredMethods.userReceive({ name: domain.name, amount: toGroths(amount) });
                 }
             case "withdraw":
                 {

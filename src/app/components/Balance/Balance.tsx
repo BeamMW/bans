@@ -13,6 +13,7 @@ import { useCurrentTransactionState } from "@app/library/transaction-react/useCu
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import store from "index";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import { LoadingOverlay } from "../LoadingOverlay";
 
 interface BalanceProps {
   balance: string
@@ -20,9 +21,6 @@ interface BalanceProps {
 export const Balance: React.FC<BalanceProps> = ({ balance }) => {
 
   const TRANSACTION_ID = "WITHDRAW ALL";
-
-  const publicKey = useSelector(selectPublicKey());
-  const { registeredMethods } = useBansApi();
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
@@ -46,12 +44,14 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
       {
         balance && (
           <div className="withdraw">
-            <WithdrawAction
-              transactionId={TRANSACTION_ID}
-              change={"withdrawAll"}
-            >
-              <WithDrawButton text='withdraw all' />
-            </WithdrawAction>
+            {isTransactionPending ? <LoadingOverlay /> :
+              <WithdrawAction
+                transactionId={TRANSACTION_ID}
+                change={"withdrawAll"}
+              >
+                <WithDrawButton text='withdraw all' />
+              </WithdrawAction>
+            }
           </div>
         )
       }
