@@ -1,9 +1,13 @@
-import { styled } from '@linaria/react';
 import React from 'react';
-import ArrowDown from '../../assets/icons/arrow-down.svg';
+import { styled } from '@linaria/react';
+import { Text, Flex } from 'theme-ui';
+import ArrowDown from '@app/assets/icons/arrow-down.svg';
 import { Label, CustomSelect } from './Select.style';
 import { useEffect } from 'react';
 import useOnClickOutside from '@app/hooks/outsideClickHandlers/useOnClickOutside';
+import HeartActive from '@app/assets/icons/heart-active.svg';
+import CheckedIcon from '@app/assets/icons/checked.svg';
+import ArrowTop from '@app/assets/icons/arrow-top.svg';
 
 interface items {
   id: string,
@@ -59,11 +63,6 @@ const SvgContainer = styled.div `
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &.arrowDown {
-    width: 9px;
-    height: 5px;
-  }
 `
 
 export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActiveItem, activeItem, label }) => {
@@ -110,7 +109,9 @@ export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActi
     <Container>
       <Input onChange={(e) => searchItems(e.target.value)} value={activeItem}/>
       <SvgContainer onClick={handleArrowClick}>
-        <ArrowDown className='arrowDown'/>
+        {
+          show ? <ArrowTop /> : <ArrowDown />
+        }
       </SvgContainer>
     </Container>
       {
@@ -119,9 +120,19 @@ export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActi
             {
               filteredResults.map((item) => {
                 return (
-                  <div key={item.id} onClick={() => { setActiveItem(item.name); setShow(false) }}>
-                  <span>{item.name}</span>
-                </div>
+                  <Flex key={item.id} onClick={() => { setActiveItem(item.name); setShow(false) }} sx={{alignItems:'center'}}>
+                  <Text sx={{
+                        fontStyle: 'normal',
+                        fontWeight: '700',
+                        fontSize: '16px',
+                        lineHeight: '19px',
+                        marginRight: '10px'
+                  }}>{item.name}</Text>
+                  {/* TODO: ADD Conditions */}
+                  {
+                    true ? <HeartActive/>: <CheckedIcon/>
+                  }
+                </Flex>
                 )
               })
             }

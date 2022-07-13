@@ -57,11 +57,11 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
   
   return (
     <Container sx={{ justifyContent: 'flex-end!important' }}>
-    <Flex sx={{ mr: 4 }}>
-      {
+    <Flex sx={{ mr: 4, alignItems:'center' }}>
+     {
         domain && isOnSale &&
         <Amount size='14px' value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()}/>
-      }
+     }
       {
         domain && (
           <Button variant='icon' pallete='opacity' onClick={heartHandler}>
