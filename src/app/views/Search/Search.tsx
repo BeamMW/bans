@@ -13,6 +13,7 @@ import Sell from '@app/assets/icons/send.svg';
 import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
 import { useSearchValidator } from '@app/hooks/useSearchValidator';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import { Notification } from '@app/components/Notification/Notifcation';
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
@@ -63,7 +64,7 @@ const Search: React.FC = () => {
       </Input>
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
 
-      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>
         <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
         <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)}>
           <Sell />
@@ -71,7 +72,7 @@ const Search: React.FC = () => {
         </Button>
       </Flex>
 
-      {/* <Notification /> */}
+      <Notification />
     </Container>
   );
 };

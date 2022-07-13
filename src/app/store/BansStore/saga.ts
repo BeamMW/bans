@@ -219,15 +219,16 @@ export function* setUserFundsSaga(
 ) {
   try {
     const funds = action/* .payload */;
-    
-    if(typeof funds === "undefined") return false;
+
+    if (typeof funds === "undefined") return false;
 
     const total = [
-      ...funds.revenue, 
+      ...funds.revenue,
       ...funds.transferred
     ].reduce(
       (acc, current) => acc.add(current.amount)
-      , Decimal.from(0));
+      , Decimal.from(0)
+    );
 
     yield put(actions.setUserFunds({ total: total, ...funds }));
 

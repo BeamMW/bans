@@ -15,7 +15,7 @@ import RemoveIcon from './remove.svg';
 import SearchIcon from './search.svg';
 import UserIcon from './user.svg';
 import RecieveIcon from './recieve.svg';
-import GiftIcon from './gidt.svg';
+import GiftIcon from './gift.svg';
 
 export {
   ActionsIcon,

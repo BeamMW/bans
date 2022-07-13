@@ -10,4 +10,5 @@ export type ShaderActions =
     "domain_buy" |
     "domain_set_price" |
     "receive" | 
-    "receive_all";
+    "receive_all" |
+    "receive_list";

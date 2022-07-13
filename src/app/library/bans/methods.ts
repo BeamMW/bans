@@ -78,6 +78,12 @@ const methods: Array<IMethod<ShaderActions>> = [
         requiredParams: [],
         type: "writable"
     },
+    {
+        role: "user",
+        action: "receive_list",
+        requiredParams: [],
+        type: "writable"
+    },
 ]
 
 

@@ -44,7 +44,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
     funds.amount
   ).div(GROTHS_IN_BEAM).toString();
 
-  const pkKeys = funds.length && funds.map(transferred => transferred.pkKey);
+  const pkKeys = funds?.transferred.length && funds.transferred.map(transferred => transferred.pk);
 
   return (
     <Flex sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -52,15 +52,14 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       {funds.transferred.length ? (
         isTransactionPending ? <LoadingOverlay /> :
-          /* <WithdrawAction
+          <WithdrawAction
             transactionId={TRANSACTION_ID}
             change={"withdrawFromDomain"}
             domain={domain}
             pkKeys={pkKeys}
           >
             <WithDrawButton text='withdraw' />
-          </WithdrawAction> */
-          <WithDrawButton text='withdraw' />
+          </WithdrawAction>
 
       ) : <></>}
       {

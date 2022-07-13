@@ -18,7 +18,8 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
     transactionId,
     change,
     domain,
-    amount
+    amount = 0,
+    pkKeys = []
 }) => {
 
     const { registeredMethods } = useBansApi();
@@ -32,7 +33,10 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
                 }
             case "withdrawFromDomain":
                 {
-                    //return () => registeredMethods.userReceive({ name: domain.name, amount: toGroths(amount) });
+                    if(!pkKeys.length) return;
+
+                    const preparedKeys = pkKeys.reduce((map, key, index) => ({...map, [`key${index + 1}`] : key}), {})
+                    return () => registeredMethods.userReceiveList(preparedKeys);
                 }
             case "withdraw":
                 {
