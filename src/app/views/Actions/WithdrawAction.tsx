@@ -35,7 +35,7 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
                 {
                     if(!pkKeys.length) return;
 
-                    const preparedKeys = pkKeys.reduce((map, key, index) => ({...map, [`key${index + 1}`] : key}), {})
+                    const preparedKeys = pkKeys.reduce((map, key, index) => ({...map, [`key_${index + 1}`] : key}), {})
                     return () => registeredMethods.userReceiveList(preparedKeys);
                 }
             case "withdraw":
