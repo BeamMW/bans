@@ -46,7 +46,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showBelonging = true
             <Copy />
           </Button>
 
-        <Flex>
+        <Flex sx={{alignItems:'baseline'}}>
           {expiresAt ? 
           <>
           <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText>
@@ -85,7 +85,23 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showBelonging = true
             } 
              </Text>
           )
-          }
+          } 
+            {
+            domain.isOnSale &&  (
+              <Box sx={{
+                background: ' rgba(0, 246, 210, 0.2)',
+                borderRadius: '4px',
+                marginLeft: '14px',
+                padding: '2px 6px 2px 6px'
+              }}>
+                <Text sx={{
+                  color: 'rgba(0, 246, 210, 1)',
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                }}>on sale</Text>
+              </Box>
+            )
+            }
         </Flex>
         </Box>
     </Flex>
