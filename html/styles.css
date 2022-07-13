@@ -106,6 +106,13 @@
 .page::before {
   left: 80%;
 }
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/@linaria/webpack5-loader/lib/outputCssLoader.js!./src/app/components/Select/SelectWithInput.tsx ***!
+  \********************************************************************************************************************************************************************************************/
+.i17lvecr{font-size:16px;font-weight:normal;color:white;background-color:rgba(255,255,255,0);padding:15px 20px;width:90%;border-radius:10px;border:none;}.i17lvecr::-webkit-input-placeholder{font-size:16px;}.i17lvecr::-moz-placeholder{font-size:16px;}.i17lvecr:-ms-input-placeholder{font-size:16px;}.i17lvecr::placeholder{font-size:16px;}
+.cbwyixi{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;color:#fff;width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-size:14px;font-weight:normal;padding:0;}.cbwyixi.open{border:none;border-radius:10px;}.cbwyixi.focus{background-color:rgba(255,255,255,0.12);}
+.s1emmhls{width:10%;height:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}.s1emmhls.arrowDown{width:9px;height:5px;}
+
 /*!*************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/react-loading-skeleton/dist/skeleton.css ***!
   \*************************************************************************************************************************************/
@@ -206,30 +213,6 @@
     font-style: normal;
   }
   
-  /* 
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-Black.otf');
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-  
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-BlackItalic.otf');
-    font-weight: 400;
-    font-style: italic;
-  }
-  
-  
-  @font-face {
-    font-family: 'SFProDisplay';
-    src: url('./assets/fonts/SF-Pro-Display-BoldItalic.otf');
-    font-weight: 700;
-    font-style: italic;
-  }
-  */
   
       * {
         box-sizing: border-box;
@@ -285,5 +268,25 @@
       input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
+      }
+
+      ::-webkit-scrollbar {
+        width: 11px;
+        height: 10px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .2);
+        border: 3px solid rgba(0, 0, 0, 0);
+        background-clip: padding-box;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      ::-webkit-scrollbar-button {
+        display: none;
       }
   
