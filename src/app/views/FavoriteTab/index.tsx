@@ -115,7 +115,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
                 )}>
               <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
             </Box>
-            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup} suggestedSendFundsDomains={suggestedSendFundsDomains}/>
+            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup} suggestedSendFundsDomains={suggestedSendFundsDomains} />
           </SplitContainer>
         </React.Fragment>
       )) : <></>);
