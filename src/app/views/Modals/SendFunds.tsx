@@ -87,7 +87,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
       ["domain"]: domain.name,
     });
   }, [])
-  
+
   return (
     <Modal isShown={isShown} header="Send funds to the BANS">
       <>
