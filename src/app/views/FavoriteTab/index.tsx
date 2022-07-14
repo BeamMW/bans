@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Text, Container, Box } from "theme-ui";
+import { Flex, Container, Box } from "theme-ui";
 import { useSelector } from "react-redux";
 
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
-import { selectFavoritesDomains, selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
+import { selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { Amount } from "@app/components/Amount/Amount";
 import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
-import { SearchResultForSale } from "../Search/components/SearchResult/SearchResultForSale";
-import { useModal } from "@app/components/Modals/useModal";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { BuyBans } from "../Modals/BuyBans";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
-import { Register } from "../Register/Register";
 import Button from "@app/components/Button";
-import SendGreenIcon from '@app/assets/icons/send-green.svg';
-import Dots from '@app/assets/icons/dots.svg';
 import { Popup } from "@app/components/Popup/Popup";
-import { PopupItem } from "@app/components/Popup/Popup.styles";
-import Heart from '@app/assets/icons/heart.svg';
 import { useHandleHeartAction } from "@app/hooks/useHandleHeartAction";
 import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
 import useOnClickOutside from '@app/hooks/outsideClickHandlers/useOnClickOutside';
+import SendGreenIcon from '@app/assets/icons/send-green.svg';
+import Heart from '@app/assets/icons/heart.svg';
+import Dots from '@app/assets/icons/dots.svg';
+
+import { PopupItem } from "@app/components/Popup/Popup.styles";
 
 interface IPopup {
   [id: string]: boolean

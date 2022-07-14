@@ -1,10 +1,10 @@
 import React from "react";
-import { Flex, Text, Container } from "theme-ui";
+import { Flex, Container } from "theme-ui";
 import Button from "@app/components/Button";
 import { Popup } from "@app/components/Popup/Popup";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
-import { copyToClipboard } from '../../core/appUtils';
+import { copyToClipboard } from '@app/core/appUtils';
 import { RenewModal } from '@app/views/Modals/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
@@ -12,7 +12,6 @@ import { SellBansModal } from '@app/views/Modals/SellBans';
 import { Transfer } from "@app/views/Transfer/Transfer";
 import { RemoveOrChange, ModalManager as RightSideModalManager } from '@app/views/RemoveOrChange/RemoveOrChange';
 
-import Copy from '@app/assets/icons/copy.svg';
 import Dots from '@app/assets/icons/dots.svg';
 import Renew from '@app/assets/icons/renew.svg';
 import Sell from '@app/assets/icons/sell.svg';

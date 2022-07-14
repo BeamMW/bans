@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Skeleton from 'react-loading-skeleton';
-import { Paragraph, Flex, Text } from "theme-ui";
+import { Paragraph, Flex } from "theme-ui";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { SplitContainer } from '@app/components/SplitContainer/SplitContainer';
 import { useModal } from "@app/components/Modals/useModal";

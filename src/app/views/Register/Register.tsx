@@ -1,21 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import moment from "moment";
+import store from "index";
 import { Flex, Text, Divider, Box } from 'theme-ui';
 import styled from "styled-components";
-import Plus from '@app/assets/icons/blue-plus.svg';
-import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
+import { useMainView } from "@app/contexts/Bans/BansContexts";
 import { RegisterAction } from "@app/views/Actions/RegisterAction";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { BackButton } from "@app/components/BackButton/BackButton";
 import { useTransactionState } from "@app/library/transaction-react/context/TransactionContext";
-import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { RegistrationPeriod } from "@app/components/RegistrationPeriod/RegistrationPeriod";
 import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
-import moment from "moment";
-import { useDispatch } from "react-redux";
-import store from "index";
 import { loadAllFavoritesDomains } from "@app/store/BansStore/actions";
+import Plus from '@app/assets/icons/blue-plus.svg';
 
 const Container = styled.div`
   min-width: 630px;

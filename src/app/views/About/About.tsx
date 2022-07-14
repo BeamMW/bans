@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Container, Paragraph, Link } from 'theme-ui';
-import { PageTitle } from '../../components/PageTitle/PageTitle';
+import { PageTitle } from '@app/components/PageTitle/PageTitle';
 
 const About: React.FC = () => {
   return (

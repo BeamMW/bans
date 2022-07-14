@@ -4,17 +4,17 @@ import Button from '@app/components/Button';
 import {Tooltip, DIRECTIONS } from '@app/components/Tooltip/Tooltip';
 import { useModal } from '@app/components/Modals/useModal';
 import KeyModal from '@app/views/keyModal/KeyModal';
-import { copyToClipboard } from '../../core/appUtils';
+import { copyToClipboard } from '@app/core/appUtils';
+
+import { SendFunds } from '@app/views/Modals/SendFunds';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
+
 import FaqIcon from "@app/assets/icons/faq.svg";
 import KeyIcon from "@app/assets/icons/key.svg";
 import UserIcon from "@app/assets/icons/user.svg";
 import SendGreenIcon from '@app/assets/icons/send-green.svg';
 import WalletIcon from '@app/assets/icons/wallet.svg';
-
 import { TabsContainer, TabsChildren } from './Tabs.style';
-import { SendFunds } from '@app/views/Modals/SendFunds';
-import { useMainView } from '@app/contexts/Bans/BansContexts';
-import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
 let activeButtonStyle = {
   background: '#00F6D2',
