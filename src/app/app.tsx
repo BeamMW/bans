@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -26,11 +26,15 @@ import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 import { MainViewProvider } from './contexts/Bans/MainViewProvider';
 import { ModalProvider } from './contexts/Modal/ModalProvider';
+import * as serviceWorker from '@app/serviceWorker/serviceWorker';
 
 const App = () => {
-  const navigate = useNavigate();
 
-  const loader = Loader;
+  useEffect(() => {
+    window.process = {
+      ...window.process,
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -59,3 +63,5 @@ const App = () => {
 };
 
 export default App;
+
+serviceWorker.register()

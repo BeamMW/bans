@@ -233,7 +233,7 @@ export function* setUserFundsSaga(
     yield put(actions.setUserFunds({ total: total, ...funds }));
 
   } catch (e) {
-    console.log(e)
+    //console.log(e)
   }
 }
 
