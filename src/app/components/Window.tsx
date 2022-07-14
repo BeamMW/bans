@@ -35,8 +35,8 @@ const Window: React.FC<WindowProps> = ({
   return (
     <>
       {/* <Container bgColor={Utils.getStyles().background_main} ref={rootRef}> */}
-      <Container variant="window" sx={(theme) => ({background: /* Utils.isWeb() ? */  'layout.window.background' /* : 'transparent' */})}>
-          {/* <Heading as="h1" onClick={titleClicked} sx={{mb:[2]}}>BANS TEST APP</Heading> */}
+      <Container variant="window" sx={(theme) => ({background: Utils.isWeb() ?  'layout.window.background' : 'transparent'})}>
+          <Heading as="h1" onClick={titleClicked} sx={{mb:[2]}}>BANS TEST APP</Heading>
           {/* {appParams.is_admin || isModerator ? null : null} */}
         {children}
       </Container>

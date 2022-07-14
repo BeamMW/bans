@@ -10,7 +10,6 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { RegisterAction } from "@app/views/Actions/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
-import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 import Renew from '@app/assets/icons/renew-blue.svg';
@@ -33,11 +32,13 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
-  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
+    }
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
 
       return () => {
@@ -66,8 +67,6 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
             renew
           </RegisterAction>
         </ButtonContainer>
-        {isTransactionPending && <LoadingOverlay />}
-
       </>
     </Modal>
   )
