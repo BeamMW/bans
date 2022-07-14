@@ -54,6 +54,7 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
+      'process.env.NODE_ENV' : JSON.stringify('development')
     }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',

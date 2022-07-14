@@ -153,8 +153,7 @@ const headerGradient: ThemeUIStyleObject = {
 const bgColor = Utils.getStyles().background_main;
 
 const windowGradient: ThemeUIStyleObject = {
-  /* background: "rgb(50,91,93)", */
-  background: bgColor,/* " linear-gradient(180deg, rgba(50,91,93,1) 0%, rgba(14,33,38,1) 73%);" */
+  //background: bgColor,
 }
 
 const theme: Theme = {

@@ -4,9 +4,7 @@ import UtilsShader from '../library/base/shader/utilsShader';
 
 //import store from "index";
 import { setSystemState } from '@app/store/SharedStore//actions';
-//import { loadAppParams, loadRate } from '@app/store/BansStore/actions';
 import { selectIsLoaded } from '@app/store/SharedStore/selectors';
-//import { selectRate } from '@app/store/BansStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { isObject } from "formik";
 import { setTransactionsRequest } from '@app/store/SharedStore/actions';
@@ -25,7 +23,6 @@ import { BANS_CID } from "@app/constants";
 
 const shadersData = Array.from([
   ["bans", BANS_CID, "./bansAppShader.wasm", 0],
-  ["vault-anon", "a3385e50cf33afc9f769ee1d82d56b73046d680d343977f36d9a303d7bcdc4da", "./vaultAnonAppShader.wasm", 1]
 ], params => new UtilsShader(...params));
 
 
@@ -65,9 +62,7 @@ export const WalletApiConnector = ({ children }) => {
    */
   const [walletShaders, setWalletShaders] = useState<Array<UtilsShader>>(null);
 
-  //const isLoaded = useSelector(selectIsLoaded());
-  const isLoaded = true;
-  //const rate = useSelector(selectRate());
+  const isLoaded = useSelector(selectIsLoaded());
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -77,7 +72,7 @@ export const WalletApiConnector = ({ children }) => {
           "min_api_version": "6.3",
           "headless": false,
           "apiResultHandler": (error, result, full) => {
-            console.log('api result data: ', full);
+            //console.log('api result data: ', full);
             result && walletEventhandler({ walletEventPayload: full });
           }
         }, (err) => {
@@ -151,5 +146,5 @@ export const WalletApiConnector = ({ children }) => {
       connectorWalletShaders={walletShaders}>{children}</WalletApiConnectorProvider>;
   }
 
-  return <></>
+  return <Window><Loader /></Window>
 };

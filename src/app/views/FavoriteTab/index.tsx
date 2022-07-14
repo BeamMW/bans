@@ -32,15 +32,16 @@ interface IPopup {
 interface RightSideProps {
   domain: DomainPresenterType;
   showPopup: IPopup;
-  openModal: (name:string) => void;
-  setShowPopup: (data:IPopup) => void;
+  openModal: (name: string) => void;
+  setShowPopup: (data: IPopup) => void;
+  suggestedSendFundsDomains?: Array<DomainPresenterType>
 }
 
-const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, setShowPopup}) => {
+const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, setShowPopup, suggestedSendFundsDomains = [] }) => {
   const { open } = useModalContext();
   const isBansLove = useIsBansFavorite(domain.name);
   const heartHandler = useHandleHeartAction(isBansLove, domain.name);
-  const ref = React.useRef(null)
+  const ref = React.useRef(null);
 
   const handleClickOutside = () => {
     console.log('called')
@@ -50,15 +51,16 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
   }
 
   useOnClickOutside(ref, handleClickOutside);
+
   return (
     <>
       <Container sx={{ position: 'relative' }}
-        >
+      >
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
             <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={
-              (event) => open(event)("modal-send-funds")({ domain: domain })(null)
+              (event) => open(event)("modal-send-funds")({ domain: domain, suggestedDomains: suggestedSendFundsDomains })(null)
             }>
               <SendGreenIcon />
               send funds
@@ -86,31 +88,34 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
   const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
-  //const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
+  const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
 
   let [rows, setRows] = useState(null);
   const [showPopup, setShowPopup] = React.useState<IPopup>({});
 
-  const openPopup = (id:string) => setShowPopup({[id]: true});
+  const openPopup = (id: string) => setShowPopup({ [id]: true });
 
   useEffect(() => {
-    const suggestedSendFundsDomains = favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn);
-    
+    //@TODO: maybe it is not well optimized. We passed whole bunch of favorites domains every time to every row
+    setSuggestedSendFundsDomains(
+      favoriteDomains.filter(domain => !domain.isAvailable && !domain.isYourOwn)
+    );
+
     setRows(favoriteDomains ?
       favoriteDomains.map((domain, i) => (
         <React.Fragment key={i}>
           <SplitContainer key={i} leftWeight={8} rightWeight={4}>
             <Box onClick={
-            domain && !domain.isYourOwn && domain.isOnSale ?
-              (event) => open(event)("modal-search-result-for-sale")({ domain: domain, suggestedDomains: suggestedSendFundsDomains })(null) :
-              (
-                domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
-                  setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
-                } : null
-              )}>
-                <LeftSide domain={domain} showSaleIcon={false} showBelonging={true}/>
-              </Box>
-            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup}/>
+              domain && !domain.isYourOwn && domain.isOnSale ?
+                (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
+                (
+                  domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
+                    setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
+                  } : null
+                )}>
+              <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
+            </Box>
+            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup} suggestedSendFundsDomains={suggestedSendFundsDomains} />
           </SplitContainer>
         </React.Fragment>
       )) : <></>);

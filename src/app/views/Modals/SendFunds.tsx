@@ -61,7 +61,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [domain, setDomain] = React.useState<DomainPresenterType>(passedDomain);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isValid, setIsValid] = React.useState<boolean>(false);
-  const [activeItem, setActiveItem] = React.useState('');
+  const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
