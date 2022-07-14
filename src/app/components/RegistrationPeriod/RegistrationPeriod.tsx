@@ -28,7 +28,7 @@ export const RegistrationPeriod: React.FC<PeriodProps> = ({period, setPeriod}) =
       </Text>
       <YearMinus style={period > 1 ? iconStyle : iconStyleShade} onClick={periodDecrease} />
       <Text sx={{ mx: '12px' }}>{period} year</Text>
-      <YearPlus style={period < 5 ? iconStyle : iconStyleShade} onClick={periodIncrease} />
+      <YearPlus style={period < 50 ? iconStyle : iconStyleShade} onClick={periodIncrease} />
     </Flex>
   )
 }

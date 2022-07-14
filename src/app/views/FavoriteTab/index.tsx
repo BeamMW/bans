@@ -119,7 +119,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
           </SplitContainer>
         </React.Fragment>
       )) : <></>);
-  }, [isFavoriteLoaded, favoriteDomains])
+  }, [isFavoriteLoaded, favoriteDomains, showPopup])
 
   return (
     isFavoriteLoaded ? <>

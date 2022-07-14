@@ -2,7 +2,6 @@ import styled from 'styled-components';
 interface ModalContentProps {
   width: string;
 }
-const bgColor = "#0e4d76"; //utils.getStyles().background_popup;
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -14,6 +13,7 @@ export const Wrapper = styled.div`
   align-items: center;
   z-index: 100;
   background-color: var(--color-dark-transparent);
+  user-select:none;
 `;
 
 export const ModalContent = styled.div`
@@ -21,8 +21,7 @@ export const ModalContent = styled.div`
     min-width: ${({ width }) => width ? width : '630px' };
     width: ${({ width }) => width ? width : 'auto' };
     border-radius: 10px;
-    /* background-color: ${bgColor}; */
-    background-color: #0D4D76;
+    background-color: #00446F;
 `;
 
 export const ModalHeader = styled.p`

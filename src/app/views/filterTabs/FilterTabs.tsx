@@ -16,7 +16,6 @@ interface FliterTabsProps {
 export const FilterTabs: React.FC<FliterTabsProps> = ({tabs, children, active, setActive}) => {
   return (
     <>
-    <TransactionLink />
     <Container>
       {
         tabs.map((tab) => {

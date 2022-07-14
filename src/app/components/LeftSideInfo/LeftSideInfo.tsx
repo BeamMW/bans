@@ -2,7 +2,7 @@ import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import styled from 'styled-components';
-import { Box, Flex, Text } from "theme-ui";
+import { Box, Flex, Paragraph, Text } from "theme-ui";
 import Button from "../Button";
 import { copyToClipboard } from '../../core/appUtils';
 import SaleIcon from '@app/assets/icons/sell.svg';
@@ -35,18 +35,28 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
 
-      {showSaleIcon && isOnSale ?
+      {/* {showSaleIcon && isOnSale ?
         <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
           <SaleIcon />
         </Flex> : <></>
-      }
+      } */}
 
       <Box>
-        <Text>{name}.beam</Text>
-        <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
-          <Copy />
-        </Button>
-
+        <Flex sx={{alignItems: 'flex-end'}}>
+          <Paragraph sx={{
+            fontFamily: 'SFProDisplay',
+            fontWeight: 700,
+            lineHeight: '19px',
+          }}>
+            {name}
+            <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
+            </Paragraph>
+          <Box sx={{marginLeft: '14px'}}>
+            <Button variant='icon' width="auto" height="auto" pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+              <Copy />
+            </Button>
+          </Box>
+        </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
           {expiresAt ?
             <>

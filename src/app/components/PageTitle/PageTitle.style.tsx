@@ -16,6 +16,7 @@ export const TitleContainer = styled.div`
 `
 
 export const Title = styled.div`
+  flex: 11;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,6 +27,7 @@ export const Title = styled.div`
   text-transform: uppercase;
   letter-spacing: 3.1px;
   color: #fff;
+  margin-right: 62px;
 `
 export const TitleChildren = styled.div`
     display: flex;

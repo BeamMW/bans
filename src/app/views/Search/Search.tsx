@@ -43,7 +43,12 @@ const Search: React.FC = () => {
     );
   }, []);
 
-  const handleChange = (e) => setSearch(e.target.value);
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
+      return false;
+    };
+    setSearch(e.target.value.toLocaleLowerCase());
+  }
 
   const debouncedHandleChange = useMemo(
     () => debounce(handleChange, 100, { leading: false, trailing: true })
@@ -57,7 +62,7 @@ const Search: React.FC = () => {
         onChange={handleChange}
         value={search}
         maxLength={30}
-        pattern="[A-Za-z0-9]"
+        pattern="[a-z0-9]"
         placeholder='Search a name'
       >
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
