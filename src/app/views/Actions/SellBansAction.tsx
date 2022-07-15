@@ -10,6 +10,7 @@ type SellBansActionProps = {
     change: any;
     amount?: number;
     domain: DomainPresenterType;
+    disabled: boolean;
 };
 
 export const SellBansAction: React.FC<SellBansActionProps> = ({
@@ -17,7 +18,8 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     transactionId,
     change,
     amount,
-    domain
+    domain,
+    disabled = false
 }) => {
 
     const { registeredMethods } = useBansApi();
@@ -44,7 +46,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     );
 
     return (
-        <Button pallete="green" onClick={sendTransaction}>
+        <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}} onClick={!disabled ? sendTransaction : null}>
             {children}
         </Button>
     );

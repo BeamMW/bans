@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import ArrowDown from '@app/assets/icons/arrow-down.svg';
 import store from "index";
 
 interface SellBansModalProps {
@@ -26,29 +27,27 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
 
   if (!isShown) return <></>;
 
-  const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
+  const { close, data: { domain: domain, domainsToSell: domainsToSell = [] } }:
+    { close: any, data: { domain: DomainPresenterType, domainsToSell: Array<DomainPresenterType> } } = useModalContext();
 
   closeModal = closeModal ?? close;
 
-  let domains = [];
-  
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
-  const [activeItem, setActiveItem] = React.useState('');
+  const [activeItem, _setActiveItem] = React.useState<DomainPresenterType>(domain);
   const [amount, setAmount] = useState<number | string | null>("");
-  const [selectedDomain, setSelectedDomain] = useState<DomainPresenterType>(domain);
 
-  const domainsSelect: any = !!domains && domains.length ? domains.map((domain, i) => new Object({
+  const setActiveItem = (item) => {
+    !!item && _setActiveItem(item.domain);
+  }
+
+  const domainsSelect: any = domainsToSell.map((domain, i) => new Object({
     id: i,
-    name: domain.name
-  })) : [];
-
-  /*   setActiveItem(
-      domainsSelect.filter(domainSelect => domain.name == domainSelect.name).pop().id
-    )
-   */
+    name: domain.name,
+    domain: domain,
+  }));
 
   const handleChange = (e) => setAmount(e.target.value);
 
@@ -64,25 +63,19 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
 
   }, [transactionState]);
 
-
   const beamPrice = useSelector(selectRate());
-
 
   return (
     <Modal isShown={isShown} header="Sell Bans">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
         {
-          selectedDomain.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
-            <Text>{`ALREADY ON SALE for ${selectedDomain.price.amount}!`}</Text>
+          activeItem.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
+            <Text>{`Already on sale for ${activeItem.price.amount}!`}</Text>
           </Flex> : <></>
         }
-        {/* <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem}> 
-              <div className="selected" onClick={() => setShow(true)}>
-                {activeItem ? activeItem : items[0].name}
-                <ArrowDown className="arrow"/>
-              </div>
-            </Select>
-        */}
+        
+        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} />
+
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'
@@ -106,7 +99,8 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             transactionId={TRANSACTION_ID}
             change={"sellBans"}
             amount={+amount}
-            domain={selectedDomain}
+            domain={activeItem}
+            disabled={activeItem.isOnSale}
           >
             <Sell />
             <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>

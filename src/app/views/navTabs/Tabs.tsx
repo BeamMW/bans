@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import Button from '@app/components/Button';
 import {Tooltip, DIRECTIONS } from '@app/components/Tooltip/Tooltip';
 import { useModal } from '@app/components/Modals/useModal';
-import KeyModal from '@app/views/keyModal/KeyModal';
+import KeyModal from '@app/views/Modals/keyModal/KeyModal';
 import { copyToClipboard } from '../../core/appUtils';
 import FaqIcon from "@app/assets/icons/faq.svg";
 import KeyIcon from "@app/assets/icons/key.svg";
