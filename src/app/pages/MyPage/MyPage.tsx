@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer } from 'react';
+import React, { useCallback, useMemo, useReducer } from 'react';
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { FilterTabs } from '../../views/filterTabs/FilterTabs';
 import EmptyPage from '../../views/EmptyPage/EmptyPage';
@@ -16,6 +16,8 @@ import { Register } from '@app/views/Register/Register';
 import { selectFavoritesDomains, selectPublicKey, selectUserDomains } from '@app/store/BansStore/selectors';
 import store from 'index';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
+import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
+import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
@@ -56,7 +58,16 @@ const MyPage = () => {
   }, [/* active,  */userBans, favoriteBans])
 
 
+  //@TODO: move to hook!
+  const TRANSACTION_ID = new RegExp(/BUYING|REGISTER/, "i");
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
+  const emptyText = useMemo(() => {
+    if((!domains || domains.length) && transactionState.id.match(TRANSACTION_ID) && transactionState.type === "waitingForConfirmation" )
+      return "The BANS will appear on the page as soon as the transaction is completed.";
+
+    return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null);
+  }, [domains, active, transactionState])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
   return (
@@ -73,7 +84,7 @@ const MyPage = () => {
                 +active == 1 ?
                   <AllTab domains={domains} /> :
                   (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
-              ) : <EmptyPage emptyText={active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null)} />
+              ) : <EmptyPage emptyText={emptyText} />
             ) : <LoadingOverlay />
             }
           </>

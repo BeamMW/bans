@@ -5,7 +5,7 @@ export const useCurrentTransactionState = (myId: string | RegExp): TransactionSt
     const [transactionState] = useTransactionState();
 
     return transactionState.type !== "idle" &&
-      (typeof myId === "string" ? transactionState.id === myId : transactionState.id.match(myId))
+      (typeof myId === "string" ? transactionState.id === myId : (myId instanceof RegExp ? transactionState.id.match(myId) : null))
       ? transactionState
       : { type: "idle" };
   };

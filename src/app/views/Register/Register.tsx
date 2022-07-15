@@ -14,6 +14,7 @@ import { RegistrationPrice } from "@app/components/RegistrationPrice/Registratio
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import { loadAllFavoritesDomains } from "@app/store/BansStore/actions";
 import Plus from '@app/assets/icons/blue-plus.svg';
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 
 const Container = styled.div`
   min-width: 630px;

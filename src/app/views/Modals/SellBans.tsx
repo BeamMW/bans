@@ -100,7 +100,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             change={"sellBans"}
             amount={+amount}
             domain={activeItem}
-            disabled={activeItem.isOnSale}
+            disabled={!amount || activeItem.isOnSale}
           >
             <Sell />
             <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>
