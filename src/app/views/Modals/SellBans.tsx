@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Box, Container, Flex, Text } from "theme-ui";
+import store from "index";
 import { Modal } from "@app/components/Modals/Modal";
 import { Select } from '@app/components/Select/Select';
 import Input from "@app/components/Input";
-import Beam from '@app/assets/icons/beam.svg';
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { SellBansAction } from "@app/views/Actions/SellBansAction";
-import Sell from '@app/assets/icons/send.svg';
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { Decimal } from "@app/library/base/Decimal";
-import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import ArrowDown from '@app/assets/icons/arrow-down.svg';
-import store from "index";
+import Sell from '@app/assets/icons/send.svg';
+import Beam from '@app/assets/icons/beam.svg';
 
 interface SellBansModalProps {
   isShown: boolean;

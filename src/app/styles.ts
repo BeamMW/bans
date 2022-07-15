@@ -129,6 +129,7 @@ css`
       -webkit-appearance: none;
       margin: 0;
     }
+}
 `;
 
 

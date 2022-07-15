@@ -1,20 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Divider } from "theme-ui";
+import store from "index";
 import { Modal } from "@app/components/Modals/Modal";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
 import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
-import { Divider } from "theme-ui";
 import { RegistrationPeriod } from '@app/components/RegistrationPeriod/RegistrationPeriod';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { RegisterAction } from "@app/views/Actions/RegisterAction";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
-import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 import Renew from '@app/assets/icons/renew-blue.svg';
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
-import store from "index";
 interface RenewModalProps {
   isShown: boolean;
   closeModal?: (...args) => void;

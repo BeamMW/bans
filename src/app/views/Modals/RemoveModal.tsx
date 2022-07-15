@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Paragraph } from 'theme-ui';
+import store from 'index';
 import { Modal } from '@app/components/Modals/Modal';
 
 import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContainer';
@@ -9,10 +10,9 @@ import { SellBansAction } from '@app/views/Actions/SellBansAction';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { LoadingOverlay } from '@app/components/LoadingOverlay';
-import RemoveIcon from '@app/assets/icons/remove-sale.svg'
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
-import store from 'index';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
+import RemoveIcon from '@app/assets/icons/remove-sale.svg';
 
 interface RemoveProps {
   isShown: boolean;

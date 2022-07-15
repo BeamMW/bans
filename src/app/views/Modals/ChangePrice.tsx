@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Box, Text } from "theme-ui";
+import store from "index";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { Modal } from "@app/components/Modals/Modal";
-import ArrowRight from '@app/assets/icons/arrow-right.svg'
 import { Amount } from "@app/components/Amount/Amount";
 import Input from "@app/components/Input";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
@@ -13,11 +14,10 @@ import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { SellBansAction } from "@app/views/Actions/SellBansAction";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
-import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
-import store from "index";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import ArrowRight from '@app/assets/icons/arrow-right.svg'
 
 
 interface ChangePriceProps {

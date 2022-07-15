@@ -8,13 +8,13 @@ import { Amount } from '@app/components/Amount/Amount';
 import { ChangePrice } from '@app/views/Modals/ChangePrice';
 import { GROTHS_IN_BEAM } from '@app/constants';
 import { Decimal } from '@app/library/base/Decimal';
+import { useModalContext } from '@app/contexts/Modal/ModalContext';
 
-import Dots from '././../../assets/icons/dots.svg';
+import Dots from '@app/assets/icons/dots.svg';
 import ChangePriceIcon from '@app/assets/icons/edit.svg';
 import RemoveFromSale from '@app/assets/icons/remove-sale.svg';
 
 import { PopupItem } from '@app/components/Popup/Popup.styles';
-import { useModalContext } from '@app/contexts/Modal/ModalContext';
 interface RemoveOrChangeProps {
   copyToClipboard: (value: string) => void;
   domain: DomainPresenterType;

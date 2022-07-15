@@ -62,10 +62,6 @@
         display: inline;
       }
   
-      html * {
-        font-family: 'SFProDisplay', sans-serif;
-      }
-  
       body {
         font-size: 14px;
         color: white;

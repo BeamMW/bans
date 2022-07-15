@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo } from "react";
+import { Box, Flex, Text } from "theme-ui";
 import Input from "@app/components/Input";
 import { Modal } from "@app/components/Modals/Modal";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
-import SendIcon from '@app/assets/icons/send.svg';
-import BeamIcon from '@app/assets/icons/beam.svg';
-import CheckedIcon from '@app/assets/icons/checked.svg';
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useSelector } from "react-redux";
@@ -16,8 +14,10 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
-import { Box, Flex, Text } from "theme-ui";
 import { SelectWithInput } from '@app/components/Select/SelectWithInput';
+import SendIcon from '@app/assets/icons/send.svg';
+import BeamIcon from '@app/assets/icons/beam.svg';
+import CheckedIcon from '@app/assets/icons/checked.svg';
 
 interface SendFundsProps {
   isShown: boolean;

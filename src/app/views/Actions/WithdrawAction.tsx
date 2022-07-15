@@ -1,6 +1,5 @@
 import React from "react";
 import { useTransactionFunction } from "@app/library/transaction-react/useTransactionFunction";
-import Button from "@app/components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { toGroths } from "@app/library/base/appUtils";
