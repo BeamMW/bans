@@ -63,7 +63,7 @@ const MyPage = () => {
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
   const emptyText = useMemo(() => {
-    if((!domains || domains.length) && transactionState.id.match(TRANSACTION_ID) && transactionState.type === "waitingForConfirmation" )
+    if((!domains || domains.length) && transactionState.type === "waitingForConfirmation" && transactionState.id.match(TRANSACTION_ID) )
       return "The BANS will appear on the page as soon as the transaction is completed.";
 
     return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null);
