@@ -24,6 +24,7 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
               fontFamily: 'SFProDisplay',
               fontWeight: 700,
               lineHeight: '19px',
+              fontStyle: 'normal',
             }}>
               {value}
               <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
