@@ -33,3 +33,15 @@ export const PopupItem = styled.div`
         margin-right: 10px
       }
 `
+
+export const BluredContainer = styled.div `
+    right: 0px;
+    position: absolute;
+    border-radius: 10px;
+    padding:  10px 20px;
+    backdrop-filter: blur(30px);
+    background-color: ${Utils.getStyles().background_popup};
+    width: 100%;
+    height: 100%;
+    margin-top: -10px;
+`

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from './Popup.styles';
+import { Container, BluredContainer } from './Popup.styles';
 
 interface PopupProps {
   children: React.ReactElement[] | React.ReactElement;
@@ -9,8 +9,11 @@ interface PopupProps {
 export const Popup: React.FC<PopupProps> = ({ children, isVisible }) => {
 
   return (
-    <Container isVisible={isVisible}>
-    { children }
-  </Container>
+    <>
+      <Container isVisible={isVisible}>
+      <BluredContainer />
+        { children }
+      </Container>
+    </>
   )
 }

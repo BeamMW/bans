@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
   info?: string;
+  suffix?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -115,6 +116,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     margin = 'none',
     pallete = 'blue',
     info,
+    suffix,
     children,
     className, ...rest
   }, ref) => {
@@ -138,6 +140,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )
         }
         <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+        {!!suffix && suffix }
         {!!info && <InfoStyled>{info}</InfoStyled>}
       </ContainerStyled>
     );
