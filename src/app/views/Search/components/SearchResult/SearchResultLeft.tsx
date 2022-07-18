@@ -21,9 +21,10 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
       <Flex>
         <Paragraph sx={{
               fontSize: '16px',
-              fontFamily: 'SFProDisplay',
+              fontFamily: 'SF Pro Display',
               fontWeight: 700,
               lineHeight: '19px',
+              fontStyle: 'normal',
             }}>
               {value}
               <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
