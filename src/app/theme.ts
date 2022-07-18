@@ -224,6 +224,7 @@ const theme: Theme = {
       textTransform: 'uppercase',
     },
     panelHeader: {
+      fontFamily: 'SFProDisplay',
       color: ' #8DA1AD',
       alignSelf: 'center',
       flex: 2,

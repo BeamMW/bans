@@ -24,7 +24,8 @@ export const PopupItem = styled.div`
       align-items: center;
       line-height: normal !important;
       white-space: nowrap;
-
+      z-index: 999;
+      position: relative;
       &:hover {
         color: #00f6d2;
       }

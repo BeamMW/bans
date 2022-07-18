@@ -22,7 +22,7 @@ export const Tooltip: React.FC<TooltipProps> = (props) => {
   const showTip = () => {
     timeout = setTimeout(() => {
       setActive(true);
-    }, props.delay || 400);
+    }, props.delay || 50);
   };
 
   const hideTip = () => {

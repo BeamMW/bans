@@ -19,6 +19,7 @@ import { IsTransactionPending } from "@app/library/transaction-react/IsTransacti
 const Container = styled.div`
   min-width: 630px;
   display: flex;
+  font-family: 'SFProDisplay';
   flex-direction: column;
   border-radius: 10px;
   background-color: rgba(255,255,255,0.05);
@@ -30,10 +31,10 @@ const Container = styled.div`
 
 const tillDate = (foundDomain, period) => useMemo(() => {
   if (foundDomain.expiresAt) return foundDomain.expiresAt;
-
   return moment().add(1, 'years').format("LL");
 
 }, [foundDomain, period])
+
 
 export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
@@ -64,7 +65,7 @@ export const Register: React.FC = () => {
       }
     }
 
-  }, [transactionState, setCurrentView]);
+  }, [transactionState, setCurrentView, till]);
 
   return (
     <>
