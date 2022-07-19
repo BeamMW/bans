@@ -22,7 +22,7 @@ const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
 
 const MyPage = () => {
   let {state} = useLocation();
-  const { active: activeLocation } = state; // Read values passed on state
+  const { active: activeLocation } = state || {active: 1}; // Read values passed on state
 
   const [domains, setDomains] = useState(null);
   const [active, _setActive] = useState(null);
