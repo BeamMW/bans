@@ -3,7 +3,7 @@ import { END, eventChannel } from "redux-saga";
 import { call, fork, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
 import { getBansApi } from '@app/utils/getBansApi';
 import _ from "lodash";
-import { createNotification, getNotificationsAsync, getNotificationsByCondition, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
+import { createNotification, deleteNotification, getNotificationFavoriteDomain, getNotificationsAsync, getNotificationsByCondition, readAllActiveNotifications, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
 import { Notification, NotificationState, NotificationType } from "@app/library/bans/userLocalDatabase/domainObject";
 import { userDatabase } from "@app/library/bans/userLocalDatabase";
 import { actions } from ".";
@@ -49,6 +49,11 @@ const wrapperExternalNotificationsEventChannel = function* () {
 
 const domainNamesPreparedForSale = (payload): Array<string> => {
   return _.filter(payload, domain => !!domain?.price)
+    .map(domain => domain.name);
+}
+
+const domainNamesPreparedWithdrawnFromSale = (payload): Array<string> => {
+  return _.filter(payload, domain => !("price" in domain))
     .map(domain => domain.name);
 }
 
@@ -106,6 +111,48 @@ function* notificationsFavoritesOnSaleSaga(payload: { domains: Array<any> } = { 
   }
 }
 
+function* notificationsFavoritesWithdrawnFromSaleSaga(payload: { domains: Array<any> } = { domains: [] }) {
+  try {
+    const state = (yield select()) as { shared; bans; notifications; };
+
+    const favoritesDomains = state.bans.allFavoritesDomains;
+    const receivedDomains = payload.domains;
+
+    if (!favoritesDomains.length || !receivedDomains.length) return;
+
+    const favoritesStoresInNotifications = yield call(
+      getNotificationsByCondition, { type: NotificationType.favorites }
+    );
+
+    const receivedDomainNamesPrepared = domainNamesPreparedWithdrawnFromSale(receivedDomains);
+
+    const notificationsForRemoving = _.chain(favoritesStoresInNotifications)
+      .filter(({ notifyData }) => receivedDomainNamesPrepared.includes(notifyData.domain.name))
+      .value();
+
+    for (const entry of notificationsForRemoving) {
+      yield call(deleteNotification, entry.gid);
+    }  
+
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* notificationFavoriteDomainRemoved(
+  action: ReturnType<typeof actions.notificationFavoriteDomainRemoved>
+) {
+  try {
+    const removedFavoriteDomain = action.payload;
+    const favoriteDomainInStorage = yield call(getNotificationFavoriteDomain, removedFavoriteDomain);
+
+    yield call(deleteNotification, favoriteDomainInStorage.gid);
+  } catch(e) {
+    console.log(e);
+  }
+
+}
+
 
 function* notificationsEntriesChangedSaga(
   action: ReturnType<typeof actions.updateNotifications.request>
@@ -128,10 +175,12 @@ function* notificationsEntriesChangedSaga(
   }
 }
 
-function* loadFavoritesNotificationsFromDatabaseSaga() {
+function* loadFavoritesNotificationsFromDatabaseSaga(
+  action?: ReturnType<typeof actions.reinitNotifications.request>
+) {
   try {
-    const notifications = yield call(readAllNotifications);
-    
+    const notifications = yield call(readAllActiveNotifications);
+
     yield put(actions.initNotifications.success(notifications));
   } catch (e) {
     yield put(actions.initNotifications.failure(e));
@@ -144,8 +193,14 @@ export default function* notificationsSaga() {
     //init
     yield call(loadFavoritesNotificationsFromDatabaseSaga);
 
+    //event channel based
     yield takeLatest(externalNotificationsEventChannel, notificationsFavoritesOnSaleSaga);
-    yield takeEvery(actions.updateNotifications.request, notificationsEntriesChangedSaga)
+    yield takeLatest(externalNotificationsEventChannel, notificationsFavoritesWithdrawnFromSaleSaga);
+
+    //by action
+    yield takeEvery(actions.updateNotifications.request, notificationsEntriesChangedSaga);
+    yield takeLatest(actions.notificationFavoriteDomainRemoved, notificationFavoriteDomainRemoved);
+    yield takeLatest(actions.reinitNotifications.request, loadFavoritesNotificationsFromDatabaseSaga);
   }
 }
 

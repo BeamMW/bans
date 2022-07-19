@@ -1,17 +1,32 @@
 import { UserWallet, Notification, NotificationState, NotificationType } from '../domainObject'
 import cuid from 'cuid'
 import { userDatabase as database } from '../database';
+import { DomainPresenterType } from '../../DomainPresenter';
+import { domainToASCII } from 'url';
 
 
 export async function readAllNotifications() {
     return await database.notifications.toArray()
 }
 
+export async function readAllActiveNotifications() {
+    return await database.notifications.where({state:NotificationState.active}).toArray()
+}
+
 export const getNotificationsAsync = async () => await database.notifications;
 
 export const getNotificationsByCondition = async (condition: object, callback?: any) => {
     callback = callback || null;
-    return await database.notifications.where(condition).toArray(callback); 
+    return await database.notifications.where(condition).toArray(callback);
+}
+
+export const getNotificationFavoriteDomain = async (domain: DomainPresenterType | string) => {
+    const domainName = typeof domain !== "string" ? domain.name : domain;
+
+    return await database.notifications
+        .where({ "type": NotificationType.favorites })
+        .and((value) => value.notifyData?.domain.name === domainName )
+        .first();
 }
 
 export async function deleteAllNotifications() {

@@ -105,7 +105,7 @@ export const observeDatabaseChanges = (database, callback) => {
 
 const databaseInstance = new InitializeDatabase('user-bans', {
     favoriteDomains: '&gid, domainName',
-    notifications: '&gid, type, state, deffered, notifyData',
+    notifications: '&gid, *notifyData, type, state, deffered',
 });
 
 export const userDatabase = databaseInstance.userDatabase;

@@ -19,7 +19,7 @@ import { setDappVersion } from "@app/store/SharedStore/actions";
 import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/database";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
-import { updateNotifications } from "@app/store/NotificationsStore/actions";
+import { reinitNotifications, updateNotifications } from "@app/store/NotificationsStore/actions";
 
 
 const shadersData = Array.from([
@@ -98,12 +98,15 @@ export const WalletApiConnector = ({ children }) => {
                       console.log('An object was created: ' + JSON.stringify(change));
                       break;
                     case 2: // UPDATED
-                      store.dispatch(updateNotifications.request(change.obj));
+                      //@TODO: not optimized!
+                      store.dispatch(reinitNotifications.request(true));
 
                       console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
                       break;
                     case 3: // DELETED
-                      store.dispatch(updateNotifications.request(change.obj));
+
+                      //@TODO: not optimized!
+                      store.dispatch(reinitNotifications.request(true));
       
                       console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
                       break;

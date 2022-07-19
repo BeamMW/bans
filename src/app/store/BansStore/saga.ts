@@ -350,7 +350,7 @@ function* bansSaga() {
     }
   );
 
-  // not optimized!
+  //@TODO: not optimized!
   yield takeEvery(actions.reloadAllUserInfo.request, reloadAllUserInfoSaga);
 }
 
