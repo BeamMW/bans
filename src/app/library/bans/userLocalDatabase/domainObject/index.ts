@@ -1,3 +1,3 @@
-export {UserWallet} from "./UserWallet";
-export {FavoriteDomains} from "./FavoriteDomains";
-export {Notifications} from "./Notifications";
+export * from "./UserWallet";
+export * from "./FavoriteDomains";
+export * from "./Notification";

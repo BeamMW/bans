@@ -13,7 +13,7 @@ import Sell from '@app/assets/icons/send.svg';
 import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
 import { useSearchValidator } from '@app/hooks/useSearchValidator';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
-import { Notification } from '@app/components/Notification/Notifcation';
+import Notifications from '@app/views/Notifications/Notifications';
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
@@ -77,7 +77,8 @@ const Search: React.FC = () => {
         </Button>
       </Flex>
 
-      <Notification />
+      <Notifications/>
+
     </Container>
   );
 };

@@ -16,9 +16,10 @@ import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/Wa
 import store from "index";
 import { loadAppParams, loadRate } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
-import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
+import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/database";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
+import { updateNotifications } from "@app/store/NotificationsStore/actions";
 
 
 const shadersData = Array.from([
@@ -84,7 +85,28 @@ export const WalletApiConnector = ({ children }) => {
             
             //open and check if exists user-defined-database
             userDatabase.openDatabase();
-            
+            //observe user-defined -database if open
+            if(userDatabase.isOpen) {
+              observeDatabaseChanges(userDatabase, changes => {
+                changes.forEach(function (change) {
+                  if(change.table != "notifications") return;
+
+                  switch (change.type) {
+                    case 1: // CREATED
+                      console.log('An object was created: ' + JSON.stringify(change));
+                      store.dispatch(updateNotifications.request(change.obj));
+                      break;
+                    case 2: // UPDATED
+                      console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
+                      break;
+                    case 3: // DELETED
+                      console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
+                      break;
+                  }
+                });
+              })
+            }
+
             /**
              * Put shadersData in ShaderStore
              */

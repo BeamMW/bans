@@ -344,6 +344,7 @@ function* bansSaga() {
 
   yield takeEvery(
     yield call(userViewInterval, 5000),
+    //yield call(setInterval, () => {}, 5000),
     function* () {
       store.dispatch(actions.reloadAllUserInfo.request())
     }

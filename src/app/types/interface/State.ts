@@ -5,4 +5,5 @@ export interface AppState {
   shared: SharedStateType;
   main: /* BansStateType */any;
   bans: any;
+  notifications: any;
 }

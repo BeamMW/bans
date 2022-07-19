@@ -1,6 +1,8 @@
 import Dexie, { Table } from 'dexie';
+import { Notification } from './domainObject';
 import { FavoriteDomains } from './domainObject/FavoriteDomains';
 import { UserWallet } from './domainObject/UserWallet';
+import 'dexie-observable';
 
 export interface Friend {
     id?: number;
@@ -60,7 +62,7 @@ export class Database extends Dexie {
  */
 export class UserBansDatabase extends Database implements IUserDatabase {
     public favoriteDomains!: Table<FavoriteDomains, string>
-    public notifications!: Table<FavoriteDomains, string>
+    public notifications!: Table<Notification, string>
     //public userWallet: Table<UserWallet, string>
 
     constructor(databaseName: string) {
@@ -74,7 +76,6 @@ export class UserBansDatabase extends Database implements IUserDatabase {
             }
         }
     }
-
 }
 
 class InitializeDatabase {
@@ -84,10 +85,20 @@ class InitializeDatabase {
         this.database = new UserBansDatabase(databaseName);
 
         this.database.version(1).stores(schema);
+        //for dexie-observable
+        this.database.version(2).stores({}); 
     }
 
     get userDatabase(): UserBansDatabase{
         return this.database;
+    }
+}
+
+export const observeDatabaseChanges = (database, callback) => {
+    try {
+        database.on("changes", callback);
+    } catch(e) {
+        console.log(e);
     }
 }
 

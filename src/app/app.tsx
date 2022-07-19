@@ -22,7 +22,6 @@ import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 import { MainViewProvider } from './contexts/Bans/MainViewProvider';
 import { ModalProvider } from './contexts/Modal/ModalProvider';
-import * as serviceWorker from '@app/serviceWorker/serviceWorker';
 
 const App = () => {
 
@@ -60,4 +59,3 @@ const App = () => {
 
 export default App;
 
-serviceWorker.register()
