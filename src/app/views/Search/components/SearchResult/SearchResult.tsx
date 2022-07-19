@@ -70,12 +70,12 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
                 <Flex>
                   {
                     !isValid && (
-                      <SubText sx={{ fontSize: '14px' }}>Domain should contain at least 3 characters, only latin letters, numbers are allowed</SubText>
+                      <SubText sx={{ fontSize: '14px', px: 4 }}>Domain should contain at least 3 characters, only latin letters, numbers are allowed</SubText>
                     )
                   }
                   {
                     foundDomain && foundDomain.isYourOwn && (
-                      <SubText sx={{ fontSize: '14px' }}>Your are already own the domain</SubText>
+                      <SubText sx={{ fontSize: '14px', px: 4 }}>Your are already own the domain</SubText>
                     )
                   }
                 </Flex>
