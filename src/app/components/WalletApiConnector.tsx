@@ -93,13 +93,18 @@ export const WalletApiConnector = ({ children }) => {
 
                   switch (change.type) {
                     case 1: // CREATED
-                      console.log('An object was created: ' + JSON.stringify(change));
                       store.dispatch(updateNotifications.request(change.obj));
+
+                      console.log('An object was created: ' + JSON.stringify(change));
                       break;
                     case 2: // UPDATED
+                      store.dispatch(updateNotifications.request(change.obj));
+
                       console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
                       break;
                     case 3: // DELETED
+                      store.dispatch(updateNotifications.request(change.obj));
+      
                       console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
                       break;
                   }

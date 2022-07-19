@@ -19,11 +19,10 @@ const reducer = createReducer<any, Action>(
       nextState.setIsNotificationsLoaded = action.payload;
     }),
   )
-  .handleAction(actions.updateNotifications.success, (state, action) =>
+  .handleAction([actions.updateNotifications.success, actions.initNotifications.success], (state, action) =>
     produce(state, nextState => {
       nextState.queue = action.payload;
     }),
-  )
-  ;
+  );
 
 export { reducer as NotificationsReducer };

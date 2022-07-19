@@ -12,37 +12,36 @@ import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
 import { useSearchValidator } from '@app/hooks/useSearchValidator';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { Notification } from '@app/components/Notification/Notifcation';
+import { useSelector } from 'react-redux';
+import { selectNotifications } from '@app/store/NotificationsStore/selectors';
 
 const Notifications: React.FC = () => {
-  const { foundDomain, setFoundDomain } = useMainView();
+    const [notificationsList, setNotificationsList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const [isValid, setIsValid] = useState(true);
-  const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
-  const [isLoading, setIsLoading] = useState(false);
-  const {open} = useModalContext();
+    const notifications = useSelector(selectNotifications());
 
- 
+    useEffect(() => {
+       setNotificationsList(notifications);
+       console.log("updadetd!!");
+    }, [notifications]);
 
-  useEffect(() => {
-    //if search already exists
-    !!foundDomain && (
-      setSearch(foundDomain.name),
-      setIsValid(true)
+    return (
+        <Container sx={{ maxWidth: 630 }}>
+            {!!notificationsList && !!notificationsList.length && notificationsList.map((notification, i) => {
+                return ( notification?.notifyData && 
+                    <>
+                        <Notification
+                            passKey={i}
+                            text={`Your Favorite domain ${notification.notifyData.domain.name}.beam is available now`}
+                            handler={() => { }}
+                            closeHandler={() => { console.log(i) }}
+                        />
+                    </>
+                );
+            })}
+        </Container>
     );
-  }, []);
-
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
-      return false;
-    };
-    setSearch(e.target.value.toLocaleLowerCase());
-  }
-
-  return (
-    <Container sx={{ maxWidth: 630 }}>
-      <Notification />
-    </Container>
-  );
 };
 
 export default Notifications;

@@ -8,7 +8,7 @@ export default () => {
   const appReducer = combineReducers({
     shared: SharedReducer,
     bans: BansReducer,
-    notification: NotificationsReducer,
+    notifications: NotificationsReducer,
   });
 
   return (state: /* AppState */any | undefined, action: AnyAction) => appReducer(state, action);

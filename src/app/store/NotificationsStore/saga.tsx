@@ -1,11 +1,12 @@
 import store from "index";
 import { END, eventChannel } from "redux-saga";
-import { call, fork, select, take, takeLatest } from "redux-saga/effects";
+import { call, fork, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
 import { getBansApi } from '@app/utils/getBansApi';
 import _ from "lodash";
-import { createNotification, getNotificationsAsync, getNotificationsByCondition } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
+import { createNotification, getNotificationsAsync, getNotificationsByCondition, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
 import { Notification, NotificationState, NotificationType } from "@app/library/bans/userLocalDatabase/domainObject";
 import { userDatabase } from "@app/library/bans/userLocalDatabase";
+import { actions } from ".";
 
 const secs = 4;
 
@@ -79,11 +80,11 @@ function* notificationsFavoritesOnSaleSaga(payload: { domains: Array<any> } = { 
     const favoriteDomainsOnSale = _.chain(favoritesDomains)
       .filter(favoriteDomain => receivedDomainNamesPrepared.includes(favoriteDomain.name))
       .filter(favoriteDomain => {
-        const favoriteDomainsNamesNotification = favoritesStoresInNotifications ?
+        const favoriteDomainsNamesNotification = favoritesStoresInNotifications.length ?
           _.map(favoritesStoresInNotifications, ({ notifyData }) => notifyData.domain.name) :
           [];
 
-        return favoriteDomainsNamesNotification.length ? favoriteDomainsNamesNotification.includes(favoriteDomain) : true;
+        return favoriteDomainsNamesNotification.length ? !favoriteDomainsNamesNotification.includes(favoriteDomain.name) : true;
       })
       .value();
 
@@ -106,20 +107,45 @@ function* notificationsFavoritesOnSaleSaga(payload: { domains: Array<any> } = { 
 }
 
 
-function* updateNotificationsSaga(
+function* notificationsEntriesChangedSaga(
   action: ReturnType<typeof actions.updateNotifications.request>
 ) {
   try {
+    const entry = action.payload;
 
+    if (entry.state !== NotificationState.active) return;
+
+    const state = (yield select()) as { notifications; };
+    const notifications = _.chain(state.notifications.queue)
+      .filter(notification => notification.gid !== entry.gid)
+      .union([entry])
+      .value();
+
+    yield put(actions.updateNotifications.success(notifications));
   } catch (e) {
     console.log(e);
-    yield put()
+    yield put(actions.updateNotifications.failure(e))
+  }
+}
+
+function* loadFavoritesNotificationsFromDatabaseSaga() {
+  try {
+    const notifications = yield call(readAllNotifications);
+    
+    yield put(actions.initNotifications.success(notifications));
+  } catch (e) {
+    yield put(actions.initNotifications.failure(e));
+    console.log(e);
   }
 }
 
 export default function* notificationsSaga() {
   if (userDatabase.isOpen) {
+    //init
+    yield call(loadFavoritesNotificationsFromDatabaseSaga);
+
     yield takeLatest(externalNotificationsEventChannel, notificationsFavoritesOnSaleSaga);
+    yield takeEvery(actions.updateNotifications.request, notificationsEntriesChangedSaga)
   }
 }
 
