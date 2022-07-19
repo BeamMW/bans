@@ -46,10 +46,11 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
-
+    }
+    
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       return () => {
         //store.dispatch()
       }

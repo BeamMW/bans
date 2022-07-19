@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface ContainerProps {
   border: boolean;
   height: string;
+  styls?: any;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -15,6 +16,7 @@ const Container = styled.div<ContainerProps>`
    cursor: pointer;
    padding: 20px;
    margin-bottom:10px;
+   ${props => props?.styles ?? ""}
 `
 
 interface StyledCardProps {
@@ -37,6 +39,8 @@ interface SplitContainerProps {
     height?: string;
     children: React.ReactNode[];
     handleClick?: () => void;
+    styles?:any;
+    passKey?: number;
 }
 export const SplitContainer: React.FC<SplitContainerProps> = ({
   children,
@@ -45,10 +49,12 @@ export const SplitContainer: React.FC<SplitContainerProps> = ({
   border = 'none',
   height= '79px',
   handleClick,
+  styles = {},
+  passKey = null
 }) => {
   const [left, right] = children;
   return (
-    <Container onClick={handleClick} border={border} height={height}>
+    <Container key={passKey} styles={styles} onClick={handleClick} border={border} height={height}>
       <PaneLeft weight={leftWeight}>
         {left}
       </PaneLeft>

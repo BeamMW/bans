@@ -23,7 +23,6 @@ const Notifications: React.FC = () => {
 
     useEffect(() => {
        setNotificationsList(notifications);
-       console.log("updadetd!!");
     }, [notifications]);
 
     return (
@@ -32,10 +31,10 @@ const Notifications: React.FC = () => {
                 return ( notification?.notifyData && 
                     <>
                         <Notification
+                            notification={notification}
                             passKey={i}
                             text={`Your Favorite domain ${notification.notifyData.domain.name}.beam is available now`}
                             handler={() => { }}
-                            closeHandler={() => { console.log(i) }}
                         />
                     </>
                 );

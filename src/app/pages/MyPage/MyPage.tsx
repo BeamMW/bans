@@ -15,13 +15,17 @@ import store from 'index';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
+import { useLocation } from 'react-router-dom';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
 
 const MyPage = () => {
+  let {state} = useLocation();
+  const { active: activeLocation } = state; // Read values passed on state
+
   const [domains, setDomains] = useState(null);
-  const [active, _setActive] = useState(1);
+  const [active, _setActive] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const setActive = (value) => {
@@ -37,10 +41,15 @@ const MyPage = () => {
   const favoriteBans = useSelector(selectFavoritesDomains());
   const userBans = useSelector(selectUserDomains());
 
+  //first page loading
+  useEffect(() => {
+    setIsLoaded(false);
+    activeLocation ? setActive(activeLocation) : setActive(1);
+  }, [activeLocation])
 
   //@TODO:refactor fetching domains every time instead put in store!
   useEffect(() => {
-    //@TODO:temporary solution! remove in the future
+    //@TODO:not optimized! temporary solution! remove in the future
     store.dispatch(reloadAllUserInfo.request());
   }, [active])
 
