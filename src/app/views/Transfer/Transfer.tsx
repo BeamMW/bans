@@ -48,11 +48,11 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
     <Modal isShown={isShown} header="Transfer">
       <>
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>Paste the Publisher key of the recipient of this domain.</Paragraph>
+          <Paragraph variant='text' sx={{textAlign: 'center' }}>Paste the Publisher key of the recipient of this domain.</Paragraph>
         </Box>
         <Box sx={{ mt: '20px', my: '30px' }}>
           <Input
-            variant='proposal'
+            variant='modalInput'
             pallete='white'
             onChange={(e) => setTransferKey(e.target.value)}
             value={transferKey}
@@ -68,7 +68,7 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
             domain={domain}
           >
             <ArrowRight />
-            Transfer
+            transfer
           </TransferAction>
         </ButtonContainer>
         {isTransactionPending && <LoadingOverlay />}

@@ -54,7 +54,7 @@ const GhostBorderedButtonStyled = styled(ButtonStyled)`
   background-color: rgba(0, 246, 210, .1);
   color: ${({ pallete }) => `var(--color-${pallete})`};
   border: ${({ pallete }) => `1px solid var(--color-${pallete})`};
-  max-width: 215px;
+  max-width: 165px;
   padding: 8px 18px;
 
   &:hover,

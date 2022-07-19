@@ -63,8 +63,8 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       ) : <></>}
       {
-        domain.isExpired && (
-          <Button variant="ghostBordered" pallete="green" style={{ margin: '0 0 0 20px' }}>
+        true && (
+          <Button variant="ghostBordered"  pallete="green" style={{ margin: '0 0 0 20px' }}>
             renew subscription
           </Button>
         )
@@ -154,7 +154,7 @@ export const MyTransactions: React.FC<MyBansProps> = ({ }) => {
 
     for (const [domain, funds] of fundDomains) {
       rows.push(
-        <SplitContainer key={domain.name} leftWeight={9} rightWeight={3}>
+        <SplitContainer key={domain.name} leftWeight={6} rightWeight={6}>
           <LeftSide domain={domain} />
           <RightSide domain={domain} funds={funds} />
         </SplitContainer>

@@ -42,13 +42,12 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
   const ref = React.useRef(null);
 
   const handleClickOutside = () => {
-    console.log('called')
     setShowPopup({
       [domain.name]: false
     });
   }
 
-  useOnClickOutside(ref, handleClickOutside);
+  useOnClickOutside(ref, handleClickOutside, heartHandler);
 
   return (
     <>
@@ -57,7 +56,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "baseline" }}>
           {
             !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
-            <Button variant="ghostBordered" pallete="green" style={{ margin: '0 20px 0 20px' }} onClick={
+            <Button variant="ghostBordered" pallete="green" style={{ mr: 5 }} onClick={
               (event) => open(event)("modal-send-funds")({ domain: domain, suggestedDomains: suggestedSendFundsDomains })(null)
             }>
               <SendGreenIcon />
@@ -65,16 +64,16 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
             </Button>
           }
           {
-            !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" />
+            !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
           }
           <Button variant='icon' pallete='transparent' onClick={() => openModal(domain.name)}>
             <Dots />
           </Button>
         </Flex>
         <Popup isVisible={showPopup[domain.name]}>
-          <PopupItem onClick={heartHandler} ref={ref}>
-            <Heart />
-            remove from favorites
+          <PopupItem ref={ref}>
+              <Heart />
+              remove from favorites
           </PopupItem>
         </Popup>
       </Container>

@@ -62,10 +62,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
-
+  const [textWidth, setTextWidth] = React.useState(0);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setValues({
       ...values,
       [name]: value,
@@ -79,6 +78,26 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
   });
+
+  function getTextWidth(text, font) {
+    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+}
+
+  function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.keyCode === 8 && values.domain.length !== 0) { 
+      setTextWidth(textWidth - 8);
+      return;
+    }
+    if(e.keyCode === 8 && values.domain.length === 0) return;
+    
+    const width = getTextWidth(values.domain, '16px SFProDisplay');
+    setTextWidth(width);
+  }
+
 
   //first loading!
   useEffect(() => {
@@ -100,7 +119,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Domain*'
             name='domain'
             onChange={handleChange}
+            onKeyDown={updateSuffix}
             value={values.domain}
+            suffix={values.domain.length ?<Text id="suffix" sx={{left: textWidth === 0 ? '0px' : `${textWidth}px`}}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}

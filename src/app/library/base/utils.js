@@ -425,7 +425,7 @@ export default class Utils {
             content_main: "#ffffff",
             background_main_top: "#035b8f",
             background_main: "#042548",
-            background_popup: "#00446c",
+            background_popup: "rgba(255,255,255,0.15)",
             validator_error: "#ff625c"
         }
     }

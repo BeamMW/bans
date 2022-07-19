@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Text } from "theme-ui";
+import { Box, Flex, Paragraph, Text } from "theme-ui";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { containerStyles, SearchResultStyleProps, SubText } from './SearchResult.styles';
 
@@ -19,7 +19,16 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
   return (
     <Flex sx={containerStyles(props)}>
       <Flex>
-        <Text>{value}</Text>
+        <Paragraph sx={{
+              fontSize: '16px',
+              fontFamily: 'SFProDisplay',
+              fontWeight: 700,
+              lineHeight: '19px',
+              fontStyle: 'normal',
+            }}>
+              {value}
+              <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
+        </Paragraph>
         {
           isAvailable && (
             <Box sx={{

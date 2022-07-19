@@ -24,7 +24,8 @@ export const PopupItem = styled.div`
       align-items: center;
       line-height: normal !important;
       white-space: nowrap;
-
+      z-index: 999;
+      position: relative;
       &:hover {
         color: #00f6d2;
       }
@@ -32,4 +33,16 @@ export const PopupItem = styled.div`
       & > svg {
         margin-right: 10px
       }
+`
+
+export const BluredContainer = styled.div `
+    right: 0px;
+    position: absolute;
+    border-radius: 10px;
+    padding:  10px 20px;
+    backdrop-filter: blur(30px);
+    background-color: ${Utils.getStyles().background_popup};
+    width: 100%;
+    height: 100%;
+    margin-top: -10px;
 `

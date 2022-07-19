@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
   info?: string;
+  suffix?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -54,7 +55,8 @@ const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
   font-family: 'SFProDisplay', sans-serif;
   font-size: 14px;
   line-height: 17px;
-  font-weight: normal;
+  font-weight: 400;
+  font-style: normal;
   color: ${({ pallete }) => `var(--color-${pallete})`};
   height: 45px;
   background-color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .05)' : 'rgb(255, 116, 107, .15)')};
@@ -115,6 +117,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     margin = 'none',
     pallete = 'blue',
     info,
+    suffix,
     children,
     className, ...rest
   }, ref) => {
@@ -138,6 +141,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )
         }
         <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+        {!!suffix && suffix }
         {!!info && <InfoStyled>{info}</InfoStyled>}
       </ContainerStyled>
     );
