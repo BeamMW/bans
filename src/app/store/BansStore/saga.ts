@@ -15,7 +15,7 @@ import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
 import { eventChannel, END, channel, Channel } from 'redux-saga'
-import { notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
+import { notificationFromSoldDomainSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -172,27 +172,10 @@ export function* loadUserViewSaga(
       { transferred: resultUserViewParams?.anon, revenue: resultUserViewParams?.raw } :
       false;
 
-    const state = (yield select()) as { shared; bans };
-
-    if (state.bans.setIsUserViewLoaded) {
-      //create channel and fork notification saga
-      const internalFundsChannel = yield call(channel);
-      yield fork(notificationFromTransferredFundsSaga, internalFundsChannel)
-
-      const oldFunds = state.bans.userView.funds;
-      const changes = _.differenceWith(funds.transferred, oldFunds.transferred, _.isEqual);
-
-      if (changes.length)
-        yield put(internalFundsChannel, { payload: changes })
-
-    }
-
-
-
-    /* store.dispatch(actions.setUserDomains(domains))
-    store.dispatch(actions.setUserFunds(funds)) */
-    yield call(setUserFundsSaga, funds)
-    yield call(setUserDomainsSaga, domains)
+    //store.dispatch(actions.setUserDomains(domains))
+    //store.dispatch(actions.setUserFunds(funds))
+    yield fork(setUserFundsSaga, funds)
+    yield fork(setUserDomainsSaga, domains)
 
     //@TODO: always update true - maybe redunant
     yield put(actions.setIsUserViewLoaded(true));
@@ -208,8 +191,9 @@ export function* loadUserViewSaga(
 export function* setUserDomainsSaga(
   action//: ReturnType<typeof actions.setUserDomains>
 ) {
+
   try {
-    if (!action/* .payload */.length) return false;
+    if (!action./* payload. */length) return false;
 
     let domains: Array<any> = action/* .payload */;
     const state = (yield select()) as { shared; bans };
@@ -227,6 +211,22 @@ export function* setUserDomainsSaga(
       currentStateHeight,
       publicKey
     ));
+
+    //notify soldDomain channel
+    if (state.bans.setIsUserViewLoaded) {
+      //create channel and fork notification saga
+      const internalDomainSellChannel = yield call(channel);
+      yield fork(notificationFromSoldDomainSaga, internalDomainSellChannel)
+
+      const oldDomainsState = state.bans.userView.domains;
+      const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
+
+      const changesOnSold = changes.filter(domain => domain.isOnSale)
+
+      if (changesOnSold.length) {
+        yield put(internalDomainSellChannel, { payload: changesOnSold })
+      }
+    }
 
     yield put(actions.setUserDomains(domains));
 
@@ -252,6 +252,22 @@ export function* setUserFundsSaga(
       (acc, current) => acc.add(current.amount)
       , Decimal.from(0)
     );
+
+    const state = (yield select()) as { bans };
+
+    //notify funds channel
+    if (state.bans.setIsUserViewLoaded) {
+      //create channel and fork notification saga
+      const internalFundsChannel = yield call(channel);
+      yield fork(notificationFromTransferredFundsSaga, internalFundsChannel)
+
+      const oldFundsState = state.bans.userView.funds;
+      const changes = _.differenceWith(funds.transferred, oldFundsState.transferred, _.isEqual);
+
+      if (changes.length)
+        yield put(internalFundsChannel, { payload: changes })
+
+    }
 
     yield put(actions.setUserFunds({ total: total, ...funds }));
 
@@ -355,10 +371,10 @@ function userViewInterval(delay) {
 
 function* bansSaga() {
   yield takeEvery(actions.loadAppParams.request, loadParamsSaga);
-  yield takeEvery(actions.loadUserView.request, loadUserViewSaga);
+  yield takeLatest(actions.loadUserView.request, loadUserViewSaga);
 
-  yield takeLatest(actions.setUserDomains, setUserDomainsSaga);
-  yield takeLatest(actions.setUserFunds, setUserFundsSaga);
+  //yield takeLatest(actions.setUserDomains, setUserDomainsSaga);
+  //yield takeLatest(actions.setUserFunds, setUserFundsSaga);
   yield takeLatest(actions.loadContractInfo.request, loadContractInfoSaga);
   yield takeLatest(actions.loadRate.request, loadRate);
   yield takeLatest(actions.loadAllFavoritesDomains.request, loadAllFavoritesDomainsSaga);

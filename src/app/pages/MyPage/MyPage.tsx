@@ -16,13 +16,14 @@ import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useLocation } from 'react-router-dom';
+import { Container, Flex } from 'theme-ui';
 
 
 const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
 
 const MyPage = () => {
-  let {state} = useLocation();
-  const { active: activeLocation } = state || {active: 1}; // Read values passed on state
+  let { state } = useLocation();
+  const { active: activeLocation } = state || { active: 1 }; // Read values passed on state
 
   const [domains, setDomains] = useState(null);
   const [active, _setActive] = useState(null);
@@ -69,7 +70,7 @@ const MyPage = () => {
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
   const emptyText = useMemo(() => {
-    if((!domains || domains.length) && transactionState.type === "waitingForConfirmation" && transactionState.id.match(TRANSACTION_ID) )
+    if ((!domains || domains.length) && transactionState.type === "waitingForConfirmation" && transactionState.id.match(TRANSACTION_ID))
       return "The BANS will appear on the page as soon as the transaction is completed.";
 
     return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null);
@@ -91,7 +92,12 @@ const MyPage = () => {
                   <AllTab domains={domains} /> :
                   (+active == 2 ? <FavoriteTab domains={domains} /> : <></>)
               ) : <EmptyPage emptyText={emptyText} />
-            ) : <LoadingOverlay />
+            ) :
+              <Container sx={{ width: "auto" }}>
+                <Flex sx={{ justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+                  <LoadingOverlay />
+                </Flex>
+              </Container>
             }
           </>
         ) : (view === "MYBANS_REGISTER" ? <Register /> : <></>)

@@ -215,6 +215,23 @@ export function* notificationFromTransferredFundsSaga(channel) {
   }
 }
 
+export function* notificationFromSoldDomainSaga(channel) {
+  while (true) {
+    const {payload: soldDomains} = yield take(channel)
+
+    for (const soldDomain of soldDomains) {
+      const notification = notificationDomainObjectFactory({
+        type: NotificationType.sold,
+        state: NotificationState.active,
+        data: { domain: soldDomain }
+      });
+  
+      yield call(createNotification, notification);
+    }
+    
+  }
+}
+
 export default function* notificationsSaga() {
   if (userDatabase.isOpen) {
     //init
