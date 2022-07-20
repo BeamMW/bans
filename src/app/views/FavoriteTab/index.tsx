@@ -66,9 +66,11 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
           {
             !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
           }
-          <Button variant='icon' pallete='transparent' onClick={() => openModal(domain.name)}>
-            <Dots />
-          </Button>
+          <Box sx={{ position: 'relative', zIndex: 999 }}>
+            <Button variant='icon' pallete='transparent' onClick={(event) => { openModal(domain.name); event.stopPropagation() }}>
+              <Dots />
+            </Button>
+          </Box>
         </Flex>
         <Popup isVisible={showPopup[domain.name]}>
           <PopupItem ref={ref}>
@@ -101,8 +103,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
     setRows(favoriteDomains ?
       favoriteDomains.map((domain, i) => (
         <React.Fragment key={i}>
-          <SplitContainer key={i} leftWeight={8} rightWeight={4}>
-            <Box onClick={
+          <SplitContainer key={i} leftWeight={8} rightWeight={4} handleClick={
               domain && !domain.isYourOwn && domain.isOnSale ?
                 (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
                 (
@@ -110,6 +111,7 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
                     setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
                   } : null
                 )}>
+            <Box>
               <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
             </Box>
             <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup} suggestedSendFundsDomains={suggestedSendFundsDomains} />

@@ -17,6 +17,7 @@ import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
+import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -109,7 +110,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   }, [])
 
   return (
-    <Modal isShown={isShown} header="Send funds to the BANS">
+    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bins domain">
       <>
         {suggestedDomains && suggestedDomains.length ?
           <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
@@ -121,6 +122,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             onChange={handleChange}
             onKeyDown={updateSuffix}
             value={values.domain}
+            maxLength={30}
             suffix={values.domain.length ? <Text id="suffix" sx={{ left: textWidth === 0 ? '0px' : `${textWidth}px` }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
@@ -159,7 +161,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             disabled={isButtonDisabled}
           >
             <SendIcon />
-            Send
+            send
           </SendFundsAction>
         </ButtonContainer>
       </>

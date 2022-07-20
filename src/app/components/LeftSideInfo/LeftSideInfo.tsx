@@ -52,8 +52,8 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             {name}
             <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
             </Paragraph>
-          <Box sx={{marginLeft: '14px'}}>
-            <Button variant='icon' width="auto" height="auto" pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
+          <Box sx={{ marginLeft: '14px', position: 'relative', zIndex: 999 }}>
+            <Button variant='icon' width="auto" height="auto" pallete='transparent' onClick={(event) => { copyToClipboard(domain.name); event.stopPropagation(); }}>
               <Copy />
             </Button>
           </Box>

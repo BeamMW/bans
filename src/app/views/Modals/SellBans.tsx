@@ -70,7 +70,8 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
   const beamPrice = useSelector(selectRate());
 
   return (
-    <Modal isShown={isShown} header="Sell Bans">
+    <Modal isShown={isShown} header="Sell Bans" subHeader="If you want to put a BANS on sale, fill in the Amount only. The Amount can be change at any time. 
+    To sell a BANS to a particular user, you need to fill Buyer's Public Key.">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
         {
           activeItem.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
