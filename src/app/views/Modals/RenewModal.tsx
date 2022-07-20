@@ -15,6 +15,7 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import Renew from '@app/assets/icons/renew-blue.svg';
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import useCalculateDomainPrice from "@app/hooks/useCalculateDomainPrice";
 interface RenewModalProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -22,9 +23,9 @@ interface RenewModalProps {
 
 export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) => {
 
-  if(!isShown) return <></>;
+  if (!isShown) return <></>;
 
-  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+  const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
 
   closeModal = closeModal ?? close;
 
@@ -33,6 +34,8 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
+
+  const price = useCalculateDomainPrice(domain.name);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
@@ -55,7 +58,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
         <RegistrationHeader search={domain.name} />
         <Divider sx={{ my: 5 }} />
         <RegistrationPeriod period={period} setPeriod={setPeriod} />
-        <RegistrationPrice price={domain.price} period={period} />
+        <RegistrationPrice price={{ ...domain.price, ...{ amount: price } }} period={period} />
         <ButtonContainer>
           <CloseBtn toggle={closeModal} />
           <RegisterAction

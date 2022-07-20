@@ -18,6 +18,7 @@ import { IsTransactionPending } from "@app/library/transaction-react/IsTransacti
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDomains } from "@app/store/BansStore/selectors";
+import useCalculateDomainPrice from "@app/hooks/useCalculateDomainPrice";
 
 const Container = styled.div`
   min-width: 630px;
@@ -53,6 +54,8 @@ export const Register: React.FC = () => {
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
   const { name: domainName } = foundDomain;
+
+  const price = useCalculateDomainPrice(domainName);
 
   const now = moment().format("LL");
   const till = tillDate(foundDomain, period);
@@ -91,7 +94,7 @@ export const Register: React.FC = () => {
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 4 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod} />
-          <RegistrationPrice price={foundDomain.price} period={period} />
+          <RegistrationPrice price={{...foundDomain.price, ...{amount: price}}} period={period} />
           <Flex sx={{ flexDirection: 'column' }}>
             <Text variant="panelHeader" sx={{ mb: 30 }}>
               Current domain will be available from {now} till {till}.
