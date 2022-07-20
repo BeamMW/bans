@@ -3,7 +3,7 @@ import { useTransactionState } from "./context/TransactionContext";
 import { Flex, Box, Text } from 'theme-ui';
 import { TransactionProgressDonut } from './TransactionProgressDonut';
 
-export const TransactionMonitor: React.FC<{ transactions: any, showStatusBlock: boolean }> = ({ transactions, showStatusBlock }) => {
+export const TransactionMonitor: React.FC<{ transactions: any, showStatusBlock: boolean }> = ({ transactions, showStatusBlock = false }) => {
   //const { provider } = useLiquity();
   const [transactionState, setTransactionState] = useTransactionState();
 

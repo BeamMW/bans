@@ -16,6 +16,7 @@ import { SelectWithInput } from '@app/components/Select/SelectWithInput';
 import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
+import _ from "lodash";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -46,7 +47,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
     }
-    
+
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       return () => {
         //store.dispatch()
@@ -61,8 +62,10 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setValues({
       ...values,
       [name]: value,
@@ -83,15 +86,15 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     context.font = font;
     var metrics = context.measureText(text);
     return metrics.width;
-}
+  }
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.keyCode === 8 && values.domain.length !== 0) { 
+    if (e.key === "Backspace" && values.domain.length !== 0) {
       setTextWidth(textWidth - 8);
       return;
     }
-    if(e.keyCode === 8 && values.domain.length === 0) return;
-    
+    if (e.key === "Backspace" && values.domain.length === 0) return;
+
     const width = getTextWidth(values.domain, '16px SFProDisplay');
     setTextWidth(width);
   }
@@ -118,7 +121,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             onChange={handleChange}
             onKeyDown={updateSuffix}
             value={values.domain}
-            suffix={values.domain.length ?<Text id="suffix" sx={{left: textWidth === 0 ? '0px' : `${textWidth}px`}}>.beam</Text> : <></>}
+            suffix={values.domain.length ? <Text id="suffix" sx={{ left: textWidth === 0 ? '0px' : `${textWidth}px` }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}
@@ -129,6 +132,14 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Amount*'
             name='amount'
             onChange={handleChange}
+            onKeyPress={(e) => {
+              /* if(e.code === "190" && _.isFloat(values.amount))
+                e.preventDefault(); */
+
+              if (!/[0-9\b]/g.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
             value={values.amount}
             type="number"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
