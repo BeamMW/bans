@@ -4,6 +4,7 @@ import { BANS_CID } from '@app/constants';
 import { actions } from '.';
 import store from '../../../index';
 import _ from 'lodash';
+import omitDeep from 'omit-deep-lodash';
 
 import {
   setIsLoaded,
@@ -219,11 +220,25 @@ export function* setUserDomainsSaga(
       yield fork(notificationFromSoldDomainSaga, internalDomainSellChannel)
 
       const oldDomainsState = state.bans.userView.domains;
+      
+      //important! if source array is not filled
+      if(!oldDomainsState.length) return;
+
       const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
 
-      const changesOnSold = changes.filter(domain => domain.isOnSale)
+      //additional validator for channel
+      if(_.isEqual(
+        omitDeep(oldDomainsState, ['expiresAt', 'isExpired']),
+        omitDeep(domains, ['expiresAt', 'isExpired']),
+      )) return;
 
+      //console.log("changes",changes);
+      const changesOnSold = changes.filter(domain => domain.isOnSale)
+      //console.log("changesOnSold", changesOnSold);
+      //console.log("_".repeat(20));
+      //changes.length && console.log(oldDomainsState, domains);
       if (changesOnSold.length) {
+        //console.log("we made it", changesOnSold);
         yield put(internalDomainSellChannel, { payload: changesOnSold })
       }
     }

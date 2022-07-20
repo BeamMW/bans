@@ -14,9 +14,9 @@ import { Decimal } from "@app/library/base/Decimal";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
-import ArrowDown from '@app/assets/icons/arrow-down.svg';
 import Sell from '@app/assets/icons/send.svg';
 import Beam from '@app/assets/icons/beam.svg';
+import { LoadingOverlay } from "@app/components/LoadingOverlay";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -73,7 +73,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             <Text>{`Already on sale for ${activeItem.price.amount}!`}</Text>
           </Flex> : <></>
         }
-        
+
         <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} />
 
         <Box sx={{ mt: '30px' }}>
@@ -95,16 +95,23 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
           <Box sx={{ mr: '30px' }}>
             <CloseBtn toggle={closeModal} />
           </Box>
-          <SellBansAction
-            transactionId={TRANSACTION_ID}
-            change={"sellBans"}
-            amount={+amount}
-            domain={activeItem}
-            disabled={!amount || activeItem.isOnSale}
-          >
-            <Sell />
-            <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>
-          </SellBansAction>
+          {
+            isTransactionPending ?
+              <Flex sx={{ width: "auto", justifyContent: "center", alignItems: "center" }}>
+                <LoadingOverlay />
+              </Flex> :
+              <SellBansAction
+                transactionId={TRANSACTION_ID}
+                change={"sellBans"}
+                amount={+amount}
+                domain={activeItem}
+                disabled={!amount || activeItem.isOnSale}
+              >
+                <Sell />
+                <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>
+              </SellBansAction>
+          }
+
         </Flex>
       </Container>
     </Modal>

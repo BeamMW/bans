@@ -96,20 +96,26 @@ export const Register: React.FC = () => {
             <Text variant="panelHeader" sx={{ mb: 30 }}>
               Current domain will be available from {now} till {till}.
             </Text>
-            <Flex sx={{justifyContent: "center"}}>
-              <RegisterAction
-                transactionId={"DOMAIN_REGISTER"}
-                change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
-                period={period}
-                domain={foundDomain}
-              >
-                <Plus />
-                register
-              </RegisterAction>
+            <Flex sx={{ justifyContent: "center" }}>
+              {
+                isTransactionPending ?
+                  <Flex sx={{width:"100%", justifyContent: "center", alignItems:"center"}}>
+                    <LoadingOverlay />
+                  </Flex> :
+                  <RegisterAction
+                    transactionId={"DOMAIN_REGISTER"}
+                    change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
+                    period={period}
+                    domain={foundDomain}
+                  >
+                    <Plus />
+                    register
+                  </RegisterAction>
+              }
+
             </Flex>
           </Flex>
         </Box>
-        {isTransactionPending && <LoadingOverlay />}
       </Container>
     </>
   )
