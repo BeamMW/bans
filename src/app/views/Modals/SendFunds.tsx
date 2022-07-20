@@ -5,7 +5,6 @@ import { Modal } from "@app/components/Modals/Modal";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
-import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useSelector } from "react-redux";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { Decimal } from "@app/library/base/Decimal";
@@ -13,7 +12,6 @@ import { SendFundsAction } from "@app/views/Actions/SendFundsAction";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";
-import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { SelectWithInput } from '@app/components/Select/SelectWithInput';
 import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
@@ -43,7 +41,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const TRANSACTION_ID = "SEND_FUNDS";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
-  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
@@ -111,7 +108,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   return (
     <Modal isShown={isShown} header="Send funds to the BANS">
       <>
-        {isTransactionPending && <LoadingOverlay />}
         {suggestedDomains && suggestedDomains.length ?
           <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
           <Input

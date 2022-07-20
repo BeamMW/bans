@@ -32,6 +32,7 @@ const initialState = {
       transferred: [],
     }
   },
+  setIsUserViewLoaded: false,
   allFavoritesDomains: [],
   setIsFavoriteLoaded: false,
 };
@@ -87,6 +88,12 @@ const reducer = createReducer<any, Action>(
   .handleAction(actions.setIsFavoriteLoaded, (state, action) =>
     produce(state, nextState => {
       nextState.isFavoriteLoaded =
+        action.payload;
+    }),
+  )
+  .handleAction(actions.setIsUserViewLoaded, (state, action) =>
+    produce(state, nextState => {
+      nextState.setIsUserViewLoaded =
         action.payload;
     }),
   )

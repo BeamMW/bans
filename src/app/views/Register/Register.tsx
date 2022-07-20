@@ -15,6 +15,9 @@ import { RegistrationHeader } from "@app/components/RegistrationHeader/Registrat
 import { loadAllFavoritesDomains } from "@app/store/BansStore/actions";
 import Plus from '@app/assets/icons/blue-plus.svg';
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserDomains } from "@app/store/BansStore/selectors";
 
 const Container = styled.div`
   min-width: 630px;
@@ -39,6 +42,8 @@ const tillDate = (foundDomain, period) => useMemo(() => {
 export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
+  const navigate = useNavigate();
+
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
@@ -52,16 +57,24 @@ export const Register: React.FC = () => {
   const now = moment().format("LL");
   const till = tillDate(foundDomain, period);
 
+  const userBans: Array<any> = useSelector(selectUserDomains());
+
   useEffect(() => {
+
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      //if user has not any domains we redirets user to my-page empty
+      !userBans.length ? navigate("my-page") : null;
+    }
+
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
 
       /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesDomains.request())
 
       //dispatch to the main search view and clear found domain data
-      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null);
+      setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null) || navigate("my-page");
 
       return () => {
-        //store.dispatch()
       }
     }
 

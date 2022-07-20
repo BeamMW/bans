@@ -29,7 +29,7 @@
     "@linaria/webpack-loader": "^3.0.0-beta.16",
     "@svgr/webpack": "^6.1.2",
     "@types/chrome": "0.0.135",
-    "@types/node": "^16.6.1",
+    "@types/node": "^18.0.6",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "4.17.0",

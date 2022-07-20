@@ -60,7 +60,7 @@ const MyPage = () => {
     active === 1 && setDomains(userBans);
     active === 2 && setDomains(favoriteBans);
 
-    setIsLoaded(true);
+    setIsLoaded(!!domains);
   }, [/* active,  */userBans, favoriteBans])
 
 
@@ -85,11 +85,11 @@ const MyPage = () => {
             {!!domains &&
               <FilterTabs tabs={tabs} active={active} setActive={setActive} />
             }
-            {isLoaded ? (
+            {isLoaded && +active ? (
               domains && domains.length ? (
                 +active == 1 ?
                   <AllTab domains={domains} /> :
-                  (active == 2 ? <FavoriteTab domains={domains} /> : <></>)
+                  (+active == 2 ? <FavoriteTab domains={domains} /> : <></>)
               ) : <EmptyPage emptyText={emptyText} />
             ) : <LoadingOverlay />
             }

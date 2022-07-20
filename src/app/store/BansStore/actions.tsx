@@ -8,6 +8,7 @@ export const setPublicKey = createAction('@@MAIN/SET_PUBLIC_KEY')<string>();
 export const setProposalsState = createAction('@@MAIN/SET_PROPOSALS_STATE')<{ is_active: boolean, type: string }>();
 export const setPopupState = createAction('@@MAIN/SET_POPUP_STATE')<{ type: string, state: boolean }>();
 export const setIsFavoriteLoaded = createAction('@@MAIN/SET_IS_FAVORITE_LOADED')<boolean>();
+export const setIsUserViewLoaded = createAction('@@MAIN/SET_IS_USER_VIEW_LOADED')<boolean>();
 export const setUserDomains = createAction('@@MAIN/SET_USER_DOMAINS')<Array<any>>();
 export const setUserFunds = createAction('@@MAIN/SET_USER_FUNDS')<any>();
 

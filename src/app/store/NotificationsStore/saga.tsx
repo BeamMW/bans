@@ -1,6 +1,6 @@
 import store from "index";
-import { END, eventChannel } from "redux-saga";
-import { call, fork, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
+import { channel, END, eventChannel } from "redux-saga";
+import { call, cancelled, delay, fork, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
 import { getBansApi } from '@app/utils/getBansApi';
 import _ from "lodash";
 import { createNotification, deleteNotification, getNotificationFavoriteDomain, getNotificationsAsync, getNotificationsByCondition, readAllActiveNotifications, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
@@ -8,7 +8,11 @@ import { Notification, NotificationState, NotificationType } from "@app/library/
 import { userDatabase } from "@app/library/bans/userLocalDatabase";
 import { actions } from ".";
 
-const secs = 4;
+const secs = 5;
+
+const internalEventFundsChannel = function* () {
+  return yield channel();
+}
 
 const externalNotificationsEventChannel = eventChannel(emitter => {
 
@@ -83,7 +87,7 @@ function* notificationsFavoritesOnSaleSaga(payload: { domains: Array<any> } = { 
 
     const receivedDomainNamesPrepared = domainNamesPreparedForSale(receivedDomains);
     const favoriteDomainsOnSale = _.chain(favoritesDomains)
-      .filter(favoriteDomain => receivedDomainNamesPrepared.includes(favoriteDomain.name))
+      .filter(favoriteDomain => receivedDomainNamesPrepared.includes(favoriteDomain.name) && !favoriteDomain.isYourOwn)
       .filter(favoriteDomain => {
         const favoriteDomainsNamesNotification = favoritesStoresInNotifications.length ?
           _.map(favoritesStoresInNotifications, ({ notifyData }) => notifyData.domain.name) :
@@ -108,6 +112,12 @@ function* notificationsFavoritesOnSaleSaga(payload: { domains: Array<any> } = { 
   } catch (err) {
     externalNotificationsEventChannel.close();
     console.log(err);
+
+  } finally {
+    if (yield cancelled()) {
+      externalNotificationsEventChannel.close()
+      console.log('externalNotificationsEventChannel cancelled')
+    }
   }
 }
 
@@ -132,7 +142,7 @@ function* notificationsFavoritesWithdrawnFromSaleSaga(payload: { domains: Array<
 
     for (const entry of notificationsForRemoving) {
       yield call(deleteNotification, entry.gid);
-    }  
+    }
 
   } catch (e) {
     console.log(e);
@@ -147,7 +157,7 @@ function* notificationFavoriteDomainRemoved(
     const favoriteDomainInStorage = yield call(getNotificationFavoriteDomain, removedFavoriteDomain);
 
     yield call(deleteNotification, favoriteDomainInStorage.gid);
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 
@@ -188,6 +198,23 @@ function* loadFavoritesNotificationsFromDatabaseSaga(
   }
 }
 
+export function* notificationFromTransferredFundsSaga(channel) {
+  while (true) {
+    const {payload: transfers} = yield take(channel)
+    
+    for (const transfer of transfers) {
+      const notification = notificationDomainObjectFactory({
+        type: NotificationType.transferred,
+        state: NotificationState.active,
+        data: { transfer: transfer }
+      });
+  
+      yield call(createNotification, notification);
+    }
+    
+  }
+}
+
 export default function* notificationsSaga() {
   if (userDatabase.isOpen) {
     //init
@@ -201,6 +228,8 @@ export default function* notificationsSaga() {
     yield takeEvery(actions.updateNotifications.request, notificationsEntriesChangedSaga);
     yield takeLatest(actions.notificationFavoriteDomainRemoved, notificationFavoriteDomainRemoved);
     yield takeLatest(actions.reinitNotifications.request, loadFavoritesNotificationsFromDatabaseSaga);
+
+    //yield fork(notificationFromTransferredFundsSaga, internalEventFundsChannelInstance);
   }
 }
 

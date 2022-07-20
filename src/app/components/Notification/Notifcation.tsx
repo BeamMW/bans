@@ -9,17 +9,15 @@ import { SplitContainer } from "../SplitContainer/SplitContainer";
 
 //sx={{ background: "rgb(9 19 30)", position: "absolute",width:"100%", maxWidth:"630px", mt: 10 * passKey }}
 export const Notification = ({ notification, text, handler, closeHandler = null, passKey }) => {
-  const navigate = useNavigate();
   const {setCurrentView} = useMainView()
 
   const handleCloseNotification = () => {
-    updateNotificationState(notification.gid, NotificationState.disabled);
-    closeHandler ? closeHandler() : null;
+    return !! closeHandler ? closeHandler(notification) : updateNotificationState(notification.gid, NotificationState.disabled);
   };
 
   const moreDetailsHandler = () => {
-    navigate("my-page", { state: { active: 2 /* for tabs favorites */ } }),
-    handleCloseNotification()
+    handler(notification);
+    handleCloseNotification();
   }
 
   return (

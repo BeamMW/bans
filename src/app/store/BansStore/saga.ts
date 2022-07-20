@@ -1,4 +1,4 @@
-import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading, all } from 'redux-saga/effects';
+import { call, put, takeLatest, select, takeEvery, getContext, take, takeLeading, all, fork } from 'redux-saga/effects';
 import { BANS_CID } from '@app/constants';
 
 import { actions } from '.';
@@ -14,7 +14,8 @@ import { Decimal } from '@app/library/base/Decimal';
 import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/userFavorites';
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
-import { eventChannel, END } from 'redux-saga'
+import { eventChannel, END, channel, Channel } from 'redux-saga'
+import { notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -171,16 +172,38 @@ export function* loadUserViewSaga(
       { transferred: resultUserViewParams?.anon, revenue: resultUserViewParams?.raw } :
       false;
 
+    const state = (yield select()) as { shared; bans };
+
+    if (state.bans.setIsUserViewLoaded) {
+      //create channel and fork notification saga
+      const internalFundsChannel = yield call(channel);
+      yield fork(notificationFromTransferredFundsSaga, internalFundsChannel)
+
+      const oldFunds = state.bans.userView.funds;
+      const changes = _.differenceWith(funds.transferred, oldFunds.transferred, _.isEqual);
+
+      if (changes.length)
+        yield put(internalFundsChannel, { payload: changes })
+
+    }
+
+
+
     /* store.dispatch(actions.setUserDomains(domains))
     store.dispatch(actions.setUserFunds(funds)) */
     yield call(setUserFundsSaga, funds)
     yield call(setUserDomainsSaga, domains)
+
+    //@TODO: always update true - maybe redunant
+    yield put(actions.setIsUserViewLoaded(true));
 
   } catch (err) {
     console.log(err);
     actions.loadUserView.failure(err);
   }
 }
+
+
 
 export function* setUserDomainsSaga(
   action//: ReturnType<typeof actions.setUserDomains>
@@ -352,6 +375,7 @@ function* bansSaga() {
 
   //@TODO: not optimized!
   yield takeEvery(actions.reloadAllUserInfo.request, reloadAllUserInfoSaga);
+  //yield call(watchRequests)
 }
 
 export default bansSaga;

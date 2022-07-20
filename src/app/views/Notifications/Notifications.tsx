@@ -14,27 +14,71 @@ import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { Notification } from '@app/components/Notification/Notifcation';
 import { useSelector } from 'react-redux';
 import { selectNotifications } from '@app/store/NotificationsStore/selectors';
+import { NotificationState, NotificationType } from '@app/library/bans/userLocalDatabase/domainObject';
+import { GROTHS_IN_BEAM } from '@app/constants';
+import { Decimal } from '@app/library/base/Decimal';
+import { deleteNotification, updateNotificationState } from '@app/library/bans/userLocalDatabase/dao/userNotifications';
+import { useNavigate } from 'react-router-dom';
 
 const Notifications: React.FC = () => {
     const [notificationsList, setNotificationsList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const notifications = useSelector(selectNotifications());
 
+    const generateText = (notification) => {
+        if (notification.type === NotificationType.favorites)
+            return `Your Favorite domain ${notification.notifyData.domain.name}.beam is available now`
+
+        if (notification.type === NotificationType.sold)
+            return `Your Domain ${notification.notifyData.domain.name}.beam has been sold`
+
+        if (notification.type === NotificationType.transferred)
+            return `Your Received a ${Decimal.from(notification.notifyData.transfer.amount).div(GROTHS_IN_BEAM)} BEAM transrfer to ${notification.notifyData.transfer.domain}.beam`
+
+    };
+
+    const handler = useCallback((notification) => {
+        if (notification.type === NotificationType.favorites)
+            return navigate("my-page", { state: { active: 2 /* for tabs favorites */ } })
+
+        if (notification.type === NotificationType.sold)
+            return navigate("my-page", { state: { active: 1 /* for all tabs */ } })
+
+        if (notification.type === NotificationType.transferred)
+            return navigate("transactions")
+
+    }, []);
+
+    const closeHandler = useCallback((notification) => {
+        if (notification.type === NotificationType.favorites)
+            updateNotificationState(notification.gid, NotificationState.disabled);
+
+        if (notification.type === NotificationType.sold)
+            deleteNotification(notification.gid);
+
+        if (notification.type === NotificationType.transferred)
+            deleteNotification(notification.gid);
+
+    }, []);
+
     useEffect(() => {
-       setNotificationsList(notifications);
+        setNotificationsList(notifications);
+        setIsLoading(false);
     }, [notifications]);
 
     return (
         <Container sx={{ maxWidth: 630 }}>
             {!!notificationsList && !!notificationsList.length && notificationsList.map((notification, i) => {
-                return ( notification?.notifyData && 
+                return (notification?.notifyData &&
                     <>
                         <Notification
                             notification={notification}
                             passKey={i}
-                            text={`Your Favorite domain ${notification.notifyData.domain.name}.beam is available now`}
-                            handler={() => { }}
+                            text={generateText(notification)}
+                            handler={handler}
+                            closeHandler={closeHandler}
                         />
                     </>
                 );
