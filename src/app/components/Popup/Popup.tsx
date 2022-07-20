@@ -11,7 +11,6 @@ export const Popup: React.FC<PopupProps> = ({ children, isVisible }) => {
   return (
     <>
       <Container isVisible={isVisible}>
-      <BluredContainer />
         { children }
       </Container>
     </>

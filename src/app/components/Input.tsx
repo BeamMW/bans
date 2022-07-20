@@ -52,7 +52,7 @@ const InputGrayStyled = styled(InputStyled)`
 `;
 
 const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
-  font-family: 'SFProDisplay', sans-serif;
+  font-family: 'SF Pro Display', sans-serif;
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;

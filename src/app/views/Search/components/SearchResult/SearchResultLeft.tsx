@@ -21,7 +21,7 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
       <Flex>
         <Paragraph sx={{
               fontSize: '16px',
-              fontFamily: 'SFProDisplay',
+              fontFamily: 'SF Pro Display',
               fontWeight: 700,
               lineHeight: '19px',
               fontStyle: 'normal',

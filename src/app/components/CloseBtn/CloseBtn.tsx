@@ -19,7 +19,7 @@ export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle, text = 'close' }) => 
     borderRadius='50px'
     height='auto'
     >
-     <Cancel />
+     <Cancel width={'14px'} height={'14px'} />
      <Text sx={{ ml:'9px', fontWeight: 'bold' }}>{ text }</Text>
    </Button>
   )
