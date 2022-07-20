@@ -148,7 +148,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             disabled={isButtonDisabled}
           >
             <SendIcon />
-            Send
+            send
           </SendFundsAction>
         </ButtonContainer>
       </>

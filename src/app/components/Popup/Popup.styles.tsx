@@ -12,7 +12,6 @@ export const Container = styled.div<ContainerStyleProps>`
     outline:  none;
     padding:  20px;
     background-color: ${Utils.getStyles().background_popup};
-    backdrop-filter: blur(1px) brightness(30%);
     display: ${props => (props.isVisible ? "block" : "none")};
     right: 10px;
 `
