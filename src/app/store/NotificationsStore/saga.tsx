@@ -218,7 +218,7 @@ export function* notificationFromTransferredFundsSaga(channel) {
 export function* notificationFromSoldDomainSaga(channel) {
   while (true) {
     const {payload: soldDomains} = yield take(channel)
-    console.log(soldDomains);
+
     for (const soldDomain of soldDomains) {
       const notification = notificationDomainObjectFactory({
         type: NotificationType.sold,

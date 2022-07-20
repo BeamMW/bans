@@ -52,9 +52,13 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
   const handleChange = (e) => setAmount(e.target.value);
 
   useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
+      closeModal(null);
+    }
+
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
 
-      closeModal(null);
+      store.dispatch(reloadAllUserInfo.request());
 
       return () => {
         store.dispatch(reloadAllUserInfo.request());
@@ -96,20 +100,16 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             <CloseBtn toggle={closeModal} />
           </Box>
           {
-            isTransactionPending ?
-              <Flex sx={{ width: "auto", justifyContent: "center", alignItems: "center" }}>
-                <LoadingOverlay />
-              </Flex> :
-              <SellBansAction
-                transactionId={TRANSACTION_ID}
-                change={"sellBans"}
-                amount={+amount}
-                domain={activeItem}
-                disabled={!amount || activeItem.isOnSale}
-              >
-                <Sell />
-                <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>
-              </SellBansAction>
+            <SellBansAction
+              transactionId={TRANSACTION_ID}
+              change={"sellBans"}
+              amount={+amount}
+              domain={activeItem}
+              disabled={!amount || activeItem.isOnSale || isTransactionPending}
+            >
+              <Sell />
+              <Text sx={{ ml: '9px', fontWeight: 'bold', color: '#032E49' }}>Sell</Text>
+            </SellBansAction>
           }
 
         </Flex>

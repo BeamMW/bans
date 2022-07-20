@@ -8,12 +8,11 @@ import { ButtonContainer } from '@app/components/ButtonsContainer/ButtonContaine
 import { Modal } from '@app/components/Modals/Modal';
 import { CloseBtn } from '@app/components/CloseBtn/CloseBtn';
 import { RegisterAction } from '@app/views/Actions/RegisterAction';
-import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import ArrowRight from '@app/assets/icons/arrow-right.svg'
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import store from 'index';
-import { loadAllFavoritesDomains } from '@app/store/BansStore/actions';
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 
 interface ResultForSaleProps {
   isShown: boolean;
@@ -35,10 +34,12 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesDomains.request());
-
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
+    }
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      store.dispatch(reloadAllUserInfo.request());
 
       return () => {
         //store.dispatch()
@@ -50,7 +51,6 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   return (
     <Modal isShown={true} header="Attention">
       <>
-        {isTransactionPending && <LoadingOverlay />}
         <Box>
           <Paragraph sx={{ textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
           <Paragraph sx={{ textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>

@@ -9,7 +9,6 @@ import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { SellBansAction } from '@app/views/Actions/SellBansAction';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
-import { LoadingOverlay } from '@app/components/LoadingOverlay';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 import RemoveIcon from '@app/assets/icons/remove-sale.svg';
@@ -31,12 +30,14 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
+    }
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
-      return () => {
-        
-      }
+
+      return () => {}
     }
 
   }, [transactionState]);
@@ -45,7 +46,6 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
   return (
     <Modal isShown={isShown} header="Remove from sale">
       <>
-        {isTransactionPending && <LoadingOverlay />}
         <Box>
           <Paragraph sx={{ textAlign: 'center' }}>Are you sure you want to remove domain {domain.name}.beam from sale?</Paragraph>
         </Box>
@@ -56,6 +56,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
             transactionId={TRANSACTION_ID}
             change={"sellBans"}
             domain={domain}
+            disabled={isTransactionPending}
           >
             <RemoveIcon />
             remove

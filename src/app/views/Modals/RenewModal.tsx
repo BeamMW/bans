@@ -14,6 +14,7 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 
 import Renew from '@app/assets/icons/renew-blue.svg';
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 interface RenewModalProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -31,9 +32,10 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
       closeModal(null);
     }
 
@@ -61,6 +63,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
             change={"renewDomainExpiration"}
             period={period}
             domain={domain}
+            disabled={isTransactionPending}
           >
             <Renew />
             renew

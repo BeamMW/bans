@@ -99,7 +99,7 @@ export const Register: React.FC = () => {
             <Flex sx={{ justifyContent: "center" }}>
               {
                 isTransactionPending ?
-                  <Flex sx={{width:"100%", justifyContent: "center", alignItems:"center"}}>
+                  <Flex sx={{width:"auto", justifyContent: "center", alignItems:"center"}}>
                     <LoadingOverlay />
                   </Flex> :
                   <RegisterAction

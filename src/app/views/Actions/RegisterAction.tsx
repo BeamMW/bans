@@ -10,6 +10,7 @@ type RegisterActionProps = {
     period?: number;
     domain: DomainPresenterType;
     isPure?: boolean;
+    disabled?: boolean;
 };
 
 export const RegisterAction: React.FC<RegisterActionProps> = ({
@@ -18,7 +19,8 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     change,
     period,
     domain,
-    isPure = false
+    isPure = false,
+    disabled
 }) => {
 
     const { registeredMethods } = useBansApi();
@@ -50,11 +52,11 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     return (
         !isPure ?
             (
-                <Button pallete="green" onClick={sendTransaction} >
+                <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null} >
                     {children}
                 </Button >
             ) : (
-                <span onClick={sendTransaction}>
+                <span style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null}>
                     {children}
                 </span>
             )

@@ -21,7 +21,7 @@ function* sharedSaga() {
     try {
       const updatedTransactions = action.payload;
       
-      console.log("Transaction update: ", updatedTransactions);
+      //console.log("Transaction update: ", updatedTransactions);
 
       yield put(actions.setTransactionsSuccess(updatedTransactions));
 

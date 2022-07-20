@@ -4,7 +4,7 @@ import { BANS_CID } from '@app/constants';
 import { actions } from '.';
 import store from '../../../index';
 import _ from 'lodash';
-import omitDeep from 'omit-deep-lodash';
+//import omitDeep from 'omit-deep-lodash';
 
 import {
   setIsLoaded,
@@ -17,6 +17,7 @@ import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
 import { eventChannel, END, channel, Channel } from 'redux-saga'
 import { notificationFromSoldDomainSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
+import { omitDeep } from '@app/utils/helpers';
 
 const FETCH_INTERVAL = 310000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -214,34 +215,7 @@ export function* setUserDomainsSaga(
     ));
 
     //notify soldDomain channel
-    if (state.bans.setIsUserViewLoaded) {
-      //create channel and fork notification saga
-      const internalDomainSellChannel = yield call(channel);
-      yield fork(notificationFromSoldDomainSaga, internalDomainSellChannel)
-
-      const oldDomainsState = state.bans.userView.domains;
-      
-      //important! if source array is not filled
-      if(!oldDomainsState.length) return;
-
-      const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
-
-      //additional validator for channel
-      if(_.isEqual(
-        omitDeep(oldDomainsState, ['expiresAt', 'isExpired']),
-        omitDeep(domains, ['expiresAt', 'isExpired']),
-      )) return;
-
-      //console.log("changes",changes);
-      const changesOnSold = changes.filter(domain => domain.isOnSale)
-      //console.log("changesOnSold", changesOnSold);
-      //console.log("_".repeat(20));
-      //changes.length && console.log(oldDomainsState, domains);
-      if (changesOnSold.length) {
-        //console.log("we made it", changesOnSold);
-        yield put(internalDomainSellChannel, { payload: changesOnSold })
-      }
-    }
+    yield fork(notifySoldDomainChannel, domains);
 
     yield put(actions.setUserDomains(domains));
 
@@ -250,6 +224,38 @@ export function* setUserDomainsSaga(
     //yield put(actions.loadUserBans.failure(e));
   }
 
+}
+
+function* notifySoldDomainChannel(domains) {
+  const state = (yield select()) as { shared; bans };
+
+  if (state.bans.setIsUserViewLoaded) {
+    //create channel and fork notification saga
+    const internalDomainSellChannel = yield call(channel);
+    yield fork(notificationFromSoldDomainSaga, internalDomainSellChannel)
+
+    const oldDomainsState = state.bans.userView.domains;
+
+    //important! if the original array is not filled or the arrays are even - indicate that no domain has been sold
+    if (!oldDomainsState.length || (domains.length === oldDomainsState.length)) return;
+
+    const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
+
+    //additional validator for channel
+    if (_.isEqual(
+      _.map(domains, domain => domain.name),
+      _.map(oldDomainsState, domain => domain.name)
+    )) return;
+
+    //console.log("changes", changes);
+    const changesOnSold = changes.filter(domain => domain.isOnSale)
+    /* console.log("changesOnSold", changesOnSold);
+    console.log("_".repeat(20));
+    changes.length && console.log(oldDomainsState, domains); */
+    if (changesOnSold.length) {
+      yield put(internalDomainSellChannel, { payload: changesOnSold })
+    }
+  }
 }
 
 export function* setUserFundsSaga(

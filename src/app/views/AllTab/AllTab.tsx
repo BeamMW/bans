@@ -9,7 +9,7 @@ import { RenewModal } from '@app/views/Modals/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { SellBansModal } from '@app/views/Modals/SellBans';
-import { Transfer } from "@app/views/Transfer/Transfer";
+import { Transfer } from "@app/views/Modals/Transfer";
 import { RemoveOrChange, ModalManager as RightSideModalManager } from '@app/views/RemoveOrChange/RemoveOrChange';
 
 import Dots from '@app/assets/icons/dots.svg';
