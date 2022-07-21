@@ -14,7 +14,6 @@ const useCalculateDomainPrice = (domainName: string) => {
         if (!domainNameLength || domainNameLength < 3) return 0;
 
         if (domainNameLength === 3) {
-            console.log(_.round(Decimal.from(320).div(beamPrice), 2));
             return _.round(Decimal.from(320).div(beamPrice).mul(GROTHS_IN_BEAM), 2);
         }
 
@@ -26,7 +25,7 @@ const useCalculateDomainPrice = (domainName: string) => {
             return _.round(Decimal.from(10).div(beamPrice).mul(GROTHS_IN_BEAM), 2);
         }
 
-    }, [domainName])
+    }, [domainName, beamPrice])
 }
 
 

@@ -12,7 +12,7 @@ import { useCurrentTransactionState } from "@app/library/transaction-react/useCu
 import { RegistrationPeriod } from "@app/components/RegistrationPeriod/RegistrationPeriod";
 import { RegistrationPrice } from "@app/components/RegistrationPrice/RegistrationPrice";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
-import { loadAllFavoritesDomains } from "@app/store/BansStore/actions";
+import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import Plus from '@app/assets/icons/blue-plus.svg';
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { useNavigate } from "react-router-dom";
@@ -33,13 +33,6 @@ const Container = styled.div`
 `;
 
 
-const tillDate = (foundDomain, period) => useMemo(() => {
-  if (foundDomain.expiresAt) return foundDomain.expiresAt;
-  return moment().add(1, 'years').format("LL");
-
-}, [foundDomain, period])
-
-
 export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
@@ -58,21 +51,23 @@ export const Register: React.FC = () => {
   const price = useCalculateDomainPrice(domainName);
 
   const now = moment().format("LL");
-  const till = tillDate(foundDomain, period);
 
   const userBans: Array<any> = useSelector(selectUserDomains());
 
+  const till = useMemo(() => {
+    if (foundDomain.expiresAt) return foundDomain.expiresAt;
+    return moment().add(period, 'years').format("LL");
+  }, [period]);
+
   useEffect(() => {
-
-
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       //if user has not any domains we redirets user to my-page empty
       !userBans.length ? navigate("my-page") : null;
     }
 
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-
-      /* @TODO: refactor - load only specific domains */store.dispatch(loadAllFavoritesDomains.request())
+      /* @TODO: refactor - load only specific domains */
+      store.dispatch(reloadAllUserInfo.request())
 
       //dispatch to the main search view and clear found domain data
       setCurrentView("REGISTER_COMPLETED") || setFoundDomain(null) || navigate("my-page");
@@ -94,7 +89,7 @@ export const Register: React.FC = () => {
           <RegistrationHeader search={domainName} />
           <Divider sx={{ my: 4 }} />
           <RegistrationPeriod period={period} setPeriod={setPeriod} />
-          <RegistrationPrice price={{...foundDomain.price, ...{amount: price}}} period={period} />
+          <RegistrationPrice price={{ ...foundDomain.price, ...{ amount: price } }} period={period} />
           <Flex sx={{ flexDirection: 'column' }}>
             <Text variant="panelHeader" sx={{ mb: 30 }}>
               Current domain will be available from {now} till {till}.
@@ -102,7 +97,7 @@ export const Register: React.FC = () => {
             <Flex sx={{ justifyContent: "center" }}>
               {
                 isTransactionPending ?
-                  <Flex sx={{width:"auto", justifyContent: "center", alignItems:"center"}}>
+                  <Flex sx={{ width: "auto", justifyContent: "center", alignItems: "center" }}>
                     <LoadingOverlay />
                   </Flex> :
                   <RegisterAction
