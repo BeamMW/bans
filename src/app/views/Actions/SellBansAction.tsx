@@ -4,6 +4,7 @@ import { toGroths } from '@app/library/base/appUtils';
 import Button from "@app/components/Button";
 import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
+import { Pallete } from "@app/core/types";
 
 type SellBansActionProps = {
     transactionId: string;
@@ -11,6 +12,7 @@ type SellBansActionProps = {
     amount?: number;
     domain: DomainPresenterType;
     disabled: boolean;
+    pallete?: Pallete;
 };
 
 export const SellBansAction: React.FC<SellBansActionProps> = ({
@@ -19,6 +21,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     change,
     amount,
     domain,
+    pallete = 'green',
     disabled = false
 }) => {
 
@@ -46,7 +49,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     );
 
     return (
-        <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}} onClick={!disabled ? sendTransaction : null}>
+        <Button pallete={pallete} style={disabled ? {opacity: "0.2"} : {}} onClick={!disabled ? sendTransaction : null}>
             {children}
         </Button>
     );

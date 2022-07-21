@@ -47,18 +47,19 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
     <Modal isShown={isShown} header="Remove from sale">
       <>
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>Are you sure you want to remove domain {domain.name}.beam from sale?</Paragraph>
+          <Paragraph sx={{ textAlign: 'center', fontFamily: 'SFProDisplay' }}>Are you sure you want to remove domain {domain.name}.beam from sale?</Paragraph>
         </Box>
 
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} />
+          <CloseBtn toggle={closeModal} text='cancel' width='16px' height='15px'/>
           <SellBansAction
             transactionId={TRANSACTION_ID}
             change={"sellBans"}
             domain={domain}
             disabled={isTransactionPending}
+            pallete='red'
           >
-            <RemoveIcon />
+            <RemoveIcon style={{marginTop: '-1px'}}/>
             remove
           </SellBansAction>
         </ButtonContainer>

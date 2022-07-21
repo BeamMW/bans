@@ -28,7 +28,6 @@ const ButtonStyled = styled(BaseButtonStyled)`
   display: block;
   width: 100%;
   max-width: 230px;
-  margin-bottom: 10px;
   padding: 10px 24px;
   border: none;
   border-radius: 22px;

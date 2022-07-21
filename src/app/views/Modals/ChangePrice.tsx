@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Box, Text } from "theme-ui";
+import { Box, Flex, Text } from "theme-ui";
 import store from "index";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
@@ -17,6 +17,7 @@ import { Decimal } from "@app/library/base/Decimal";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import BeamIcon from '@app/assets/icons/beam.svg';
 import ArrowRight from '@app/assets/icons/arrow-right.svg'
 
 
@@ -55,7 +56,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
   const beamPrice = useSelector(selectRate());
 
   return (
-    <Modal isShown={isShown} header={header} width={'390px'}>
+    <Modal isShown={isShown} header={header} width={'450px'}>
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box sx={{ mb: '10px' }}>
@@ -74,10 +75,13 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             type="number"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
+            <Flex sx={{ justifyContent: 'center' }}>
+              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
+            </Flex>
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} />
+          <CloseBtn toggle={closeModal} text='cancel'/>
           <SellBansAction
             transactionId={TRANSACTION_ID}
             change={"adjustSellingBans"}
@@ -85,7 +89,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             domain={domain}
           >
             <ArrowRight />
-            Transfer
+            change
           </SellBansAction>
         </ButtonContainer>
       </>
