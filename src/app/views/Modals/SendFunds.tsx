@@ -27,7 +27,7 @@ interface SendFundsProps {
 
 const initialValues = {
   domain: '',
-  amount: null
+  amount: ''
 }
 
 export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => {
