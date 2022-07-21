@@ -18,6 +18,7 @@ import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
+import { setError } from "@app/store/SharedStore/actions";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -63,14 +64,29 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
-
+  const [isValidAmount, setIsValidAmount] = React.useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if(name === 'domain') {
+      if(/^[A-Za-z0-9]*$/.test(value)) {
+        setValues({
+          ...values,
+          [name]: value.toLowerCase(),
+        });
+      }
+    }
 
-    setValues({
-      ...values,
-      [name]: value,
-    });
+    if(name === 'amount') {
+      if(value.toString().match(/^[-]?([1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|\.[0-9]{1,2})$/)) {
+        setValues({
+          ...values,
+          [name]: value,
+        });
+      } else {
+        setIsValidAmount(false)
+      }
+    }
+    return;
   }
 
   const beamPrice = useSelector(selectRate());
@@ -134,14 +150,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Amount*'
             name='amount'
             onChange={handleChange}
-            onKeyPress={(e) => {
-              /* if(e.code === "190" && _.isFloat(values.amount))
-                e.preventDefault(); */
-
-              if (!/[0-9\b]/g.test(e.key)) {
-                e.preventDefault();
-              }
-            }}
             value={values.amount}
             type="number"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}

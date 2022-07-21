@@ -51,7 +51,7 @@ export const CustomSelect = styled.div `
   }
 
   .items {
-    background-color: #00446C;
+    background-color: #003F67;
     color: #fff;
     position: absolute;
     border:none;
