@@ -16,7 +16,7 @@ import { readAllFavoriteDomains } from '@app/library/bans/userLocalDatabase/dao/
 import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
 import { eventChannel, END, channel, Channel } from 'redux-saga'
-import { notificationFromSoldDomainSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
+import { notificationFromDomainsChangesSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
 import { omitDeep } from '@app/utils/helpers';
 
 const FETCH_INTERVAL = 310000;
@@ -215,7 +215,7 @@ export function* setUserDomainsSaga(
     ));
 
     //notify soldDomain channel
-    yield fork(notifySoldDomainChannel, domains);
+    yield fork(notifyChangesDomainsStateChannel, domains);
 
     yield put(actions.setUserDomains(domains));
 
@@ -226,17 +226,20 @@ export function* setUserDomainsSaga(
 
 }
 
-function* notifySoldDomainChannel(domains) {
+function* notifyChangesDomainsStateChannel(domains) {
   const state = (yield select()) as { shared; bans };
 
   if (state.bans.setIsUserViewLoaded) {
     //create channel and fork notification saga
-    const internalDomainSellChannel = yield call(channel);
-    yield fork(notificationFromSoldDomainSaga, internalDomainSellChannel)
+    const internalChangesDomainChannel = yield call(channel);
+    yield fork(notificationFromDomainsChangesSaga, internalChangesDomainChannel)
 
     const oldDomainsState = state.bans.userView.domains;
 
-    //important! if the original array is not filled or the arrays are even - indicate that no domain has been sold
+    /**
+     * important! if the original array is not filled or the arrays are even - 
+     * indicate that no domain has been sold or transferred
+     */
     if (!oldDomainsState.length || (domains.length === oldDomainsState.length)) return;
 
     const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
@@ -248,12 +251,22 @@ function* notifySoldDomainChannel(domains) {
     )) return;
 
     //console.log("changes", changes);
-    const changesOnSold = changes.filter(domain => domain.isOnSale)
+
+    /* If previous domain state has isOnSale option - obviously the domain have been sold */
+    const changesOnSold = changes.filter(domain => domain.isOnSale);
+
+    /* If previous domain state has not isOnSale option - obviously the domain have been transferred */
+    const changesTransferred = changes.filter(domain => !domain.isOnSale);
+
     /* console.log("changesOnSold", changesOnSold);
     console.log("_".repeat(20));
     changes.length && console.log(oldDomainsState, domains); */
+
     if (changesOnSold.length) {
-      yield put(internalDomainSellChannel, { payload: changesOnSold })
+      yield put(internalChangesDomainChannel, { payload: {
+        changesOnSold: changesOnSold,
+        changesOnTransferred: changesTransferred
+      } })
     }
   }
 }
