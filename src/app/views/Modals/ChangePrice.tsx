@@ -38,11 +38,14 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
       closeModal(null);
-      return () => {
-        store.dispatch(reloadAllUserInfo.request());
-      }
+    }
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      store.dispatch(reloadAllUserInfo.request());
+
+      return () => {}
     }
 
   }, [transactionState]);
@@ -87,6 +90,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             change={"adjustSellingBans"}
             amount={+amount}
             domain={domain}
+            disabled={isTransactionPending}
           >
             <ArrowRight />
             change

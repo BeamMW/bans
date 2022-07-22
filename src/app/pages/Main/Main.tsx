@@ -12,7 +12,7 @@ const Main = () => {
   return (
     <>
       <Flex sx={{ justifyContent: 'center', mt: 35, mb: 35 }}>
-        <PageHeader icon={LogoIcon} title='Beam Anonymous Name Service' />
+        <PageHeader icon={LogoIcon} title='BANS - Beam Anonymous Name Service' />
       </Flex>
       {
         view === "SEARCH" ? <Search /> : (view === "REGISTER" ? <Register /> : <></>)
