@@ -19,6 +19,7 @@ import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
 import { setError } from "@app/store/SharedStore/actions";
+import { getTextWidth } from "@app/core/appUtils";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -75,18 +76,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
         });
       }
     }
-
-    if(name === 'amount') {
-      if(value.toString().match(/^[-]?([1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|\.[0-9]{1,2})$/)) {
-        setValues({
-          ...values,
-          [name]: value,
-        });
-      } else {
-        setIsValidAmount(false)
-      }
-    }
-    return;
   }
 
   const beamPrice = useSelector(selectRate());
@@ -96,14 +85,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
   });
-
-  function getTextWidth(text, font) {
-    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-  }
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Backspace" && values.domain.length !== 0) {
@@ -126,7 +107,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   }, [])
 
   return (
-    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bins domain">
+    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bans domain">
       <>
         {suggestedDomains && suggestedDomains.length ?
           <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
@@ -160,7 +141,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} text="cancel" />
+          <CloseBtn toggle={closeModal} />
           <SendFundsAction
             transactionId={TRANSACTION_ID}
             change={"sendFunds"}

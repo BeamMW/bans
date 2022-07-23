@@ -59,7 +59,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
             disabled={isTransactionPending}
             pallete='red'
           >
-            <RemoveIcon style={{marginTop: '-1px'}}/>
+            <RemoveIcon style={{marginTop: '-1px', filter: 'brightness(15%)'}}/>
             remove
           </SellBansAction>
         </ButtonContainer>

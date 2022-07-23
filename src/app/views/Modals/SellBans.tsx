@@ -17,6 +17,8 @@ import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import Sell from '@app/assets/icons/send.svg';
 import Beam from '@app/assets/icons/beam.svg';
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
+import { getTextWidth } from "@app/core/appUtils";
+import BeamIcon from '@app/assets/icons/beam.svg';
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -35,7 +37,6 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
-
   const [activeItem, _setActiveItem] = React.useState<DomainPresenterType>(domain);
   const [amount, setAmount] = useState<number | string | null>("");
 
@@ -70,8 +71,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
   const beamPrice = useSelector(selectRate());
 
   return (
-    <Modal isShown={isShown} header="Sell Bans" subHeader="If you want to put a BANS on sale, fill in the Amount only. The Amount can be change at any time. 
-    To sell a BANS to a particular user, you need to fill Buyer's Public Key.">
+    <Modal isShown={isShown} header="Sell BANS" subHeader="If you want to put a BANS on sale, fill in the Amount only. The Amount can be change at any time. To sell a BANS to a particular user, you need to fill Buyer's Public Key.">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
         {
           activeItem.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
@@ -79,19 +79,21 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
           </Flex> : <></>
         }
 
-        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} />
+        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} showSuffix={true}/>
 
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'
-            pallete='white'
+            pallete='purple'
             label='Amount'
             onChange={handleChange}
             value={amount}
             type="number"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
-            <Beam />
+            <Flex sx={{ justifyContent: 'center' }}>
+              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
+            </Flex>
           </Input>
         </Box>
         <Box sx={{ my: '30px' }}>
