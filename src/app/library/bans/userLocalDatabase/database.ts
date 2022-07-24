@@ -81,15 +81,15 @@ export class UserBansDatabase extends Database implements IUserDatabase {
 class InitializeDatabase {
     protected database: UserBansDatabase;
 
-    constructor(databaseName:string, schema: { [tableName: string]: string; }) {
+    constructor(databaseName: string, schema: { [tableName: string]: string; }) {
         this.database = new UserBansDatabase(databaseName);
 
         this.database.version(1).stores(schema);
         //for dexie-observable
-        this.database.version(2).stores({}); 
+        this.database.version(2).stores({});
     }
 
-    get userDatabase(): UserBansDatabase{
+    get userDatabase(): UserBansDatabase {
         return this.database;
     }
 }
@@ -97,7 +97,7 @@ class InitializeDatabase {
 export const observeDatabaseChanges = (database, callback) => {
     try {
         database.on("changes", callback);
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
@@ -109,3 +109,17 @@ const databaseInstance = new InitializeDatabase('user-bans', {
 });
 
 export const userDatabase = databaseInstance.userDatabase;
+
+/* export const userDatabaseInit = (databaseName: string, uniqueDatabaseKey: string) => {
+    try {
+        const database = new InitializeDatabase(`${uniqueDatabaseKey}-${databaseName}`, {
+            favoriteDomains: '&gid, domainName',
+            notifications: '&gid, *notifyData, type, state, deffered',
+        });
+    
+        return database.userDatabase;
+    } catch (e) {
+        throw new Error(e);
+    }
+    
+} */

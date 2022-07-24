@@ -240,32 +240,38 @@ function* notifyChangesDomainsStateChannel(domains) {
      * important! if the original array is not filled or the arrays are even - 
      * indicate that no domain has been sold or transferred
      */
-    if (!oldDomainsState.length || (domains.length === oldDomainsState.length)) return;
+    if (!oldDomainsState.length /* || (domains.length === oldDomainsState.length) */) return;
 
     const changes = _.differenceWith(oldDomainsState, domains, _.isEqual);
 
+    //@TODO: think twice? additional temporary check
+    const differenceByName: Array<string> = (_.differenceBy(oldDomainsState, domains, 'name')).map(domain => domain.name);
+
     //additional validator for channel
-    if (_.isEqual(
+    if(!differenceByName.length) return;
+    /* if (_.isEqual(
       _.map(domains, domain => domain.name),
       _.map(oldDomainsState, domain => domain.name)
-    )) return;
+    )) return; */
 
-    //console.log("changes", changes);
+    /* console.log("differenceByName", differenceByName);
+    console.log("changes", changes); */
 
     /* If previous domain state has isOnSale option - obviously the domain have been sold */
-    const changesOnSold = changes.filter(domain => domain.isOnSale);
+    const changesSoldDomains = changes.filter(domain => domain.isOnSale && differenceByName.includes(domain.name));
 
     /* If previous domain state has not isOnSale option - obviously the domain have been transferred */
-    const changesTransferred = changes.filter(domain => !domain.isOnSale);
+    //const changesGiftedDomains = changes.filter(domain => !domain.isOnSale && differenceByName.includes(domain.name));
 
-    /* console.log("changesOnSold", changesOnSold);
+    /* console.log("changesSoldDomains", changesSoldDomains);
+    console.log("changesGiftedDomains", changesGiftedDomains);
     console.log("_".repeat(20));
     changes.length && console.log(oldDomainsState, domains); */
 
-    if (changesOnSold.length) {
+    if ([...changesSoldDomains, /* ...changesGiftedDomains */].length) {
       yield put(internalChangesDomainChannel, { payload: {
-        changesOnSold: changesOnSold,
-        changesOnTransferred: changesTransferred
+        changesSoldDomains: changesSoldDomains,
+        //changesGiftedDomains: changesGiftedDomains
       } })
     }
   }

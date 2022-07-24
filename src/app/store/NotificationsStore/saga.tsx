@@ -221,29 +221,31 @@ export function* notificationFromTransferredFundsSaga(channel) {
 export function* notificationFromDomainsChangesSaga(channel) {
   while (true) {
     const { payload: {
-      changesOnSold, changesOnTransferred
+      changesSoldDomains/* , changesGiftedDomains */
     } } = yield take(channel)
 
     const notifications = [
-      //for sold domain notifications
-      ...changesOnSold.map(
+      //for sold domains notifications
+      ...changesSoldDomains.map(
         soldDomain => notificationDomainObjectFactory({
           type: NotificationType.sold,
           state: NotificationState.active,
           data: { domain: soldDomain }
         })
       ),
-      //for transferred domain notifications
-      ...changesOnTransferred.map(transferredDomain =>
-        notificationDomainObjectFactory({
-          type: NotificationType.transferred,
+      
+      //for gifted domains notifications
+      /* ...changesGiftedDomains.map(
+        giftedDomain => notificationDomainObjectFactory({
+          type: NotificationType.gifted,
           state: NotificationState.active,
-          data: { domain: transferredDomain }
+          data: { domain: giftedDomain }
         })
-      )
+      ) */
     ];
 
-    yield call(bulkCreateNotification, notifications);
+    //@TODO: ternary??
+    yield notifications.length ? call(bulkCreateNotification, notifications) : null;
   }
 }
 
