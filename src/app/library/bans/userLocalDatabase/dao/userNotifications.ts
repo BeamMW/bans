@@ -41,6 +41,10 @@ export async function createNotification(notification: Notification): Promise<st
     return await database.notifications.put(notification);
 }
 
+export async function bulkCreateNotification(notifications: Array<Notification>): Promise<string> {
+    return await database.notifications.bulkAdd(notifications);
+}
+
 export async function updateNotificationState(search: string | Notification, state: NotificationState): Promise<number> {
     if (typeof search === "string") {
 

@@ -34,7 +34,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
       closeModal(null);
     }
 

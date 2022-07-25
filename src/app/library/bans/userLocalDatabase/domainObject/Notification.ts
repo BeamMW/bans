@@ -4,6 +4,7 @@ export enum NotificationType {
     favorites = 0,
     sold = 1,
     transferred = 2,
+    gifted = 3,
 }
 
 export enum NotificationState {

@@ -3,7 +3,7 @@ import { channel, END, eventChannel } from "redux-saga";
 import { call, cancelled, delay, fork, put, select, take, takeEvery, takeLatest } from "redux-saga/effects";
 import { getBansApi } from '@app/utils/getBansApi';
 import _ from "lodash";
-import { createNotification, deleteNotification, getNotificationFavoriteDomain, getNotificationsAsync, getNotificationsByCondition, readAllActiveNotifications, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
+import { bulkCreateNotification, createNotification, deleteNotification, getNotificationFavoriteDomain, getNotificationsAsync, getNotificationsByCondition, readAllActiveNotifications, readAllNotifications } from "@app/library/bans/userLocalDatabase/dao/userNotifications";
 import { Notification, NotificationState, NotificationType } from "@app/library/bans/userLocalDatabase/domainObject";
 import { userDatabase } from "@app/library/bans/userLocalDatabase";
 import { actions } from ".";
@@ -200,35 +200,52 @@ function* loadFavoritesNotificationsFromDatabaseSaga(
 
 export function* notificationFromTransferredFundsSaga(channel) {
   while (true) {
-    const {payload: transfers} = yield take(channel)
-    
+    const { payload: transfers } = yield take(channel)
+
     for (const transfer of transfers) {
       const notification = notificationDomainObjectFactory({
         type: NotificationType.transferred,
         state: NotificationState.active,
         data: { transfer: transfer }
       });
-  
+
       yield call(createNotification, notification);
     }
-    
+
   }
 }
 
-export function* notificationFromSoldDomainSaga(channel) {
+/**
+ *  Create notification for sold or transferred domain
+ */
+export function* notificationFromDomainsChangesSaga(channel) {
   while (true) {
-    const {payload: soldDomains} = yield take(channel)
+    const { payload: {
+      changesSoldDomains/* , changesGiftedDomains */
+    } } = yield take(channel)
 
-    for (const soldDomain of soldDomains) {
-      const notification = notificationDomainObjectFactory({
-        type: NotificationType.sold,
-        state: NotificationState.active,
-        data: { domain: soldDomain }
-      });
-  
-      yield call(createNotification, notification);
-    }
-    
+    const notifications = [
+      //for sold domains notifications
+      ...changesSoldDomains.map(
+        soldDomain => notificationDomainObjectFactory({
+          type: NotificationType.sold,
+          state: NotificationState.active,
+          data: { domain: soldDomain }
+        })
+      ),
+      
+      //for gifted domains notifications
+      /* ...changesGiftedDomains.map(
+        giftedDomain => notificationDomainObjectFactory({
+          type: NotificationType.gifted,
+          state: NotificationState.active,
+          data: { domain: giftedDomain }
+        })
+      ) */
+    ];
+
+    //@TODO: ternary??
+    yield notifications.length ? call(bulkCreateNotification, notifications) : null;
   }
 }
 

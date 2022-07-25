@@ -21,11 +21,9 @@ import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
 import { reinitNotifications, updateNotifications } from "@app/store/NotificationsStore/actions";
 
-
 const shadersData = Array.from([
   ["bans", BANS_CID, "./bansAppShader.wasm", 0],
 ], params => new UtilsShader(...params));
-
 
 const walletEventhandler = ({ walletEventPayload }) => {
   if (walletEventPayload) {

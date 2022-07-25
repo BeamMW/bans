@@ -37,14 +37,14 @@ const Notifications: React.FC = () => {
         if (notification.type === NotificationType.transferred)
             return `Your Received a ${Decimal.from(notification.notifyData.transfer.amount).div(GROTHS_IN_BEAM)} BEAM transrfer to ${notification.notifyData.transfer.domain}.beam`
 
+        if (notification.type === NotificationType.gifted)
+            return `Domain ${notification.notifyData.domain.name}.beam has been transferred to you`
+
     };
 
     const handler = useCallback((notification) => {
-        if (notification.type === NotificationType.favorites)
-            return navigate("my-page", { state: { active: 2 /* for tabs favorites */ } })
-
-        if (notification.type === NotificationType.sold)
-            return navigate("my-page", { state: { active: 1 /* for all tabs */ } })
+        if ([NotificationType.gifted, NotificationType.favorites, NotificationType.sold].includes(notification.type))
+            return navigate("my-page", { state: { active: NotificationType.favorites ? 2 : 1 } })
 
         if (notification.type === NotificationType.transferred)
             return navigate("transactions")
@@ -55,10 +55,7 @@ const Notifications: React.FC = () => {
         if (notification.type === NotificationType.favorites)
             updateNotificationState(notification.gid, NotificationState.disabled);
 
-        if (notification.type === NotificationType.sold)
-            deleteNotification(notification.gid);
-
-        if (notification.type === NotificationType.transferred)
+        if ([NotificationType.sold, NotificationType.transferred, NotificationType.gifted].includes(notification.type))
             deleteNotification(notification.gid);
 
     }, []);
