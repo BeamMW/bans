@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { WalletApiConnectorContext } from './WalletApiConnectorContext';
 
 let timeout;
-let timeoutDelay = 2000;
+let timeoutDelay = 2100;
 
 export const WalletApiConnectorProvider: React.FC<{ children?: React.ReactNode, isAuthorized: boolean, connectorWalletShaders: Array<UtilsShader>, loader: any, isLoaded: boolean }> = props => {
   const { children, loader, isLoaded, isAuthorized, connectorWalletShaders } = props;

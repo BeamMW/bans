@@ -183,8 +183,11 @@ export function* loadUserViewSaga(
     yield put(actions.setIsUserViewLoaded(true));
 
   } catch (err) {
-    console.log(err);
-    actions.loadUserView.failure(err);
+    if (err?.error == 'state not found') {
+      actions.loadUserView.failure(err);
+    } else {
+      console.log(err);
+    }
   }
 }
 
@@ -195,7 +198,7 @@ export function* setUserDomainsSaga(
 ) {
 
   try {
-    if (!action./* payload. */length) return false;
+    if (!_.isArray(action/* payload. */)) return false;
 
     let domains: Array<any> = action/* .payload */;
     const state = (yield select()) as { shared; bans };
@@ -248,7 +251,7 @@ function* notifyChangesDomainsStateChannel(domains) {
     const differenceByName: Array<string> = (_.differenceBy(oldDomainsState, domains, 'name')).map(domain => domain.name);
 
     //additional validator for channel
-    if(!differenceByName.length) return;
+    if (!differenceByName.length) return;
     /* if (_.isEqual(
       _.map(domains, domain => domain.name),
       _.map(oldDomainsState, domain => domain.name)
@@ -269,10 +272,12 @@ function* notifyChangesDomainsStateChannel(domains) {
     changes.length && console.log(oldDomainsState, domains); */
 
     if ([...changesSoldDomains, /* ...changesGiftedDomains */].length) {
-      yield put(internalChangesDomainChannel, { payload: {
-        changesSoldDomains: changesSoldDomains,
-        //changesGiftedDomains: changesGiftedDomains
-      } })
+      yield put(internalChangesDomainChannel, {
+        payload: {
+          changesSoldDomains: changesSoldDomains,
+          //changesGiftedDomains: changesGiftedDomains
+        }
+      })
     }
   }
 }

@@ -80,12 +80,21 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     }
 
     if(name === 'amount') {
-      if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
+      console.log(value, value[0] == '0', value[1] == '0');
+      if((value[0] == '0' && value[1] == '0') || ((value.match(/\./g) || []).length > 1) ) {
+        return;
+      }
+      /* if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
         setValues({
           ...values,
           [name]: value,
         });
-      }
+      } */
+
+      setValues({
+        ...values,
+        [name]: value,
+      });
     }
     return;
   }
@@ -143,6 +152,14 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Amount*'
             name='amount'
             onChange={handleChange}
+            onKeyPress={(e) => {
+              /* if(e.code === "190" && _.isFloat(values.amount))
+                e.preventDefault(); */
+
+              if (!/[0-9\b\.]/g.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
             value={values.amount}
             type="text"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}

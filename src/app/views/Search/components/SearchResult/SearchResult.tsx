@@ -60,7 +60,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
                 {foundDomain && foundDomain.isOnSale && !foundDomain.isYourOwn ? (
                   <>
                     {searchResult}
-                    <SearchResultForSale isShown={isShown} toggleClose={toggle} />
+                    <SearchResultForSale isShown={isShown} closeModal={toggle} />
                   </>
                 ) : (
                   <>

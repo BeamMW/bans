@@ -38,8 +38,7 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
       
-      return () => {
-      }
+      return () => {}
     }
 
   }, [transactionState]);

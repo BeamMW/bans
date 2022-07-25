@@ -13,6 +13,9 @@ import ArrowRight from '@app/assets/icons/arrow-right.svg'
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import store from 'index';
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
+import { useSelector } from 'react-redux';
+import { selectUserDomains } from '@app/store/BansStore/selectors';
+import { useNavigate } from 'react-router-dom';
 
 interface ResultForSaleProps {
   isShown: boolean;
@@ -28,16 +31,27 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
 
   if(!domain) return <></>;
 
+  const navigate = useNavigate();
+
   const TRANSACTION_ID = "DOMAIN_BUYING";
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
-  useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
-      closeModal(null);
-    }
+  const userBans: Array<any> = useSelector(selectUserDomains());
 
+  useEffect(() => {
+    if(!userBans.length) {
+      if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+        //if user has not any domains we redirets user to my-page empty
+        navigate("my-page"), closeModal(null);
+      }
+    } else {
+      if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
+        closeModal(null);
+      }
+    }
+    
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
 

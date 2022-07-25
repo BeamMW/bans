@@ -57,7 +57,7 @@ const MyPage = () => {
   //@TODO:refactor as well
   useEffect(() => {
     !!domains && forceUpdate();
-
+    console.log(active, userBans);
     active === 1 && setDomains(userBans);
     active === 2 && setDomains(favoriteBans);
 
@@ -70,7 +70,7 @@ const MyPage = () => {
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
   const emptyText = useMemo(() => {
-    if ((!domains || domains.length) && transactionState.type === "waitingForConfirmation" && transactionState.id.match(TRANSACTION_ID))
+    if ((!domains || !domains.length) && (transactionState.type === "waitingForConfirmation" || transactionState.type === "completed") && transactionState.id.match(TRANSACTION_ID))
       return "The BANS will appear on the page as soon as the transaction is completed.";
 
     return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null);
