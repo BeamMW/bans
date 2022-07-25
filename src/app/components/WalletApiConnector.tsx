@@ -39,7 +39,7 @@ const walletEventhandler = ({ walletEventPayload }) => {
           isObject(walletEventPayload.result) &&
             walletEventPayload.result &&
             store.dispatch(setTransactionsRequest(walletEventPayload.result.txs));
-          
+
           break;
 
         default:
@@ -80,14 +80,14 @@ export const WalletApiConnector = ({ children }) => {
             err ? (() => { throw new err })() : setIsAuthorized(true);
 
             const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
-            
+
             //open and check if exists user-defined-database
             userDatabase.openDatabase();
             //observe user-defined -database if open
-            if(userDatabase.isOpen) {
+            if (userDatabase.isOpen) {
               observeDatabaseChanges(userDatabase, changes => {
                 changes.forEach(function (change) {
-                  if(change.table != "notifications") return;
+                  if (change.table != "notifications") return;
 
                   switch (change.type) {
                     case 1: // CREATED
@@ -105,7 +105,7 @@ export const WalletApiConnector = ({ children }) => {
 
                       //@TODO: not optimized!
                       store.dispatch(reinitNotifications.request(true));
-      
+
                       console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
                       break;
                   }
@@ -167,12 +167,9 @@ export const WalletApiConnector = ({ children }) => {
     }
   }, [rate]);
 
-  if (isLoaded) {
-    return <WalletApiConnectorProvider
-      loader={<Window><Loader /></Window>}
-      isAuthorized={isAuthorized}
-      connectorWalletShaders={walletShaders}>{children}</WalletApiConnectorProvider>;
-  }
-
-  return <Window><Loader /></Window>
+  return <WalletApiConnectorProvider
+    isLoaded={isLoaded}
+    loader={<Window><Loader /></Window>}
+    isAuthorized={isAuthorized}
+    connectorWalletShaders={walletShaders}>{children}</WalletApiConnectorProvider>;
 };
