@@ -57,7 +57,7 @@ const MyPage = () => {
   //@TODO:refactor as well
   useEffect(() => {
     !!domains && forceUpdate();
-    console.log(active, userBans);
+
     active === 1 && setDomains(userBans);
     active === 2 && setDomains(favoriteBans);
 

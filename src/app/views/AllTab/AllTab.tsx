@@ -4,7 +4,7 @@ import Button from "@app/components/Button";
 import { Popup } from "@app/components/Popup/Popup";
 import { SplitContainer } from "@app/components/SplitContainer/SplitContainer";
 import { LeftSide } from "@app/components/LeftSideInfo/LeftSideInfo";
-import { copyToClipboard } from '@app/core/appUtils';
+import { copyToClipboard } from "@app/library/base/appUtils";
 import { RenewModal } from '@app/views/Modals/RenewModal';
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";

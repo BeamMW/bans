@@ -4,7 +4,7 @@ import React from "react";
 import styled from 'styled-components';
 import { Box, Flex, Paragraph, Text } from "theme-ui";
 import Button from "../Button";
-import { copyToClipboard } from '../../core/appUtils';
+import { copyToClipboard } from "@app/library/base/appUtils";
 import SaleIcon from '@app/assets/icons/sell.svg';
 import Copy from '@app/assets/icons/copy.svg';
 

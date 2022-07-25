@@ -17,9 +17,8 @@ import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
-import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
-import { setError } from "@app/store/SharedStore/actions";
-import { getTextWidth, isNumeric } from "@app/core/appUtils";
+import { isFloat, isNumeric, getTextWidth } from "@app/library/base/appUtils";
+import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -69,9 +68,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let regexForDomain = /^[A-Za-z0-9]*$/;
-    
-    if(name === 'domain') {
-      if(regexForDomain.test(value)) {
+
+    if (name === 'domain') {
+      if (regexForDomain.test(value)) {
         setValues({
           ...values,
           [name]: value.toLowerCase(),
@@ -79,22 +78,11 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
       }
     }
 
-    if(name === 'amount') {
-      console.log(value, value[0] == '0', value[1] == '0');
-      if((value[0] == '0' && value[1] == '0') || ((value.match(/\./g) || []).length > 1) ) {
-        return;
-      }
-      /* if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
-        setValues({
-          ...values,
-          [name]: value,
-        });
-      } */
-
-      setValues({
+    if (name === 'amount') {
+      amountHandler(value, (value) => setValues({
         ...values,
         [name]: value,
-      });
+      }))
     }
     return;
   }
@@ -152,14 +140,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Amount*'
             name='amount'
             onChange={handleChange}
-            onKeyPress={(e) => {
-              /* if(e.code === "190" && _.isFloat(values.amount))
-                e.preventDefault(); */
-
-              if (!/[0-9\b\.]/g.test(e.key)) {
-                e.preventDefault();
-              }
-            }}
+            onKeyPress={keyPressAmountHandler}
             value={values.amount}
             type="text"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
@@ -175,7 +156,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             transactionId={TRANSACTION_ID}
             change={"sendFunds"}
             domain={domain}
-            amount={values.amount}
+            amount={!!values.amount ? +values.amount : 0}
             disabled={isButtonDisabled}
           >
             <SendIcon />

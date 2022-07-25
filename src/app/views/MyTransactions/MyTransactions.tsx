@@ -18,6 +18,7 @@ import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import SaleIcon from '@app/assets/icons/sell.svg';
+import EmptyPage from "../EmptyPage/EmptyPage";
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -63,7 +64,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       ) : <></>}
       {
-        true && (
+        false && (
           <Button variant="ghostBordered"  pallete="green" style={{ margin: '0 0 0 20px' }}>
             renew subscription
           </Button>
@@ -170,7 +171,7 @@ export const MyTransactions: React.FC<MyBansProps> = ({ }) => {
   return (
     <>
       <Paragraph sx={{ mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
-      {rows}
+      {rows.length ? rows : <EmptyPage emptyText={"You do not hold any domains"} />}
     </>
   );
 }

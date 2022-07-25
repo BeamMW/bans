@@ -15,11 +15,9 @@ import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import Sell from '@app/assets/icons/send.svg';
-import Beam from '@app/assets/icons/beam.svg';
-import { LoadingOverlay } from "@app/components/LoadingOverlay";
-import { getTextWidth } from "@app/core/appUtils";
 import BeamIcon from '@app/assets/icons/beam.svg';
-import { isNumeric } from './../../core/appUtils';
+import _ from 'lodash';
+import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -51,12 +49,11 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
     domain: domain,
   }));
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
-      setAmount(value);
-    }
-  } 
+
+    amountHandler(value, (value) => setAmount(value))
+  }
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
@@ -85,7 +82,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
           </Flex> : <></>
         }
 
-        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} showSuffix={true}/>
+        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} showSuffix={true} />
 
         <Box sx={{ mt: '30px' }}>
           <Input
@@ -93,6 +90,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             pallete='purple'
             label='Amount'
             onChange={handleChange}
+            onKeyPress={keyPressAmountHandler}
             value={amount}
             type="text"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}

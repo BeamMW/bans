@@ -4,7 +4,7 @@ import Button from '@app/components/Button';
 import {Tooltip, DIRECTIONS } from '@app/components/Tooltip/Tooltip';
 import { useModal } from '@app/components/Modals/useModal';
 import KeyModal from '@app/views/Modals/keyModal/KeyModal';
-import { copyToClipboard } from '@app/core/appUtils';
+import { copyToClipboard } from '@app/library/base/appUtils';
 
 import { SendFunds } from '@app/views/Modals/SendFunds';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';

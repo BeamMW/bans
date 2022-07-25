@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Flex, Text } from "theme-ui";
 import store from "index";
@@ -19,6 +19,8 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import BeamIcon from '@app/assets/icons/beam.svg';
 import ArrowRight from '@app/assets/icons/arrow-right.svg'
+import _ from "lodash";
+import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 
 
 interface ChangePriceProps {
@@ -27,9 +29,9 @@ interface ChangePriceProps {
 }
 
 export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal }) => {
-  if(!isShown) return <></>;
+  if (!isShown) return <></>;
 
-  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+  const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
 
   closeModal = closeModal ?? close;
 
@@ -45,15 +47,17 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
 
-      return () => {}
+      return () => { }
     }
 
   }, [transactionState]);
 
-  const [amount, setAmount] = React.useState(domain.price.amount / GROTHS_IN_BEAM);
+  const [amount, setAmount] = useState(+(domain.price.amount / GROTHS_IN_BEAM));
 
   const handlePriceChange = (e) => {
-    setAmount(e.target.value)
+    const { value } = e.target;
+
+    amountHandler(value, (value) => setAmount(value))
   }
   const header = `Change price for ${domain.name}.beam domain`;
   const beamPrice = useSelector(selectRate());
@@ -74,8 +78,8 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             pallete='blue'
             label='New price'
             onChange={handlePriceChange}
+            onKeyPress={keyPressAmountHandler}
             value={amount}
-            type="number"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
             <Flex sx={{ justifyContent: 'center' }}>
@@ -84,7 +88,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} text='cancel'/>
+          <CloseBtn toggle={closeModal} text='cancel' />
           <SellBansAction
             transactionId={TRANSACTION_ID}
             change={"adjustSellingBans"}
