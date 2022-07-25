@@ -19,6 +19,7 @@ import Beam from '@app/assets/icons/beam.svg';
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { getTextWidth } from "@app/core/appUtils";
 import BeamIcon from '@app/assets/icons/beam.svg';
+import { isNumeric } from './../../core/appUtils';
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -50,7 +51,12 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
     domain: domain,
   }));
 
-  const handleChange = (e) => setAmount(e.target.value);
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
+      setAmount(value);
+    }
+  } 
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
@@ -88,7 +94,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             label='Amount'
             onChange={handleChange}
             value={amount}
-            type="number"
+            type="text"
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
             <Flex sx={{ justifyContent: 'center' }}>

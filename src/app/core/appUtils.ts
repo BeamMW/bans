@@ -14,3 +14,7 @@ export function getTextWidth(text:string, font:string) {
   let metrics = context.measureText(text);
   return metrics.width;
 }
+
+export function isNumeric(value: any): boolean {
+  return !isNaN(value - parseFloat(value));
+}

@@ -19,7 +19,7 @@ import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
 import { setError } from "@app/store/SharedStore/actions";
-import { getTextWidth } from "@app/core/appUtils";
+import { getTextWidth, isNumeric } from "@app/core/appUtils";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -68,14 +68,26 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValidAmount, setIsValidAmount] = React.useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    let regexForDomain = /^[A-Za-z0-9]*$/;
+    
     if(name === 'domain') {
-      if(/^[A-Za-z0-9]*$/.test(value)) {
+      if(regexForDomain.test(value)) {
         setValues({
           ...values,
           [name]: value.toLowerCase(),
         });
       }
     }
+
+    if(name === 'amount') {
+      if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
+        setValues({
+          ...values,
+          [name]: value,
+        });
+      }
+    }
+    return;
   }
 
   const beamPrice = useSelector(selectRate());
@@ -132,7 +144,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             name='amount'
             onChange={handleChange}
             value={values.amount}
-            type="number"
+            type="text"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
           >
             <Flex sx={{ justifyContent: 'center' }}>
