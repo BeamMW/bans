@@ -6,3 +6,15 @@ export const copyToClipboard = (value: string) => {
   document.execCommand('copy');
   textField.remove();
 };
+
+export function getTextWidth(text:string, font:string) {
+  let canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+  let context = canvas.getContext("2d");
+  context.font = font;
+  let metrics = context.measureText(text);
+  return metrics.width;
+}
+
+export function isNumeric(value: any): boolean {
+  return !isNaN(value - parseFloat(value));
+}

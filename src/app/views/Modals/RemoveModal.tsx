@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Paragraph } from 'theme-ui';
+import { Box, Paragraph, Text } from 'theme-ui';
 import store from 'index';
 import { Modal } from '@app/components/Modals/Modal';
 
@@ -47,7 +47,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
     <Modal isShown={isShown} header="Remove from sale">
       <>
         <Box>
-          <Paragraph sx={{ textAlign: 'center', fontFamily: 'SFProDisplay' }}>Are you sure you want to remove domain {domain.name}.beam from sale?</Paragraph>
+          <Paragraph sx={{ textAlign: 'center', fontFamily: 'SFProDisplay' }}>Are you sure you want to remove domain <Text sx={{ fontWeight: 700 }}>{domain.name}.beam</Text> from sale?</Paragraph>
         </Box>
 
         <ButtonContainer>
@@ -59,7 +59,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
             disabled={isTransactionPending}
             pallete='red'
           >
-            <RemoveIcon style={{marginTop: '-1px'}}/>
+            <RemoveIcon style={{marginTop: '-1px', filter: 'brightness(15%)'}}/>
             remove
           </SellBansAction>
         </ButtonContainer>

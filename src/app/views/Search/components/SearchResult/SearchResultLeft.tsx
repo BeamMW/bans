@@ -18,7 +18,7 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
 
   return (
     <Flex sx={containerStyles(props)}>
-      <Flex>
+      <Flex sx={{ position: 'relative' }}>
         <Paragraph sx={{
               fontSize: '16px',
               fontFamily: 'SFProDisplay',
@@ -34,7 +34,11 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
             <Box sx={{
               background: ' rgba(0, 246, 210, 0.2)',
               borderRadius: '4px',
-              marginLeft: '14px'
+              marginLeft: '14px',
+              position: value.length === 30 ? 'absolute' : 'static',
+              left: '40%',
+              top: '100%',
+              marginTop: value.length === 30 ?  '5px' : '0px',
             }}>
               {
                 domain && domain.isOnSale &&
@@ -42,7 +46,7 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
                   color: 'rgba(0, 246, 210, 1)',
                   fontSize: '12px',
                   fontStyle: 'italic',
-                  padding: '2px 6px 2px 6px'
+                  padding: '2px 6px 2px 6px',
                 }}>{isYourOwn ? "you sale the domain" : "available for resale"}</Text>
               }
             </Box>

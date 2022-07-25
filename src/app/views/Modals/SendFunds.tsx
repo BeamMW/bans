@@ -19,6 +19,7 @@ import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { SubText } from "../Search/components/SearchResult/SearchResult.styles";
 import { setError } from "@app/store/SharedStore/actions";
+import { getTextWidth, isNumeric } from "@app/core/appUtils";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -67,8 +68,10 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValidAmount, setIsValidAmount] = React.useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    let regexForDomain = /^[A-Za-z0-9]*$/;
+    
     if(name === 'domain') {
-      if(/^[A-Za-z0-9]*$/.test(value)) {
+      if(regexForDomain.test(value)) {
         setValues({
           ...values,
           [name]: value.toLowerCase(),
@@ -77,13 +80,11 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     }
 
     if(name === 'amount') {
-      if(value.toString().match(/^[-]?([1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|\.[0-9]{1,2})$/)) {
+      if((isNumeric(value) && value[0] === '0' && value[1] !== '0') || !value) {
         setValues({
           ...values,
           [name]: value,
         });
-      } else {
-        setIsValidAmount(false)
       }
     }
     return;
@@ -96,14 +97,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
   });
-
-  function getTextWidth(text, font) {
-    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-  }
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Backspace" && values.domain.length !== 0) {
@@ -126,7 +119,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   }, [])
 
   return (
-    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bins domain">
+    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bans domain">
       <>
         {suggestedDomains && suggestedDomains.length ?
           <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
@@ -151,7 +144,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             name='amount'
             onChange={handleChange}
             value={values.amount}
-            type="number"
+            type="text"
             info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
           >
             <Flex sx={{ justifyContent: 'center' }}>
@@ -160,7 +153,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} text="cancel" />
+          <CloseBtn toggle={closeModal} />
           <SendFundsAction
             transactionId={TRANSACTION_ID}
             change={"sendFunds"}

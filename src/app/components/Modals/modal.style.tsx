@@ -45,4 +45,5 @@ export const SubHeader = styled.p`
     line-height: 17px;
     text-align: center;
     color: rgba(255,255,255,0.7);
+    max-width: 589px;
 `

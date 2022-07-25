@@ -48,8 +48,8 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
       <>
         {isTransactionPending && <LoadingOverlay />}
         <Box>
-          <Paragraph sx={{ textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{foundDomain.expiresAt}.</Text> </Paragraph>
-          <Paragraph sx={{ textAlign: 'center' }}>You will need to renew your subscription before the expiring date.</Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{foundDomain.expiresAt}.</Text> </Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center' }}>You will need to renew your subscription before the expiring date.</Paragraph>
         </Box>
 
         <ButtonContainer>

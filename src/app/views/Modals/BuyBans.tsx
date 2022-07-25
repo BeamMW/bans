@@ -49,11 +49,11 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   }, [transactionState]);
 
   return (
-    <Modal isShown={true} header="Attention">
+    <Modal isShown={isShown} header="Attention">
       <>
         <Box>
-          <Paragraph sx={{ textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
-          <Paragraph sx={{ textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
         </Box>
 
         <ButtonContainer>
