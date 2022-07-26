@@ -47,11 +47,11 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
           </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain, domainsToSell: domainsToSell})(hideTip) }>
             <Sell />
-            sell BANS
+            sell
           </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-transfer")({domain: domain})(hideTip) }>
             <TransferIcon />
-            Transfer
+            transfer
           </PopupItem>
         </Popup>
       </Container>
