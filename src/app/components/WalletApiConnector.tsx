@@ -124,6 +124,10 @@ export const WalletApiConnector = ({ children }) => {
              * Duplicate put shaders data in wallet provider
              */
             setWalletShaders(shadersData)
+            
+            if (rate.isZero) {
+              dispatch(loadRate.request());
+            }
 
             Utils.callApi("ev_subunsub", {
               /* "ev_sync_progress": true, */
@@ -160,12 +164,6 @@ export const WalletApiConnector = ({ children }) => {
       }
     }
   }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
-
-  useEffect(() => {
-    if (rate.isZero) {
-      dispatch(loadRate.request());
-    }
-  }, [rate]);
 
   return <WalletApiConnectorProvider
     isLoaded={isLoaded}

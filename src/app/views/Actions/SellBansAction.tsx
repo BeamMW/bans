@@ -11,7 +11,7 @@ type SellBansActionProps = {
     change: any;
     amount?: number;
     domain: DomainPresenterType;
-    disabled: boolean;
+    disabled?: boolean;
     pallete?: Pallete;
 };
 
