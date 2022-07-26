@@ -10,7 +10,6 @@ import Input from "@app/components/Input";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
-import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { SellBansAction } from "@app/views/Actions/SellBansAction";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
@@ -65,7 +64,6 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
   return (
     <Modal isShown={isShown} header={header} width={'450px'}>
       <>
-        {isTransactionPending && <LoadingOverlay />}
         <Box sx={{ mb: '10px' }}>
           <Text variant="subHeader">Current price</Text>
         </Box>
