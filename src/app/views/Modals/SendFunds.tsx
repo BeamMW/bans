@@ -96,13 +96,17 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   });
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
+    // if(e.key == 'l' || e.key == 'm' || e.key == 'w') {
+    //   setTextWidth(textWidth - 20)
+    // }
+
     if (e.key === "Backspace" && values.domain.length !== 0) {
-      setTextWidth(textWidth - 8);
+      setTextWidth(textWidth - 12);
       return;
     }
     if (e.key === "Backspace" && values.domain.length === 0) return;
 
-    const width = getTextWidth(values.domain, '16px SFProDisplay');
+    const width = getTextWidth(values.domain, '16px Arial');
     setTextWidth(width);
   }
 
