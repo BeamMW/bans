@@ -41,27 +41,20 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
   const userBans: Array<any> = useSelector(selectUserDomains());
 
   useEffect(() => {
-    if (!userBans.length) {
-      if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
-        //if user has not any domains we redirets user to my-page empty
-        navigate("my-page"), closeModal();
-      }
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      //if user has not any domains we redirets user to my-page empty
+      navigate("my-page"), closeModal();
+    }
 
-      if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-        store.dispatch(reloadAllUserInfo.request());
-      }
-    } else {
-      if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-        closeModal(), setFoundDomain(null);
-      }
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      !userBans.length ? store.dispatch(reloadAllUserInfo.request()) : setFoundDomain(null);
     }
 
   }, [transactionState, setCurrentView]);
 
   return (
-    <Modal isShown={isShown} header="Attention">
+    <Modal isShown={isShown} header="Attention1">
       <>
-        {isTransactionPending && <LoadingOverlay />}
         <Box>
           <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - <Text sx={{ fontWeight: 700 }}>{foundDomain.expiresAt}.</Text> </Paragraph>
           <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center' }}>You will need to renew your subscription before the expiring date.</Paragraph>
@@ -73,6 +66,7 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
             transactionId={TRANSACTION_ID}
             change={"buyDomain"}
             domain={foundDomain}
+            disabled={isTransactionPending}
           >
             <ArrowRight />
             continue
