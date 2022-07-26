@@ -170,7 +170,7 @@ export const MyTransactions: React.FC<MyBansProps> = ({ }) => {
 
   return (
     <>
-      <Paragraph sx={{ mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
+      <Paragraph sx={{ fontFamily: 'SFProDisplay',mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
       {rows.length ? rows : <EmptyPage emptyText={"You do not hold any domains"} />}
     </>
   );

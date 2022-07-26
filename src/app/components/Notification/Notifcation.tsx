@@ -23,8 +23,8 @@ export const Notification = ({ notification, text, handler, closeHandler = null,
   return (
     <SplitContainer passKey={passKey} styles={{ background: "rgb(9 19 30)", /* position: "absolute", */ width: "100%", maxWidth: "630px"/* , marginTop: 10 * passKey */ }} leftWeight={11} rightWeight={1} height="59px" key={passKey}>
       <Flex sx={{ lineHeight: '19px' }}>
-        <Text sx={{whiteSpace:'nowrap'}}>{text}</Text>
-        <span onClick={moreDetailsHandler} style={{ textDecoration: 'none', marginLeft: '14px' }}>
+        <Text sx={{whiteSpace:'nowrap', flex:'7'}}>{text}</Text>
+        <span onClick={moreDetailsHandler} style={{ textDecoration: 'none', marginLeft: '14px', flex:5 }}>
           <Text variant='link'>
             More Details
           </Text>
