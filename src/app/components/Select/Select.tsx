@@ -3,6 +3,7 @@ import { Text, Paragraph } from 'theme-ui';
 import ArrowDown from '@app/assets/icons/arrow-down.svg';
 import { Label, CustomSelect } from './Select.style';
 import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
+import useOnClickOutside from '@app/hooks/outsideClickHandlers/useOnClickOutside';
 
 interface items {
   id: string,
@@ -17,6 +18,13 @@ interface SelectProps {
 }
 export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem, showSuffix }) => {
   const [show, setShow] = React.useState(false);
+  const ref = React.useRef(null);
+
+  const handleClose = () => {
+    setShow(false);
+  }
+
+  useOnClickOutside(ref, handleClose);
 
   return (
     <div>
@@ -37,7 +45,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
       </div>
       {
         show && (
-          <div className="items">
+          <div className="items" ref={ref}>
             {
               items.map((item) => {
                 return (

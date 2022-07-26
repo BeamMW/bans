@@ -63,7 +63,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   const { domains } = props;
   
   const domainsToSell: any = !!domains && domains.length ? domains.filter((domain, i) => !domain.isOnSale) : [];
-
+  console.log('domains',domains)
   //This name is in grace period, and needs to be renewed by June 30, 2022
   const rows =
     domains.map((domain, i) => (
