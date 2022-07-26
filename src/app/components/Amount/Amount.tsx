@@ -27,6 +27,7 @@ const Container = styled.div<ContainerStyles>`
 
   & .text {
     font-size: ${props => props.size};
+    white-space: nowrap;
   }
 
   & > *:not(:first-child) {
