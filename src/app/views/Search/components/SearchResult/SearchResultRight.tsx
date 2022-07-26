@@ -71,7 +71,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
       }
     </Flex>
     <Flex>
-      <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2"} : textStyles(props)} onClick={handleBuyClick}>
+      <Text sx={isYourOwn || isOnSale ? {color: "#00F6D2", whiteSpace: 'nowrap'} : textStyles(props)} onClick={handleBuyClick}>
       {isYourOwn ? "your domain" : (isAvailable && isOnSale ? 'buy' : status)}
       </Text>
     </Flex>

@@ -23,7 +23,8 @@ export const styles = ({ isAvailable }: SearchResultStyleProps): ThemeUICSSObjec
 
 export const textStyles = ({ isAvailable, isValid }: SearchResultStyleProps): ThemeUICSSObject => ({
   color: isAvailable && isValid ? "#00F6D2" : "#FF746B",
-  fontStyle: isAvailable && isValid ? "normal" : "italic"
+  fontStyle: isAvailable && isValid ? "normal" : "italic",
+  whiteSpace: 'nowrap'
 });
 
 export const containerStyles = ({ isAvailable }: SearchResultStyleProps): ThemeUICSSObject => ({

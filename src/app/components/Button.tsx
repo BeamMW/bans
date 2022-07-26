@@ -112,6 +112,7 @@ const IconButtonStyled = styled(BaseButtonStyled)`
   padding: 0;
   width: ${({ width }) => `${width}`};
   height: ${({ height }) => `${height}`};
+  flex-shrink: 0;
   border-radius: 10px;
   > svg {
     vertical-align: middle;

@@ -56,7 +56,7 @@ const Search: React.FC = () => {
   }
 
   return (
-    <Container sx={{ maxWidth: 630 }}>
+    <Container sx={{ maxWidth: 650 }}>
       <Input
         variant='proposal'
         pallete='white'
