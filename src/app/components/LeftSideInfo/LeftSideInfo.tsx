@@ -59,7 +59,14 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
           </Box>
         </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
-          {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></> }
+          {expiresAt  && !isOnSale ? 
+          <SubText 
+            isexpired={isExpired.toString()} 
+          >Expires on {expiresAt}</SubText> : 
+          <SubText 
+            isexpired={isExpired.toString()} 
+          >This name is on sale.</SubText>
+           }
               {
                 showBelonging && <Text sx={{
                    color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B",

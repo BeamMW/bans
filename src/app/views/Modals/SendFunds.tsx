@@ -137,7 +137,12 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             onKeyDown={updateSuffix}
             value={values.domain}
             maxLength={30}
-            suffix={values.domain.length ? <Text id="suffix" sx={{ left: textWidth === 0 ? '0px' : `${textWidth}px` }}>.beam</Text> : <></>}
+            valid={isValid || values.domain.length === 0}
+            errorMessage={'Incorrect domain'}
+            suffix={values.domain.length ? <Text id="suffix" sx={{ 
+              left: textWidth === 0 ? '0px' : `${textWidth}px`,
+              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
+             }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}
