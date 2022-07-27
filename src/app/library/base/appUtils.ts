@@ -99,3 +99,11 @@ export function isNumeric(value: any): boolean {
 export function isFloat(n){
   return Number(n) === n && n % 1 !== 0;
 }
+
+export function isPromise(p) {
+  if (typeof p === 'object' && typeof p.then === 'function') {
+    return true;
+  }
+
+  return false;
+}

@@ -233,7 +233,7 @@ export function* notificationFromDomainsChangesSaga(channel) {
           data: { domain: soldDomain }
         })
       ),
-      
+
       //for gifted domains notifications
       /* ...changesGiftedDomains.map(
         giftedDomain => notificationDomainObjectFactory({
@@ -250,6 +250,7 @@ export function* notificationFromDomainsChangesSaga(channel) {
 }
 
 export default function* notificationsSaga() {
+  debugger;
   if (userDatabase.isOpen) {
     //init
     yield call(loadFavoritesNotificationsFromDatabaseSaga);
@@ -266,4 +267,3 @@ export default function* notificationsSaga() {
     //yield fork(notificationFromTransferredFundsSaga, internalEventFundsChannelInstance);
   }
 }
-

@@ -16,7 +16,7 @@ import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/Wa
 import store from "index";
 import { loadAppParams, loadRate } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
-import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/database";
+import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
 import { reinitNotifications, updateNotifications } from "@app/store/NotificationsStore/actions";
@@ -81,38 +81,6 @@ export const WalletApiConnector = ({ children }) => {
 
             const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
 
-            //open and check if exists user-defined-database
-            userDatabase.openDatabase();
-            //observe user-defined -database if open
-            if (userDatabase.isOpen) {
-              observeDatabaseChanges(userDatabase, changes => {
-                changes.forEach(function (change) {
-                  if (change.table != "notifications") return;
-
-                  switch (change.type) {
-                    case 1: // CREATED
-                      store.dispatch(updateNotifications.request(change.obj));
-
-                      console.log('An object was created: ' + JSON.stringify(change));
-                      break;
-                    case 2: // UPDATED
-                      //@TODO: not optimized!
-                      store.dispatch(reinitNotifications.request(true));
-
-                      console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
-                      break;
-                    case 3: // DELETED
-
-                      //@TODO: not optimized!
-                      store.dispatch(reinitNotifications.request(true));
-
-                      console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
-                      break;
-                  }
-                });
-              })
-            }
-
             /**
              * Put shadersData in ShaderStore
              */
@@ -124,7 +92,7 @@ export const WalletApiConnector = ({ children }) => {
              * Duplicate put shaders data in wallet provider
              */
             setWalletShaders(shadersData)
-            
+
             if (rate.isZero) {
               dispatch(loadRate.request());
             }
@@ -157,7 +125,41 @@ export const WalletApiConnector = ({ children }) => {
                 }
               }
             );
+
+
+            //open and check if exists user-defined-database
+            userDatabase.openDatabase();
+            //observe user-defined -database if open
+            if (userDatabase.isOpen) {
+              observeDatabaseChanges(userDatabase, changes => {
+                changes.forEach(function (change) {
+                  if (change.table != "notifications") return;
+
+                  switch (change.type) {
+                    case 1: // CREATED
+                      store.dispatch(updateNotifications.request(change.obj));
+
+                      console.log('An object was created: ' + JSON.stringify(change));
+                      break;
+                    case 2: // UPDATED
+                      //@TODO: not optimized!
+                      store.dispatch(reinitNotifications.request(true));
+
+                      console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
+                      break;
+                    case 3: // DELETED
+
+                      //@TODO: not optimized!
+                      store.dispatch(reinitNotifications.request(true));
+
+                      console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
+                      break;
+                  }
+                });
+              })
+            }
           });
+          
         });
       } catch (e) {
         console.log("Error has been thrown:", e);

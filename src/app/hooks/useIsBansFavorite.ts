@@ -1,4 +1,4 @@
-import { userDatabase } from "@app/library/bans/userLocalDatabase/database";
+import { userDatabase } from "@app/library/bans/userLocalDatabase/";
 import { useLiveQuery } from "dexie-react-hooks";
 
 export const useIsBansFavorite = (search) => {

@@ -1,6 +1,6 @@
 import { UserWallet, FavoriteDomains } from '../domainObject'
 import cuid from 'cuid'
-import { userDatabase as database } from '../database';
+import { userDatabase as database } from '../';
 
 
 export async function readAllFavoriteDomains() {

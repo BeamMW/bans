@@ -8,6 +8,9 @@ module.exports = {
   target: 'web',
   mode: 'development',
   devtool: 'eval-source-map',
+  experiments: {
+    topLevelAwait: true
+  },
   devServer: {
     port: 13666
   },

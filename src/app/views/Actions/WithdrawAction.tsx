@@ -10,6 +10,7 @@ type WithdrawActionProps = {
     domain?: DomainPresenterType;
     amount?: number;
     pkKeys?: Array<string>
+    disabled?: boolean;
 };
 
 export const WithdrawAction: React.FC<WithdrawActionProps> = ({
@@ -18,7 +19,8 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
     change,
     domain,
     amount = 0,
-    pkKeys = []
+    pkKeys = [],
+    disabled = false
 }) => {
 
     const { registeredMethods } = useBansApi();
@@ -51,7 +53,7 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
     );
 
     return (
-        <span onClick={sendTransaction}>
+        <span style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null}>
             {children}
         </span>
     );

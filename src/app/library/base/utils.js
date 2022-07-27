@@ -1,6 +1,6 @@
 import UtilsError from "./utilsError";
 import UtilsShader from "./shader/utilsShader";
-import { delay, id } from "./appUtils";
+import { delay, id, isPromise } from "./appUtils";
 
 const MIN_AMOUNT = 0.00000001;
 const MAX_AMOUNT = 254000000;
@@ -210,8 +210,8 @@ export default class Utils {
             "params": params
         }
 
-        //console.log(Utils.formatJSON(request))
         if (Utils.isHeadless()) {
+            console.log(request);
             return BEAM.api.callWalletApi(JSON.stringify(request))
         }
 
@@ -346,10 +346,23 @@ export default class Utils {
         }
     }
 
+    static initcbackWrapper = async (initcback, params) => {
+        if (
+            initcback.constructor.name === 'AsyncFunction' ||
+            (typeof example === 'function' && isPromise(initcback(null)))
+        ) {
+            return await initcback(...params);
+        }
+
+        return initcback(...params);
+    }
+
     static async initialize(params, initcback) {
         InitParams = params
         APIResCB = params["apiResultHandler"]
         let headless = params["headless"]
+
+        
 
         console.log('BEAM CALLING INITIALIZE METHOD');
 
@@ -403,13 +416,14 @@ export default class Utils {
             Utils.hideLoading()
 
             if (!BEAM) {
-                return initcback("Failed to create BEAM API")
+                return await Utils.initcbackWrapper(initcback, ["Failed to create BEAM API"])
             }
 
-            return initcback(null)
+            return await Utils.initcbackWrapper(initcback, [null]);
+
         }
         catch (err) {
-            return initcback(err)
+            return await Utils.initcbackWrapper(initcback, [err])
         }
     }
 
@@ -509,6 +523,7 @@ export default class Utils {
         xhr.send(null);
     }
 
+    //@TODO: add try catch handler
     static async bulkShaderDownload(shadersData, cback) {
         if (!Array.isArray(shadersData)) {
             throw new UtilsError(-101);
@@ -526,7 +541,7 @@ export default class Utils {
             await Utils.fetchShaderBytes(shaderData);
         }
 
-        return cback(null, sortedShadersData);
+        return await Utils.initcbackWrapper(cback, [null, sortedShadersData]);
     }
 
     static async fetchShaderBytes(shaderData) {

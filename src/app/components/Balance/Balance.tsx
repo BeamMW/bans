@@ -44,14 +44,13 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
       {
         balance && (
           <div className="withdraw">
-            {isTransactionPending ? <LoadingOverlay /> :
-              <WithdrawAction
-                transactionId={TRANSACTION_ID}
-                change={"withdrawAll"}
-              >
-                <WithDrawButton text='withdraw all' />
-              </WithdrawAction>
-            }
+            <WithdrawAction
+              transactionId={TRANSACTION_ID}
+              change={"withdrawAll"}
+              disabled={isTransactionPending}
+            >
+              <WithDrawButton text='withdraw all' />
+            </WithdrawAction>
           </div>
         )
       }

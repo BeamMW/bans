@@ -106,7 +106,7 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
     }
 
     protected processInvokeParamsToWalletShader() {
-        if(this.cid !== Utils.currentShaderBytesCid) {
+        if (this.cid !== Utils.currentShaderBytesCid) {
             Utils.currentShaderBytesCid = this.cid;
             const shader = ShaderStore.retriveShader(this.cid);
 
@@ -125,13 +125,13 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
 
 export class MethodReadable<ShaderActions> extends MethodAbstract<ShaderActions> {
     async callMethod<T = any>(params?: any): Promise<T> {
-        const {res: result} = await Utils.invokeContractAsync(
+        const { res: result } = await Utils.invokeContractAsync(
             this.convertContractParams(params),
             this.processInvokeParamsToWalletShader()
         );
-        
+
         //temp solution for res error responses
-        if(result?.error) {
+        if (result?.error) {
             throw new ApiError(0, result?.error, false);
         }
 
@@ -153,7 +153,8 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
             throw new ApiError(0, "This method couldn't be predicted in shader call!", false);
 
         return await Utils.invokeContractAsync(
-            this.convertContractParams(this.withPredictable())
+            this.convertContractParams(this.withPredictable()),
+            this.processInvokeParamsToWalletShader()
         );
     }
 
@@ -163,7 +164,7 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
                 this.convertContractParams(params),
                 this.processInvokeParamsToWalletShader()
             );
-            
+
             if (!txId) {
                 throw new ApiError(0, "txId do not created!", true);
             }
