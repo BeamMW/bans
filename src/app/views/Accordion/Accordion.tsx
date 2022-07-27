@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Text, Divider, Paragraph } from 'theme-ui';
+import { Text, Divider, Paragraph, Box } from 'theme-ui';
 
 import Minus from "@app/assets/icons/minus.svg";
 import Plus from "@app/assets/icons/plus.svg";
@@ -57,6 +57,7 @@ const Dropdown = styled.div`
   flex-direction: column;
   justify-content: start;
   padding: 16px 20px 20px;
+  margin-bottom: 20px;
 `;
 
 const Accordion = () => {
@@ -82,7 +83,7 @@ const Accordion = () => {
                 {clicked === index ? (
                   <Dropdown>
                     <Divider/>
-                    {item.answer}
+                      {item.answer}
                   </Dropdown>
                 ) : null}
               </React.Fragment>
