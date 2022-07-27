@@ -65,6 +65,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
   const [isValidAmount, setIsValidAmount] = React.useState(false);
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let regexForDomain = /^[A-Za-z0-9]*$/;

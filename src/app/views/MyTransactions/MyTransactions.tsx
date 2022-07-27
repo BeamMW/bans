@@ -19,6 +19,8 @@ import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import SaleIcon from '@app/assets/icons/sell.svg';
 import EmptyPage from "../EmptyPage/EmptyPage";
+import { useModalContext } from "@app/contexts/Modal/ModalContext";
+import { RenewModal } from "../Modals/RenewModal";
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -30,6 +32,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
+  const { open } = useModalContext();
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
@@ -64,8 +67,13 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       ) : <></>}
       {
-        false && (
-          <Button variant="ghostBordered"  pallete="green" style={{ margin: '0 0 0 20px' }}>
+        domain.isExpired && (
+          <Button
+            variant="ghostBordered"
+            pallete="green"
+            style={{ margin: '0 0 0 20px' }}
+            onClick={(event) => open(event)("modal-renew")({ domain: domain, })(null)}
+          >
             renew subscription
           </Button>
         )
@@ -95,7 +103,11 @@ const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
         <Text>{domain.name}.beam</Text>
 
         <Flex>
-          {domain.expiresAt ? <SubText isexpired={domain.isExpired.toString()}>Expires on {domain.expiresAt}</SubText> : <></>}
+          {domain.expiresAt ? <SubText isexpired={domain.isExpired}>{
+            domain.isExpired ?
+              `Paid term of usage is over. Your domain will be disconnected on ${domain.gracePeriod()}` :
+              `Expires on ${domain.expiresAt}`
+          }</SubText> : <></>}
         </Flex>
       </Box>
     </Flex>
@@ -170,10 +182,21 @@ export const MyTransactions: React.FC<MyBansProps> = ({ }) => {
 
   return (
     <>
-      <Paragraph sx={{ fontFamily: 'SFProDisplay',mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
+      <Paragraph sx={{ fontFamily: 'SFProDisplay', mt: '53px', mb: 5, letterSpacing: '3.1px', color: 'rgba(255, 255, 255, 0.5)' }}>MY BANS</Paragraph>
       {rows.length ? rows : <EmptyPage emptyText={"You do not hold any domains"} />}
+      <ModalManager />
     </>
   );
 }
+
+const ModalManager: React.FC = () => {
+  const { current, close } = useModalContext();
+
+  return (
+    <>
+      <RenewModal isShown={current == "modal-renew"} />
+    </>
+  );
+};
 
 export default MyTransactions;

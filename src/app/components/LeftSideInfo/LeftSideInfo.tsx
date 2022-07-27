@@ -7,6 +7,7 @@ import Button from "../Button";
 import { copyToClipboard } from "@app/library/base/appUtils";
 import SaleIcon from '@app/assets/icons/sell.svg';
 import Copy from '@app/assets/icons/copy.svg';
+import moment from "moment";
 
 
 interface SubTextProps {
@@ -18,7 +19,7 @@ export const SubText = styled(Text) <SubTextProps>`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: ${({ isExpired }) => isExpired ? '#FF746B' : 'rgba(255, 255, 255, 0.5)'};
+  color: ${({ isexpired }) => isexpired ? '#FF746B' : 'rgba(255, 255, 255, 0.5)'};
   display: block;
   padding-top: 6px;
   white-space: nowrap;
@@ -42,7 +43,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
       } */}
 
       <Box>
-        <Flex sx={{alignItems: 'flex-end'}}>
+        <Flex sx={{ alignItems: 'flex-end' }}>
           <Paragraph sx={{
             fontSize: '16px',
             fontFamily: 'SFProDisplay',
@@ -50,8 +51,8 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             lineHeight: '19px',
           }}>
             {name}
-            <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
-            </Paragraph>
+            <Text sx={{ color: 'rgba(255,255,255,0.5)' }}>.beam</Text>
+          </Paragraph>
           <Box sx={{ marginLeft: '14px', position: 'relative', zIndex: 999 }}>
             <Button variant='icon' width="auto" height="auto" pallete='transparent' onClick={(event) => { copyToClipboard(domain.name); event.stopPropagation(); }}>
               <Copy />
@@ -59,47 +60,52 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
           </Box>
         </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
-          {expiresAt ? <SubText isexpired={isExpired.toString()}>Expires on {expiresAt}</SubText> : <></> }
+          {expiresAt ?
+            <SubText isexpired={isExpired}>{ isExpired ?
+              `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}` :
+              `Expires on ${expiresAt}`
+            } </SubText> : <></>}
+          {
+            showBelonging && <Text sx={{
+              color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B",
+              fontStyle: domain.isAvailable || domain.isYourOwn ? "normal" : "italic",
+              padding: expiresAt ? '4px 0px 0px 20px' : '0px'
+            }}>
               {
-                showBelonging && <Text sx={{
-                   color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B",
-                   fontStyle: domain.isAvailable || domain.isYourOwn ? "normal" : "italic", 
-                   padding: expiresAt ? '4px 0px 0px 20px' :'0px' }}>
-                  {
-                    domain.isYourOwn ?
-                      "your already own" :
+                domain.isYourOwn ?
+                  "your already own" :
+                  (
+                    domain.isAvailable && !domain.isOnSale ?
+                      "available" :
                       (
                         domain.isAvailable && !domain.isOnSale ?
                           "available" :
                           (
-                            domain.isAvailable && !domain.isOnSale ?
+                            domain.isOnSale ?
                               "available" :
-                              (
-                                domain.isOnSale ?
-                                  "available" :
-                                  "not available"
-                              )
+                              "not available"
                           )
                       )
-                  }
-                </Text>
+                  )
               }
-              {
-                showBelonging && domain.isOnSale && (
-                  <Box sx={{
-                    background: ' rgba(0, 246, 210, 0.2)',
-                    borderRadius: '4px',
-                    marginLeft: '14px',
-                    padding: '2px 6px 2px 6px'
-                  }}>
-                    <Text sx={{
-                      color: 'rgba(0, 246, 210, 1)',
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    }}>on sale</Text>
-                  </Box>
-                )
-              }
+            </Text>
+          }
+          {
+            showBelonging && domain.isOnSale && (
+              <Box sx={{
+                background: ' rgba(0, 246, 210, 0.2)',
+                borderRadius: '4px',
+                marginLeft: '14px',
+                padding: '2px 6px 2px 6px'
+              }}>
+                <Text sx={{
+                  color: 'rgba(0, 246, 210, 1)',
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                }}>on sale</Text>
+              </Box>
+            )
+          }
         </Flex>
       </Box>
     </Flex>

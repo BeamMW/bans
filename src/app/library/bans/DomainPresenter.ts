@@ -10,6 +10,7 @@ export type DomainPresenterType = {
     isYourOwn: boolean;
     isOnSale: boolean;
     price: PriceInfo
+    gracePeriod: any;
 }
 
 export type RawDomainType = {
@@ -49,13 +50,17 @@ class DomainPresenterValidator {
 
 export class DomainPresenter implements IDomainPresenter {
 
+    protected unixTimestamp: number;
+
     constructor(
         protected rawDomain: RawDomainType,
         protected currentStateTimestamp?: number | null,
         protected currentStateHeight?: number | null,
         protected userPublicKey?: string
     ) {
-        
+        this.unixTimestamp = this.rawDomain?.hExpire ?
+            (((this.rawDomain.hExpire - this.currentStateHeight) * 60 /*  - 100000000 */) + this.currentStateTimestamp)  * 1000 :
+            null;
     }
 
     get rawSearch() {
@@ -71,15 +76,15 @@ export class DomainPresenter implements IDomainPresenter {
     }
 
     protected domainExpireTimeConverter(): string {
-        const unixTimestamp = this.rawDomain?.hExpire ?
-            (this.rawDomain.hExpire - this.currentStateHeight) * 60 + this.currentStateTimestamp :
+        return this.unixTimestamp ?
+            moment(this.unixTimestamp).format('LL') :
             null;
-
-        return unixTimestamp ? moment(unixTimestamp * 1000).format('LL') : null;
     }
 
     protected domainIsExpireTimeConverter(): boolean {
-        return false;
+        return this.unixTimestamp ?
+            moment(this.unixTimestamp).isBefore() :
+            null;
     }
 
     protected resolveIsAvailable(): boolean {
@@ -107,7 +112,8 @@ export class DomainPresenter implements IDomainPresenter {
                 isAvailable: this.resolveIsAvailable(),
                 isYourOwn: this.resolveIsYouOwn(),
                 isOnSale: !!this.rawDomain?.price,
-                price: this.resolveDomainPrice()
+                price: this.resolveDomainPrice(),
+                gracePeriod: () => this.unixTimestamp ? moment(this.unixTimestamp).add(90, 'days').format('LL') : null,
             }
         } catch (e) {
             throw new DomainPresenterError(e.message)
