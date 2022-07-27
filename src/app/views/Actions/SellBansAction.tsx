@@ -49,7 +49,16 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     );
 
     return (
-        <Button pallete={pallete} style={disabled ? {opacity: "0.2", width: 'fit-content'} : {width: 'fit-content'}} onClick={!disabled ? sendTransaction : null}>
+        <Button
+            variant='custom' 
+            padding="10px 24px"
+            width='fit-content'
+            borderRadius='50px'
+            height='auto'
+            pallete={pallete}
+            style={disabled ? {opacity: "0.2"} : {}}
+            onClick={!disabled ? sendTransaction : null}
+        >
             {children}
         </Button>
     );

@@ -9,6 +9,7 @@ import { ChangePrice } from '@app/views/Modals/ChangePrice';
 import { GROTHS_IN_BEAM } from '@app/constants';
 import { Decimal } from '@app/library/base/Decimal';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import Renew from '@app/assets/icons/renew.svg';
 
 import Dots from '@app/assets/icons/dots.svg';
 import ChangePriceIcon from '@app/assets/icons/edit.svg';
@@ -45,13 +46,17 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
+        <PopupItem onClick={(event) => open(event)("modal-renew")({domain: domain })(hideTip)}>
+            <Renew />
+            renew subscription
+          </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-adjust-sale")({domain: domain})(hideTip)}>
             <ChangePriceIcon />
             change price
           </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-remove-from-sale")({domain: domain})(hideTip)}>
             <RemoveFromSale/>
-            remove from Sale
+            remove from sale
           </PopupItem>
         </Popup>
       </Container>
