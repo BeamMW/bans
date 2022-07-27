@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
   info?: string;
+  errorMessage?: string;
   suffix?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -73,9 +74,9 @@ const InputProposalStyled = styled(InputGrayStyled)<{ pallete: string }>`
 const InputMainStyled = styled(InputGrayStyled)<{ pallete: string }>`
   font-size: 16px;
   font-weight: normal;
-  color: ${({ pallete }) => `var(--color-${pallete})`};
+  color: ${({ pallete,valid }) => valid ? `var(--color-${pallete})` : 'rgba(255, 98, 92, 1)'};
   height: 45px;
-  background-color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .05)' : 'rgb(255, 116, 107, .15)')};
+  background-color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .05)' : 'rgba(255, 98, 92, 0.2)')};
   padding: 0 15px;
   border-radius: 10px;
   border: none;
@@ -90,7 +91,7 @@ const LabelStyled = styled.div<InputProps>`
   margin-bottom: 10px;
   font-family: 'SFProDisplay';
   font-size: 14px;
-  color: ${({ valid }) => (valid ? 'rgba(255, 255, 255, .6)' : 'var(--color-red)')};
+  color: 'rgba(255, 255, 255, .6)';
 `;
 
 const InfoStyled = styled.div<InputProps>`
@@ -100,6 +101,16 @@ const InfoStyled = styled.div<InputProps>`
   font-family: 'SFProDisplay';
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);
+`
+
+const ErrorStyled = styled.div<InputProps>`
+  text-align: start;
+  margin-top: 6px;
+  margin-left: 15px;
+  font-family: 'SFProDisplay';
+  font-size: 14px;
+  height: 16px;
+  color: ${({ pallete,valid }) => valid ? `var(--color-${pallete})` : 'rgba(255, 98, 92, 1)'};
 `
 
 const IconContainer = styled.div`
@@ -117,6 +128,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     margin = 'none',
     pallete = 'blue',
     info,
+    errorMessage,
     suffix,
     children,
     className, ...rest
@@ -131,7 +143,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <ContainerStyled className={className} margin={margin}>
-        {!!label && <LabelStyled valid={valid}>{valid ? label : ''}</LabelStyled>}
+        {!!label && <LabelStyled valid={valid}>{label}</LabelStyled>}
 
         {
           !!children && (
@@ -143,6 +155,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
         {!!suffix && suffix }
         {!!info && <InfoStyled>{info}</InfoStyled>}
+          {<ErrorStyled>{!valid ? errorMessage : ''}</ErrorStyled>}
       </ContainerStyled>
     );
   },

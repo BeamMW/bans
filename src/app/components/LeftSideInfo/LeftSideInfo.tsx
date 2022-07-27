@@ -60,7 +60,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
           </Box>
         </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
-          {expiresAt ?
+          {expiresAt && !isOnSale?
             <SubText isexpired={isExpired}>{ isExpired ?
               `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}` :
               `Expires on ${expiresAt}`
