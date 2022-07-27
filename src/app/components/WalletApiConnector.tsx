@@ -16,7 +16,7 @@ import { WalletApiConnectorProvider } from "@app/library/wallet-react/context/Wa
 import store from "index";
 import { loadAppParams, loadRate } from "@app/store/BansStore/actions";
 import { setDappVersion } from "@app/store/SharedStore/actions";
-import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/database";
+import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLocalDatabase/";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
 import { reinitNotifications, updateNotifications } from "@app/store/NotificationsStore/actions";
@@ -81,6 +81,52 @@ export const WalletApiConnector = ({ children }) => {
 
             const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
 
+            /**
+             * Put shadersData in ShaderStore
+             */
+            shadersData.forEach(
+              (shaderData) => apiShaderRegester.addShaderToStore(shaderData)
+            );
+
+            /**
+             * Duplicate put shaders data in wallet provider
+             */
+            setWalletShaders(shadersData)
+
+            if (rate.isZero) {
+              dispatch(loadRate.request());
+            }
+
+            Utils.callApi("ev_subunsub", {
+              /* "ev_sync_progress": true, */
+              "ev_system_state": true,
+              "ev_txs_changed": true,
+
+              //Can't use thos events due to dapp restriction??
+              /* "ev_utxos_changed": true, 
+              "ev_assets_changed": true,
+              "ev_addrs_changed": true, */
+            },
+              (error, result, full) => {
+                if (result) {
+                  store.dispatch(loadAppParams.request());
+                }
+              }
+            );
+
+            Utils.callApi("get_version", false,
+              (error, result, full) => {
+                if (error) {
+                  throw new Error("version could't fetch!");
+                }
+
+                if (result) {
+                  store.dispatch(setDappVersion(result));
+                }
+              }
+            );
+
+
             //open and check if exists user-defined-database
             userDatabase.openDatabase();
             //observe user-defined -database if open
@@ -112,60 +158,14 @@ export const WalletApiConnector = ({ children }) => {
                 });
               })
             }
-
-            /**
-             * Put shadersData in ShaderStore
-             */
-            shadersData.forEach(
-              (shaderData) => apiShaderRegester.addShaderToStore(shaderData)
-            );
-
-            /**
-             * Duplicate put shaders data in wallet provider
-             */
-            setWalletShaders(shadersData)
-
-            Utils.callApi("ev_subunsub", {
-              /* "ev_sync_progress": true, */
-              "ev_system_state": true,
-              "ev_txs_changed": true,
-
-              //Can't use thos events due to dapp restriction??
-              /* "ev_utxos_changed": true, 
-              "ev_assets_changed": true,
-              "ev_addrs_changed": true, */
-            },
-              (error, result, full) => {
-                if (result) {
-                  store.dispatch(loadAppParams.request());
-                }
-              }
-            );
-
-            Utils.callApi("get_version", false,
-              (error, result, full) => {
-                if (error) {
-                  throw new Error("version could't fetch!");
-                }
-
-                if (result) {
-                  store.dispatch(setDappVersion(result));
-                }
-              }
-            );
           });
+          
         });
       } catch (e) {
         console.log("Error has been thrown:", e);
       }
     }
   }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
-
-  useEffect(() => {
-    if (rate.isZero) {
-      dispatch(loadRate.request());
-    }
-  }, [rate]);
 
   return <WalletApiConnectorProvider
     isLoaded={isLoaded}

@@ -1,6 +1,13 @@
 import { GROTHS_IN_BEAM } from '@app/constants';
 
-export const copyToClipboard = (value: string) => navigator.clipboard.writeText(value);
+export const copyToClipboard = (value: string) => {
+  let textField = document.createElement('textarea');
+  textField.innerText = value;
+  document.body.appendChild(textField);
+  textField.select();
+  document.execCommand('copy');
+  textField.remove();
+};
 
 export function compact(value: string, stringLength: number = 5): string {
   if (value.length <= 11) {
@@ -91,4 +98,12 @@ export function isNumeric(value: any): boolean {
 
 export function isFloat(n){
   return Number(n) === n && n % 1 !== 0;
+}
+
+export function isPromise(p) {
+  if (typeof p === 'object' && typeof p.then === 'function') {
+    return true;
+  }
+
+  return false;
 }

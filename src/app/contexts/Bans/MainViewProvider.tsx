@@ -1,7 +1,6 @@
 import { DomainPresenterType, getDomainPresentedData, RawDomainType } from "@app/library/bans/DomainPresenter";
 import methods from "@app/library/bans/methods";
 import ShaderApi from "@app/library/base/api/ShaderApi";
-import { useWalletApiConnector } from "@app/library/wallet-react/context/WalletApiConnector/WalletApiConnectorContext";
 import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -19,10 +19,6 @@ import { eventChannel, END, channel, Channel } from 'redux-saga'
 import { notificationFromDomainsChangesSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
 import { omitDeep } from '@app/utils/helpers';
 
-const FETCH_INTERVAL = 310000;
-const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
-const RATE_PARAMS = 'ids=beam&vs_currencies=usd';
-
 export function* handleParams(payload: any) {
   yield put(actions.setAppParams(payload));
 }
@@ -340,24 +336,22 @@ export function* loadContractInfoSaga(
   }
 }
 
-async function loadRatesApiCall() {
-  const response = await fetch(`${API_URL}?${RATE_PARAMS}`);
-  const promise /* : RateResponse */ = await response.json();
-  return promise.beam.usd;
-}
 
 export function* loadRate() {
-  try {
-    yield put(actions.loadRate.success(0.3));
+  const FETCH_INTERVAL = 5000;
 
-    const result: number = yield call(loadRatesApiCall);
-    yield put(actions.loadRate.success(result));
+  try {
+    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+
+    const { price } = yield call(bandApiMethods.managerViewParams);
+    yield put(actions.loadRate.success(price));
+
     setTimeout(
       () => store.dispatch(actions.loadRate.request()),
       FETCH_INTERVAL,
     );
   } catch (e) {
-    //yield put(actions.loadRate.success(0.3));
+    console.log(e);
     yield put(actions.loadRate.failure(e));
   }
 }

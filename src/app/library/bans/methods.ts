@@ -10,6 +10,11 @@ const methods: Array<IMethod<ShaderActions>> = [
     },
     {
         role: "manager",
+        action: "view_params",
+        type: "readable"
+    },
+    {
+        role: "manager",
         action: "view_name",
         requiredParams:["name"],
         type: "readable"

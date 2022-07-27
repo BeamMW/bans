@@ -1,6 +1,6 @@
 import { UserWallet, Notification, NotificationState, NotificationType } from '../domainObject'
 import cuid from 'cuid'
-import { userDatabase as database } from '../database';
+import { userDatabase as database } from '../';
 import { DomainPresenterType } from '../../DomainPresenter';
 import { domainToASCII } from 'url';
 

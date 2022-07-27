@@ -1,5 +1,6 @@
 export type ShaderActions =
     "view" |
+    "view_params" |
     "view_name" |
     "domain_register" |
     "my_key" |
