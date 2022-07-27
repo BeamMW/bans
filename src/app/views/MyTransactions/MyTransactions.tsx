@@ -54,18 +54,20 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
     <Flex sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
       <Amount value={amount} size="14px" />
 
-      {funds.transferred.length ? (
-        isTransactionPending ? <LoadingOverlay /> :
-          <WithdrawAction
-            transactionId={TRANSACTION_ID}
-            change={"withdrawFromDomain"}
-            domain={domain}
-            pkKeys={pkKeys}
-          >
-            <WithDrawButton text='withdraw' />
-          </WithdrawAction>
+      <Box sx={{ mb:2 }}>
+        {funds.transferred.length ? (
+          isTransactionPending ? <LoadingOverlay /> :
+            <WithdrawAction
+              transactionId={TRANSACTION_ID}
+              change={"withdrawFromDomain"}
+              domain={domain}
+              pkKeys={pkKeys}
+            >
+              <WithDrawButton text='withdraw' />
+            </WithdrawAction>
 
-      ) : <></>}
+        ) : <></>}
+      </Box>
       {
         domain.isExpired && (
           <Button
