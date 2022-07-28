@@ -17,7 +17,7 @@ import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import BeamIcon from '@app/assets/icons/beam.svg';
-import ArrowRight from '@app/assets/icons/arrow-right.svg'
+import ArrowRightBlack from '@app/assets/icons/arrow-right-black.svg'
 import _ from "lodash";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 
@@ -94,7 +94,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             domain={domain}
             disabled={isTransactionPending}
           >
-            <ArrowRight />
+            <ArrowRightBlack style={{ marginRight: '9px' }}/>
             change
           </SellBansAction>
         </ButtonContainer>

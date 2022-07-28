@@ -10,6 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   height?: string;
   borderRadius?: string;
   padding?: string;
+  color?: string;
 }
 
 const BaseButtonStyled = styled.button<ButtonProps>`
@@ -144,7 +145,7 @@ const CustomButtonStyled = styled(BaseButtonStyled)`
   cursor: pointer;
   user-select: none;
   position: relative;
-  color: white;
+  color: ${({ color }) => color ?  `${color}`: 'white' };
   width: ${({ width }) => `${width}`};
   height: ${({ height }) => `${height}`};
   padding: ${({ padding }) => `${padding}`};
@@ -152,7 +153,7 @@ const CustomButtonStyled = styled(BaseButtonStyled)`
   background-color: ${({ pallete }) => `var(--color-${pallete})`};
 
   &:not(.disabled):hover {
-    box-shadow: 0 0 8px white;
+    box-shadow:${({ color }) =>  ` 0 0 8px ${color}` };
     background-color: ${({ pallete }) => `var(--color-${pallete})`};
   }
 
@@ -184,6 +185,7 @@ const Button: React.FC<ButtonProps> = ({
   height = '33px',
   borderRadius = '50px',
   padding = '11px 25px 11px 22px',
+  color,
   icon: IconComponent,
   children,
   ...rest
@@ -198,6 +200,7 @@ const Button: React.FC<ButtonProps> = ({
       height={height}
       padding={padding}
       borderRadius={borderRadius}
+      color={color}
       {...rest}
     >
       {!!IconComponent && <IconComponent />}

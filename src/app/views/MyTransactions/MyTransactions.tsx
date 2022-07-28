@@ -66,7 +66,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
         ) : <></>}
       </Box>
       {
-        false && (
+        domain.isExpired && (
           <Button variant="ghostBordered"  pallete="green" style={{ margin: '0 0 0 20px' }}>
             renew subscription
           </Button>
