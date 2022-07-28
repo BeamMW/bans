@@ -116,7 +116,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
               pallete='blue'
             >
               <Sell />
-              <Text sx={{ fontWeight: 'bold', color: '#032E49', ml: '9px' }}>sell</Text>
+              <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px' }}>sell</Text>
             </SellBansAction>
           }
 

@@ -11,7 +11,7 @@ import { useCurrentTransactionState } from '@app/library/transaction-react/useCu
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
-import RemoveIcon from '@app/assets/icons/remove-sale.svg';
+import RemoveBlueIcon from '@app/assets/icons/remove-blue.svg';
 
 interface RemoveProps {
   isShown: boolean;
@@ -59,8 +59,8 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
             disabled={isTransactionPending}
             pallete='red'
           >
-            <RemoveIcon style={{margin: '-1px 9px 0px 0px', filter: 'brightness(15%)'}}/>
-            remove
+            <RemoveBlueIcon style={{marginTop: '-1px',marginRight:'9px'}}/>
+            <span style={{ color: '#042548' }}>remove</span>
           </SellBansAction>
         </ButtonContainer>
       </>

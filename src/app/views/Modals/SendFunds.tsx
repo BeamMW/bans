@@ -64,8 +64,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
-  const [textWidth, setTextWidth] = React.useState(0);
-  const [isValidAmount, setIsValidAmount] = React.useState(false);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,11 +72,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
     if (name === 'domain') {
       if (regexForDomain.test(value)) {
-        !!value && setTextWidth(getTextWidth(value, '16px Arial'/* 16 */));
-
         setValues({
           ...values,
-          [name]: value.toLowerCase(),
+          [name]: value.toLowerCase() + '.beam',
         });
       }
     }
@@ -99,25 +96,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     setDomain(domain);
   });
 
-  function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
-
-    /* if (e.key == 'l' || e.key == 'i') {
-      setTextWidth(textWidth - 4);
-    } else if (e.key == 'm' || e.key == 'w') {
-      setTextWidth(textWidth + 5);
-    } else {
-      setTextWidth(textWidth);
-    } */
-
-    /* if (e.key === "Backspace" && values.domain.length !== 0) {
-      setTextWidth(textWidth - 12);
-      return;
-    }
-    if (e.key === "Backspace" && values.domain.length === 0) return; */
-
-  }
-
-
   //first loading!
   useEffect(() => {
     domain && setValues({
@@ -138,14 +116,9 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             name='domain'
             onChange={handleChange}
             //onKeyDown={updateSuffix}
-            value={values.domain}
             maxLength={30}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
-            suffix={values.domain.length ? <Text id="suffix" sx={{
-              left: textWidth === 0 ? '0px' : `${textWidth}px`,
-              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
-            }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}
