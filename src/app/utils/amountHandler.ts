@@ -2,6 +2,7 @@ import { isFloat, isNumeric } from "@app/library/base/appUtils";
 
 export function isAmountValid(value) {
     const dotRegexp = new RegExp(/\./g);
+    const splits = value.toString().split('.');
 
     if ((value[0] == '0' && (!!value[1] && !['.'].includes(value[1])))) {
         return;
@@ -15,7 +16,11 @@ export function isAmountValid(value) {
         return;
     }
 
-    if (dotRegexp.test(value) && value.toString().split('.')[1].length > 2) {
+    if (splits[0].length > 8 && splits[0][splits[0].length - 1] != '.') {
+        return;
+    }
+
+    if (dotRegexp.test(value) && splits[1].length > 2) {
         return;
     }
 
