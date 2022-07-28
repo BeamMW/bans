@@ -56,6 +56,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
             borderRadius='50px'
             height='auto'
             pallete={pallete}
+            color='black'
             style={disabled ? {opacity: "0.2"} : {}}
             onClick={!disabled ? sendTransaction : null}
         >

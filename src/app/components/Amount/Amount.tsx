@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Beam from '../../assets/icons/beam.svg';
-import { Flex, Text } from 'theme-ui';
+import { Flex, Text, Box } from 'theme-ui';
 import { Decimal } from '@app/library/base/Decimal';
 import { useSelector } from 'react-redux';
 import { selectRate } from '@app/store/BansStore/selectors';
@@ -24,6 +24,7 @@ const Container = styled.div<ContainerStyles>`
   font-family: 'SFProDisplay', sans-serif;
   font-weight: bolder;
   margin-right: 4px;
+  align-items: ${props => props.showConvertedToUsd ? 'flex-start' : 'center' };
 
   & .text {
     font-size: ${props => props.size};
@@ -55,14 +56,14 @@ export const Amount: React.FC<AmountProps> = ({ size, value, showConvertedToUsd 
   const usdConvertedPrice = showConvertedToUsd ? beamPrice.mul(Decimal.from(value).toString()).prettify(2) : null;
 
   return (
-    <Container size={size}>
+    <Container size={size} showConvertedToUsd={showConvertedToUsd}>
     <Beam style={getIconStyles()} />
-    <div>
+    <Box>
       <Text variant='text' className='text'>{ value } BEAM</Text>
       {
        showConvertedToUsd && <Text variant='subText'><>{ usdConvertedPrice } USD</></Text>
       }
-    </div>
+    </Box>
   </Container>
   )
 }
