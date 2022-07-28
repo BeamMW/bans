@@ -71,7 +71,6 @@ export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActi
   const ref = React.useRef(null)
 
   const searchItems = (searchValue: string) => {
-    console.log(searchValue)
     if (searchValue !== '') {
       const filteredData = items.filter((item) => {
           return item.name.toLowerCase().includes(searchValue.toLowerCase())

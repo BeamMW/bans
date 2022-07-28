@@ -24,7 +24,7 @@ interface RightSideProps {
 }
 const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
   const [showPopup, setShowPopup] = React.useState(null);
-  const {open} = useModalContext();
+  const { open } = useModalContext();
 
   const hideTip = () => {
     setShowPopup(false);
@@ -35,21 +35,21 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
       <Container sx={{ position: 'relative' }}
         onMouseLeave={hideTip}
       >
-        <Flex sx={{justifyContent: 'flex-end'}}>
+        <Flex sx={{ justifyContent: 'flex-end' }}>
           <Button variant='icon' pallete='transparent' onClick={() => setShowPopup(!showPopup)}>
             <Dots />
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
-          <PopupItem onClick={(event) => open(event)("modal-renew")({domain: domain, })(hideTip)}>
+          <PopupItem onClick={(event) => open(event)("modal-renew")({ domain: domain, })(hideTip)}>
             <Renew />
             renew subscription
           </PopupItem>
-          <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain, domainsToSell: domainsToSell})(hideTip) }>
+          <PopupItem onClick={(event) => open(event)("modal-sell")({ domain: domain, domainsToSell: domainsToSell })(hideTip)}>
             <Sell />
             sell
           </PopupItem>
-          <PopupItem onClick={(event) => open(event)("modal-transfer")({domain: domain})(hideTip) }>
+          <PopupItem onClick={(event) => open(event)("modal-transfer")({ domain: domain })(hideTip)}>
             <TransferIcon />
             transfer
           </PopupItem>
@@ -61,14 +61,14 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
 
 export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props) => {
   const { domains } = props;
-  
+
   const domainsToSell: any = !!domains && domains.length ? domains.filter((domain, i) => !domain.isOnSale) : [];
 
   const rows =
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={9} rightWeight={3} styles={{
-        border: domain.isOnSale && !true ? '1px solid rgba(255, 255, 255, 0.3)' :
-        true ?  '1px solid #FF746B' : '1px solid transparent',
+        border: domain.isOnSale && !domain.isExpired ? '1px solid rgba(255, 255, 255, 0.3)' :
+          domain.isExpired ? '1px solid #FF746B' : '1px solid transparent',
       }}>
         <LeftSide domain={domain} showBelonging={false} showSaleIcon={true} />
         {
@@ -82,14 +82,14 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
   return (
     <>
       {rows}
-      <ModalManager/>
-      <RightSideModalManager/>
+      <ModalManager />
+      <RightSideModalManager />
     </>
   );
 }
 
 const ModalManager: React.FC = () => {
-  const {current, close} = useModalContext();
+  const { current, close } = useModalContext();
 
   return (
     <>

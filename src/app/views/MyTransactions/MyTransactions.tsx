@@ -56,12 +56,13 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
 
       <Box sx={{ mb:2 }}>
         {funds.transferred.length ? (
-          isTransactionPending ? <LoadingOverlay /> :
+          
             <WithdrawAction
               transactionId={TRANSACTION_ID}
               change={"withdrawFromDomain"}
               domain={domain}
               pkKeys={pkKeys}
+              //disabled={isTransactionPending}
             >
               <WithDrawButton text='withdraw' />
             </WithdrawAction>

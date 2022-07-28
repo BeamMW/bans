@@ -55,7 +55,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
       >
         <Flex sx={{ justifyContent: 'flex-end', alignItems: "center" }}>
           {
-            !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable &&
+            !domain.isYourOwn && !domain.isOnSale && !domain.isAvailable && !domain.isExpired &&
             <Button variant="ghostBordered" pallete="green" onClick={
               (event) => open(event)("modal-send-funds")({ domain: domain, suggestedDomains: suggestedSendFundsDomains })(null)
             }>

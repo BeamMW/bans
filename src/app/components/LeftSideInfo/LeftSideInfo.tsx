@@ -36,11 +36,11 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
 
-      {/* {showSaleIcon && isOnSale ?
+      {showSaleIcon && isOnSale ?
         <Flex sx={{ marginRight: '20px', alignItems: 'center' }}>
           <SaleIcon />
         </Flex> : <></>
-      } */}
+      }
 
       <Box>
         <Flex sx={{ alignItems: 'flex-end' }}>
@@ -60,16 +60,18 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
           </Box>
         </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
-          {expiresAt && !isOnSale?
-            <SubText isexpired={isExpired}>{ isExpired ?
-              `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}` :
-              `Expires on ${expiresAt}`
-            } </SubText> : <></>}
+          {expiresAt ?
+            <SubText isexpired={isExpired}>{
+              !isExpired ?
+                (!isOnSale || showBelonging ? `Expires on ${expiresAt}` : `This name is on sale.`) :
+                `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}`
+            } </SubText> : <></>
+          }
           {
             showBelonging && <Text sx={{
               color: domain.isAvailable || domain.isYourOwn ? "#00F6D2" : "#FF746B",
               fontStyle: domain.isAvailable || domain.isYourOwn ? "normal" : "italic",
-              padding: expiresAt ? '4px 0px 0px 20px' : '0px'
+              padding: expiresAt ? '4px 0px 0px 20px' : '4px 0px 0px 0px'
             }}>
               {
                 domain.isYourOwn ?

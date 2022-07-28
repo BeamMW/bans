@@ -48,9 +48,9 @@ const Search: React.FC = () => {
     });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
+    /* if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
       return false;
-    };
+    }; */
 
     setSearch(e.target.value.toLocaleLowerCase());
   }
