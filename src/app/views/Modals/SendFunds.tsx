@@ -17,7 +17,7 @@ import SendIcon from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
-import { isFloat, isNumeric, getTextWidth } from "@app/library/base/appUtils";
+import { measureText, getTextWidth } from "@app/library/base/appUtils";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 
 interface SendFundsProps {
@@ -65,13 +65,15 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
   const [isValidAmount, setIsValidAmount] = React.useState(false);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let regexForDomain = /^[A-Za-z0-9]*$/;
 
     if (name === 'domain') {
       if (regexForDomain.test(value)) {
+        !!value && setTextWidth(getTextWidth(value, '16px Arial'/* 16 */));
+
         setValues({
           ...values,
           [name]: value.toLowerCase(),
@@ -97,21 +99,20 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   });
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
-    const width = getTextWidth(values.domain, '16px Arial');
 
-    if(e.key == 'l' || e.key == 'i') {
-      setTextWidth(width - 4);
-    } else if(e.key == 'm' || e.key == 'w') {
-      setTextWidth(width + 5);
+    /* if (e.key == 'l' || e.key == 'i') {
+      setTextWidth(textWidth - 4);
+    } else if (e.key == 'm' || e.key == 'w') {
+      setTextWidth(textWidth + 5);
     } else {
-      setTextWidth(width);
-    }
+      setTextWidth(textWidth);
+    } */
 
-    if (e.key === "Backspace" && values.domain.length !== 0) {
+    /* if (e.key === "Backspace" && values.domain.length !== 0) {
       setTextWidth(textWidth - 12);
       return;
     }
-    if (e.key === "Backspace" && values.domain.length === 0) return;
+    if (e.key === "Backspace" && values.domain.length === 0) return; */
 
   }
 
@@ -135,18 +136,20 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Domain*'
             name='domain'
             onChange={handleChange}
-            onKeyDown={updateSuffix}
+            //onKeyDown={updateSuffix}
             value={values.domain}
             maxLength={30}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
-            suffix={values.domain.length ? <Text id="suffix" sx={{ 
+            suffix={values.domain.length ? <Text id="suffix" sx={{
               left: textWidth === 0 ? '0px' : `${textWidth}px`,
               color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
-             }}>.beam</Text> : <></>}
+            }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}
+          {textWidth}
+
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'

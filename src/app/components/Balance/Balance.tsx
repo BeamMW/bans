@@ -18,7 +18,7 @@ import { LoadingOverlay } from "../LoadingOverlay";
 interface BalanceProps {
   balance: string
 }
-export const Balance: React.FC<BalanceProps> = ({ balance }) => {
+export const Balance: React.FC<BalanceProps> = ({ balance}) => {
 
   const TRANSACTION_ID = "WITHDRAW ALL";
 
@@ -42,7 +42,7 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
         <Amount value={Decimal.from(balance).div(GROTHS_IN_BEAM).toString()} size='20px' />
       </div>
       {
-        balance && (
+        !!+balance ? (
           <div className="withdraw">
             <WithdrawAction
               transactionId={TRANSACTION_ID}
@@ -52,7 +52,7 @@ export const Balance: React.FC<BalanceProps> = ({ balance }) => {
               <WithDrawButton text='withdraw all' />
             </WithdrawAction>
           </div>
-        )
+        ) : <></>
       }
     </Container>
   )

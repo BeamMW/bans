@@ -28,8 +28,11 @@ interface RightSideProps {
 }
 
 const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
-  const TRANSACTION_ID = `WITHDRAW FROM ${domain.name.toUpperCase()}.beam`
-
+  
+  //@TODO:temp solution
+  //const TRANSACTION_ID = `WITHDRAW FROM ${domain.name.toUpperCase()}.beam`
+  const TRANSACTION_ID = "WITHDRAW ALL";
+  
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
   const { open } = useModalContext();
@@ -62,7 +65,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
               change={"withdrawFromDomain"}
               domain={domain}
               pkKeys={pkKeys}
-              //disabled={isTransactionPending}
+              disabled={isTransactionPending}
             >
               <WithDrawButton text='withdraw' />
             </WithdrawAction>
