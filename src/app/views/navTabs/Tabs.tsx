@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Button from '@app/components/Button';
 import {Tooltip, DIRECTIONS } from '@app/components/Tooltip/Tooltip';
 import { useModal } from '@app/components/Modals/useModal';
@@ -8,6 +8,7 @@ import { copyToClipboard } from '@app/library/base/appUtils';
 
 import { SendFunds } from '@app/views/Modals/SendFunds';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
+import { BackButton } from "@app/components/BackButton/BackButton";
 
 import FaqIcon from "@app/assets/icons/faq.svg";
 import KeyIcon from "@app/assets/icons/key.svg";
@@ -34,6 +35,7 @@ const passiveIconStyle = {
 
 const Tabs:FC = () => {
   const {open, current} = useModalContext();
+  const navigate = useNavigate();
 
   const { isShown, toggle } = useModal();
   const [active, setActive] = React.useState('');
@@ -51,6 +53,9 @@ const Tabs:FC = () => {
   return (
     <>
   <TabsContainer>
+    {
+      location.pathname !== '/' && <BackButton text="back" handler={() => navigate(-1)}/>
+    }
     <TabsChildren>
       {
         location.pathname == '/my-page' && (

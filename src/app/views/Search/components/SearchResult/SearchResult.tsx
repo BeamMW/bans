@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import { Paragraph, Flex } from "theme-ui";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
@@ -20,7 +21,7 @@ export interface SearchResultProps {
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
   const { setCurrentView, foundDomain, setFoundDomain } = useMainView();
   const { isShown, toggle } = useModal();
-
+  const navigate = useNavigate();
   const { search, isValid, isLoading } = props;
   const { isAvailable, expiresAt, isYourOwn } = foundDomain ?? { isAvailable: true, expireBlock: 0, isYourOwn: false };
 
@@ -28,6 +29,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
 
   const proceedWithDomainHandler = () => {
     isValid && isAvailable && !foundDomain.isYourOwn && !foundDomain.isOnSale && setCurrentView("REGISTER_DOMAIN");
+    navigate('/register');
   }
 
   const searchResult = (

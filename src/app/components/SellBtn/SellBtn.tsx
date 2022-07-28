@@ -17,7 +17,7 @@ export const SellBtn:React.FC<SellBtnProps> = ({ onConfirm }) => {
       borderRadius='50px'
     >
      <Sell />
-     <Text sx={{ ml:'9px', fontWeight: 'bold', color:'#032E49' }}>Sell</Text>
+     <Text sx={{ ml:'9px', fontWeight: 'bold', color:'#032E49' }}>sell</Text>
     </Button>
   )
 }

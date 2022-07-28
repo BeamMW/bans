@@ -250,7 +250,6 @@ export function* notificationFromDomainsChangesSaga(channel) {
 }
 
 export default function* notificationsSaga() {
-  debugger;
   if (userDatabase.isOpen) {
     //init
     yield call(loadFavoritesNotificationsFromDatabaseSaga);

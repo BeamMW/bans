@@ -16,7 +16,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const ContainerStyled = styled.div<InputProps>`
   position: relative;
   min-height: 50px;
-  max-width: 630px;
+  max-width: 650px;
   margin-bottom: ${({ margin }) => (margin === 'none' ? 0 : 50)}px;
 `;
 

@@ -42,15 +42,15 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
         </Flex>
         <Popup isVisible={showPopup}>
           <PopupItem onClick={(event) => open(event)("modal-renew")({domain: domain, })(hideTip)}>
-            <Renew />
+            <Renew width={20}/>
             renew subscription
           </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain, domainsToSell: domainsToSell})(hideTip) }>
-            <Sell />
+            <Sell width={20}/>
             sell
           </PopupItem>
           <PopupItem onClick={(event) => open(event)("modal-transfer")({domain: domain})(hideTip) }>
-            <TransferIcon />
+            <TransferIcon width={20}/>
             transfer
           </PopupItem>
         </Popup>

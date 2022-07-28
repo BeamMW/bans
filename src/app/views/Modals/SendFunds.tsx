@@ -47,6 +47,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      setIsButtonDisabled(true)
       closeModal(null);
     }
 
@@ -96,22 +97,22 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   });
 
   function updateSuffix(e: React.KeyboardEvent<HTMLInputElement>) {
-    const width = getTextWidth(values.domain, '16px Arial');
+    const width = getTextWidth(values.domain, '16px arial');
 
     if(e.key == 'l' || e.key == 'i') {
       setTextWidth(width - 4);
+      return;
     } else if(e.key == 'm' || e.key == 'w') {
       setTextWidth(width + 5);
-    } else {
-      setTextWidth(width);
+      return;
     }
 
     if (e.key === "Backspace" && values.domain.length !== 0) {
-      setTextWidth(textWidth - 12);
+      setTextWidth(textWidth - 6);
       return;
     }
     if (e.key === "Backspace" && values.domain.length === 0) return;
-
+    setTextWidth(width);
   }
 
 
@@ -135,14 +136,13 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             name='domain'
             onChange={handleChange}
             onKeyDown={updateSuffix}
-            value={values.domain}
             maxLength={30}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
-            suffix={values.domain.length ? <Text id="suffix" sx={{ 
-              left: textWidth === 0 ? '0px' : `${textWidth}px`,
-              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
-             }}>.beam</Text> : <></>}
+            // suffix={values.domain.length ? <Text id="suffix" sx={{ 
+            //   left: textWidth === 0 ? '0px' : `${textWidth}px`,
+            //   color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
+            //  }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}

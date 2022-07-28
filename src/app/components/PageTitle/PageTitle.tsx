@@ -4,17 +4,13 @@ import { TitleContainer, Title, TitleChildren } from './PageTitle.style';
 
 export interface PageTitleProps {
   title: string;
-  showBackButton?: boolean;
   children?: React.ReactNode;
 }
 
-export const PageTitle:FC<PageTitleProps> = ({ title,showBackButton = true, children }) => {
+export const PageTitle:FC<PageTitleProps> = ({ title, children }) => {
 
   return (
   <TitleContainer>
-    {
-      showBackButton && <BackButton text="back"/>
-    }
     <Title>{ title }</Title>
    {
     children && (
