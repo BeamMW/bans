@@ -51,7 +51,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
     <Flex sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
       <Amount value={amount} size="14px" />
 
-      <Box sx={{ mb:2 }}>
+      <Box sx={{ mb: '6px' }}>
         {funds.transferred.length ? (
           isTransactionPending ? <LoadingOverlay /> :
             <WithdrawAction
