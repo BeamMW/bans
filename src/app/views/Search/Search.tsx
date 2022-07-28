@@ -15,11 +15,12 @@ import { useSearchValidator } from '@app/hooks/useSearchValidator';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import Notifications from '@app/views/Notifications/Notifications';
 import { useDebounce } from '@app/hooks/useDebounce';
+import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
 
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
-
+  const [ buttonDisabled, setButtonDisabled ] = React.useState(false); 
   const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +56,20 @@ const Search: React.FC = () => {
     setSearch(e.target.value.toLocaleLowerCase());
   }
 
+  const TRANSACTION_ID = "SEND_FUNDS";
+
+  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      setButtonDisabled(true)
+    }
+
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+      setButtonDisabled(false)
+    }
+
+  }, [transactionState]);
   return (
     <Container sx={{ maxWidth: 650 }}>
       <Input
@@ -72,7 +87,7 @@ const Search: React.FC = () => {
 
       <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>
         <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
-        <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)}>
+        <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)} disabled={buttonDisabled}>
           <Sell />
           send funds to the BANS
         </Button>

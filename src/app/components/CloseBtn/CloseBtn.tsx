@@ -17,7 +17,7 @@ export const CloseBtn:React.FC<CloseBtnProps> = ({ toggle, text = 'close', width
     pallete='ghost'
     onClick={toggle}
     padding="10px 24px"
-    width='fit-content'
+    width='125px'
     borderRadius='50px'
     height='auto'
     >

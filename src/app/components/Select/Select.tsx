@@ -24,6 +24,10 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
     setShow(false);
   }
 
+  const handleChange = () => {
+    setShow(!show);
+  }
+
   useOnClickOutside(ref, handleClose);
 
   return (
@@ -41,7 +45,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
             {!!activeItem ?   activeItem?.name : items[0]?.domain?.name}
             { showSuffix && <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text> }
           </Paragraph>
-        <ArrowDown className="arrow"/>
+        <ArrowDown className="arrow" onClick={(e:React.MouseEvent<SVGElement, MouseEvent>) => { handleChange(); e.stopPropagation(); }}/>
       </div>
       {
         show && (

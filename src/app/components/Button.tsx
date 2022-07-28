@@ -152,8 +152,8 @@ const CustomButtonStyled = styled(BaseButtonStyled)`
   border-radius: ${({ borderRadius }) => `${borderRadius}`};
   background-color: ${({ pallete }) => `var(--color-${pallete})`};
 
-  &:not(.disabled):hover {
-    box-shadow:${({ color }) =>  ` 0 0 8px ${color}` };
+  &:hover {
+    box-shadow: 0 0 8px white;
     background-color: ${({ pallete }) => `var(--color-${pallete})`};
   }
 

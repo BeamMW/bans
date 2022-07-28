@@ -92,7 +92,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             change={"adjustSellingBans"}
             amount={+amount}
             domain={domain}
-            disabled={isTransactionPending}
+            disabled={Decimal.from(+amount).isZero  || isTransactionPending}
           >
             <ArrowRightBlack style={{ marginRight: '9px' }}/>
             change

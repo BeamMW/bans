@@ -47,6 +47,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      setIsButtonDisabled(true)
       closeModal(null);
     }
 

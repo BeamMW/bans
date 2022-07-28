@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Flex, Text } from 'theme-ui';
+import { Flex, Text, Paragraph } from 'theme-ui';
 import Button from "../Button";
 import Heart from '../../assets/icons/heart.svg';
 import HeartActive from '../../assets/icons/heart-active.svg';
@@ -17,10 +17,17 @@ export const RegistrationHeader: React.FC<HeaderProps> = ({ search }) => {
   const heartHandler = useHandleHeartAction(isBansLove, search);
 
   return (
-    <Flex>
-      <Text variant="panelHeader">
-        {search}.beam
-      </Text>
+    <Flex sx={{justifyContent: 'space-between'}}>
+
+      <Paragraph sx={{
+              fontSize: '16px',
+              fontFamily: 'SFProDisplay',
+              fontWeight: 700,
+              lineHeight: '19px',
+            }}>
+              {search}
+              <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>
+      </Paragraph>
       <Button variant='icon' pallete='opacity' style={{ margin: 0 }} onClick={heartHandler}>
         {!!isBansLove && isBansLove.length ? <HeartActive /> : <Heart />}
       </Button>

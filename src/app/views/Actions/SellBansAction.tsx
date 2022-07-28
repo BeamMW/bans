@@ -52,7 +52,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
         <Button
             variant='custom' 
             padding="10px 24px"
-            width='fit-content'
+            width='125px'
             borderRadius='50px'
             height='auto'
             pallete={pallete}

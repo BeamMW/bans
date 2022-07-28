@@ -5,7 +5,7 @@ import { PageTitle } from '@app/components/PageTitle/PageTitle';
 const About: React.FC = () => {
   return (
     <>
-    <PageTitle title="About" showBackButton={false}/>
+    <PageTitle title="About"/>
     <Container sx={{ p: 5, borderRadius: 10, bg: 'rgba(255,255,255,0.1)'}}>
       <Paragraph variant='block'>
       This proposal's expectation is to produce a community signal on a grant. Full details and discussions thus far can be found at:

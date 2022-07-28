@@ -87,7 +87,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'
-            pallete='purple'
+            pallete='blue'
             label='Amount'
             onChange={handleChange}
             onKeyPress={keyPressAmountHandler}
@@ -112,11 +112,11 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
               change={"sellBans"}
               amount={+amount}
               domain={activeItem}
-              disabled={!amount || activeItem.isOnSale || isTransactionPending}
+              disabled={Decimal.from(+amount).isZero || activeItem.isOnSale || isTransactionPending}
               pallete='blue'
             >
               <Sell />
-              <Text sx={{ fontWeight: 'bold', color: '#032E49' }}>sell</Text>
+              <Text sx={{ fontWeight: 'bold', color: '#032E49', ml: '9px' }}>sell</Text>
             </SellBansAction>
           }
 

@@ -81,7 +81,6 @@ export const Register: React.FC = () => {
   return (
     <>
       <Flex sx={{ justifyContent: 'center', mb: 40 }}>
-        <BackButton handler={backButtonHandler} text="back" />
       </Flex>
 
       <Container>

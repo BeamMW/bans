@@ -410,6 +410,7 @@ const theme: Theme = {
     window: {
       ...windowGradient,
       minHeight: "100vh",
+      maxWidth: "1200px",
       display: "flex",
       flexDirection: "column",
       p: [20],

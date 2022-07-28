@@ -19,7 +19,7 @@ export const SubText = styled(Text) <SubTextProps>`
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
-  color: ${({ isexpired }) => isexpired ? '#FF746B' : 'rgba(255, 255, 255, 0.5)'};
+  color: ${({ isexpired }) => !!isexpired ? '#FF746B' : 'rgba(255, 255, 255, 0.5)'};
   display: block;
   padding-top: 6px;
   white-space: nowrap;
@@ -61,7 +61,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
         </Flex>
         <Flex sx={{ alignItems: 'baseline' }}>
           {expiresAt ?
-            <SubText isexpired={isExpired}>{
+            <SubText isexpired={isExpired ? isExpired.toString() : ""}>{
               !isExpired ?
                 (!isOnSale || showBelonging ? `Expires on ${expiresAt}` : `This name is on sale.`) :
                 `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}`

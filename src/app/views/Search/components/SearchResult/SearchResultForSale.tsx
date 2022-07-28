@@ -53,7 +53,7 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
   }, [transactionState, setCurrentView]);
 
   return (
-    <Modal isShown={isShown} header="Attention1">
+    <Modal isShown={isShown} header="Attention">
       <>
         <Box>
           <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center' }}>You are going to buy a BANS with the set expiration period - <Text sx={{ fontWeight: 700 }}>{foundDomain.expiresAt}.</Text> </Paragraph>
