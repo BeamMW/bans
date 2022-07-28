@@ -67,14 +67,14 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
     let regexForDomain = /^[A-Za-z0-9]*$/;
-
     if (name === 'domain') {
-      if (regexForDomain.test(value)) {
+      let inputValue = value.split('.')[0].toLowerCase();
+      if (regexForDomain.test(inputValue)) {
         setValues({
           ...values,
-          [name]: value.toLowerCase() + '.beam',
+          [name]: inputValue,
         });
       }
     }
@@ -115,7 +115,17 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Domain*'
             name='domain'
             onChange={handleChange}
-            //onKeyDown={updateSuffix}
+            defaultValue='.beam'
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              let code;
+              if (e.keyCode) code = e.keyCode; // some browsers use e.keyCode
+              else if (e.which) code = e.which;  // others use e.which
+              if (e.ctrlKey || code == 46) {
+                event.preventDefault();
+            }   
+            }}
+            autoFocus={true}
+            onFocus={(e) => {e.target.selectionStart = 0; e.target.selectionEnd = 0 }}
             maxLength={30}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
