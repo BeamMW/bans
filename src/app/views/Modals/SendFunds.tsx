@@ -148,8 +148,6 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}
-          {textWidth}
-
         <Box sx={{ mt: '30px' }}>
           <Input
             variant='modalInput'
