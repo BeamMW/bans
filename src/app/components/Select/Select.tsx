@@ -24,32 +24,29 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
     setShow(false);
   }
 
-  const handleChange = () => {
-    setShow(!show);
-  }
-
   useOnClickOutside(ref, handleClose);
 
   return (
     <div>
     <Label>Domain</Label>
     <CustomSelect>
-      <div className="selected" onClick={() => setShow(true)}>
+      <div className="selected" ref={ref} onClick={() => setShow(!show)}>
           <Paragraph sx={{
             fontSize: '16px',
             fontFamily: 'SFProDisplay',
             fontWeight: 700,
             lineHeight: '19px',
             fontStyle: 'normal',
-          }}>
-            {!!activeItem ?   activeItem?.name : items[0]?.domain?.name}
+          }}
+          >
+            {!!activeItem ?  activeItem?.name : items[0]?.domain?.name}
             { showSuffix && <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text> }
           </Paragraph>
-        <ArrowDown className="arrow" onClick={(e:React.MouseEvent<SVGElement, MouseEvent>) => { handleChange(); e.stopPropagation(); }}/>
+        <ArrowDown className="arrow" onClick={(e:React.MouseEvent<SVGElement, MouseEvent>) => { handleClose(); e.stopPropagation(); }}/>
       </div>
       {
         show && (
-          <div className="items" ref={ref}>
+          <div className="items">
             {
               items.map((item) => {
                 return (

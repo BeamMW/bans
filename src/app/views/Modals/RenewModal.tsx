@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Divider } from "theme-ui";
+import { Divider, Text} from "theme-ui";
 import store from "index";
 import { Modal } from "@app/components/Modals/Modal";
 import { RegistrationHeader } from "@app/components/RegistrationHeader/RegistrationHeader";
@@ -56,7 +56,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
     <Modal isShown={isShown} header="Renew subscription">
       <>
         <RegistrationHeader search={domain.name} />
-        <Divider sx={{ my: 5 }} />
+        <Divider sx={{ my: 3 }} />
         <RegistrationPeriod period={period} setPeriod={setPeriod} />
         <RegistrationPrice price={{ ...domain.price, ...{ amount: price } }} period={period} />
         <ButtonContainer>
@@ -69,7 +69,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
             disabled={isTransactionPending}
           >
             <Renew />
-            renew
+            <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px' }}>renew</Text>
           </RegisterAction>
         </ButtonContainer>
       </>

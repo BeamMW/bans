@@ -71,7 +71,7 @@ const Search: React.FC = () => {
 
   }, [transactionState]);
   return (
-    <Container sx={{ maxWidth: 650 }}>
+    <Container>
       <Input
         variant='proposal'
         pallete='white'

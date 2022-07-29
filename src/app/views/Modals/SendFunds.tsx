@@ -70,11 +70,10 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     let { name, value } = e.target;
     let regexForDomain = /^[A-Za-z0-9]*$/;
     if (name === 'domain') {
-      let inputValue = value.split('.')[0].toLowerCase();
-      if (regexForDomain.test(inputValue)) {
+      if (regexForDomain.test(value)) {
         setValues({
           ...values,
-          [name]: inputValue,
+          [name]: value.toLowerCase(),
         });
       }
     }
@@ -115,18 +114,19 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Domain*'
             name='domain'
             onChange={handleChange}
-            defaultValue='.beam'
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              let code;
-              if (e.keyCode) code = e.keyCode; // some browsers use e.keyCode
-              else if (e.which) code = e.which;  // others use e.which
-              if (e.ctrlKey || code == 46) {
-                event.preventDefault();
-            }   
-            }}
-            autoFocus={true}
-            onFocus={(e) => {e.target.selectionStart = 0; e.target.selectionEnd = 0 }}
+            // defaultValue='.beam'
+            // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            //   let code;
+            //   if (e.keyCode) code = e.keyCode; // some browsers use e.keyCode
+            //   else if (e.which) code = e.which;  // others use e.which
+            //   if (e.ctrlKey || code == 46) {
+            //     event.preventDefault();
+            // }   
+            // }}
+            // autoFocus={true}
+            // onFocus={(e) => {e.target.selectionStart = 0; e.target.selectionEnd = 0 }}
             maxLength={30}
+            value={values.domain}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
           >
@@ -159,7 +159,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             disabled={isButtonDisabled}
           >
             <SendIcon />
-            send
+            <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px' }}>send</Text>
           </SendFundsAction>
         </ButtonContainer>
       </>
