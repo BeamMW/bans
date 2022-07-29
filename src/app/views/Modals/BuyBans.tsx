@@ -78,7 +78,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
             domain={domain}
           >
             <ArrowRight />
-            continue
+            <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px', marginTop: '-1px' }}>continue</Text>
           </RegisterAction>
         </ButtonContainer>
       </>

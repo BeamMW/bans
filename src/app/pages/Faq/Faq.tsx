@@ -8,14 +8,6 @@ const Faq: React.FC = () => {
     <>
       <PageTitle title="FAQ" />
       <Accordion />
-      {/* <Container>
-        <Flex sx={{ justifyContent: "center", alignItems:'center', alignContent:"center", minHeight: "50vh" }}>
-          <Heading>Coming soon...</Heading>
-        </Flex>
-      </Container> */}
-      {/* Waiting to be filled */}
-      {/* <Accordion />
-      <About/> */}
     </>
   )
 }
