@@ -28,7 +28,7 @@ const Data = [
   },
   {
     question: 'What happens if I sold my BANS domain and received funds after I sold it? You will not be able to access to these funds. ',
-    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Always make sure to conduct transactions with BANS domains you own.<br/><br/>
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Always make sure to conduct transactions with BANS domains you own.<br/>
     Alternatively, wait for all transactions linked to a BANS domain to complete, before listing it for sale.</Paragraph>
   },
   {

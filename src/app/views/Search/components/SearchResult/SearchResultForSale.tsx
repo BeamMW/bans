@@ -69,7 +69,7 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
             disabled={isTransactionPending}
           >
             <ArrowRight />
-            continue
+            <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px', marginTop: '-1px' }}>continue</Text>
           </RegisterAction>
         </ButtonContainer>
       </>

@@ -122,7 +122,8 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             errorMessage={'Incorrect domain'}
             suffix={values.domain.length ? <Text id="suffix" sx={{
               left: textWidth === 0 ? '0px' : `${textWidth}px`,
-              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
+              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)',
+              fontWeight: 700,
             }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
