@@ -29,11 +29,10 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
 
   const proceedWithDomainHandler = () => {
     isValid && isAvailable && !foundDomain.isYourOwn && !foundDomain.isOnSale && setCurrentView("REGISTER_DOMAIN");
-    navigate('/register');
   }
 
   const searchResult = (
-    <SplitContainer leftWeight={7} rightWeight={5} border={showBorder} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler}>
+    <SplitContainer styles={{ maxWidth: '650px', margin:'0 auto' }}  leftWeight={7} rightWeight={5} border={showBorder} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler}>
       <SearchResultLeft domain={foundDomain} value={search} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} />
       <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
     </SplitContainer>
@@ -69,7 +68,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
                     {searchResult}
                   </>
                 )}
-                <Flex>
+                <Flex sx={{maxWidth:' 650px', margin: '0 auto'}}>
                   {
                     !isValid && (
                       <SubText sx={{ fontSize: '14px', px: 4 }}>Domain should contain at least 3 characters, only latin letters, numbers are allowed</SubText>

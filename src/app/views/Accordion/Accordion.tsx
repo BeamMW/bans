@@ -30,6 +30,37 @@ const Data = [
     question: 'What happens if I sold my BANS domain and received funds after I sold it? You will not be able to access to these funds. ',
     answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Always make sure to conduct transactions with BANS domains you own.<br/><br/>
     Alternatively, wait for all transactions linked to a BANS domain to complete, before listing it for sale.</Paragraph>
+  },
+  {
+    question: 'What would happen if I sold my BANS domain but didnt withdraw the received balance from my BANS name?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>
+      Your funds remain unaffected and can be withdrawn any time. Same case applies, if you have remaining funds in your BANS domain after it has expired
+    </Paragraph>
+  },
+  {
+    question: 'Can I create my own BANS subdomains?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Functionality is currently in development and will be activated at a later stage.</Paragraph>
+  },
+  {
+    question: 'What is a Grace Period?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>
+      Grade period lasts 90 days , and refers to the time period between the expiration of your BANS domain and the moment it is passed back to the BeamX DAO, in case the domain is not renewed.<br/>
+E.g., if your BANS domain is set to expire on January 1st, 2023, your grace period will last until April 1st, 2023
+    </Paragraph>
+  },
+  {
+    question: 'After expiration, will the BANS domain become available for purchase to other users?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Yes.</Paragraph>
+  },
+  {
+    question: 'Will BANS domain support NFT profile pictures?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Currently in development!</Paragraph>
+  },
+  {
+    question: 'Where does all the revenue go from the sales of BANS domain? ',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>
+      All profits are stored in the BeamX DAO treasury and under the governance of $BEAMX token holders.
+    </Paragraph>
   }
 ];
 

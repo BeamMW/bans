@@ -80,7 +80,8 @@ export const Register: React.FC = () => {
 
   return (
     <>
-      <Flex sx={{ justifyContent: 'center', mb: 40 }}>
+      <Flex sx={{ justifyContent: 'center',position: 'absolute', top:' 30px' }}>
+        <BackButton handler={backButtonHandler} text="back" />
       </Flex>
 
       <Container>
@@ -106,7 +107,7 @@ export const Register: React.FC = () => {
                     domain={foundDomain}
                   >
                     <Plus />
-                    register
+                    <Text sx={{ fontWeight: 'bold', color: '#032E49', marginLeft: '9px' }}>register</Text>
                   </RegisterAction>
               }
 

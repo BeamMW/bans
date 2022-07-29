@@ -9,6 +9,7 @@ const Container = styled(Flex)`
       position: absolute;
       top: 50%;
       width: 95%;
+      max-width: 1200px;
 `
 
 const EmptyPage: React.FC<any> = ({emptyText}) => {

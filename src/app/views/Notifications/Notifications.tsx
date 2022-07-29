@@ -66,7 +66,7 @@ const Notifications: React.FC = () => {
     }, [notifications]);
 
     return (
-        <Container sx={{ maxWidth: 630 }}>
+        <Container sx={{ maxWidth: 800, width: 'fit-content' }}>
             {!!notificationsList && !!notificationsList.length && notificationsList.map((notification, i) => {
                 return (notification?.notifyData &&
                     <>
