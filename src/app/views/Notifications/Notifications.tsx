@@ -43,10 +43,12 @@ const Notifications: React.FC = () => {
     };
 
     const handler = useCallback((notification) => {
-        if ([NotificationType.gifted, NotificationType.favorites, NotificationType.sold].includes(notification.type))
-            return navigate("my-page", { state: { active: NotificationType.favorites ? 2 : 1 } })
+        if ([NotificationType.gifted, NotificationType.favorites, ].includes(notification.type)) {
+            const active = NotificationType.favorites == notification.type ? 2 : 1;
+            return navigate("my-page", { state: { active: active } })
+        }
 
-        if (notification.type === NotificationType.transferred)
+        if ([NotificationType.transferred, NotificationType.sold].includes(notification.type))
             return navigate("transactions")
 
     }, []);
