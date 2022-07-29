@@ -64,7 +64,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             <SubText isexpired={isExpired ? isExpired.toString() : ""}>{
               !isExpired ?
                 (!isOnSale || showBelonging ? `Expires on ${expiresAt}` : `This name is on sale.`) :
-                `This name is in grace period, and needs to be renewed by ${domain.gracePeriod()}`
+                `This name is in grace period, and needs to be renewed by ${domain.gracePeriod}`
             } </SubText> : <></>
           }
           {

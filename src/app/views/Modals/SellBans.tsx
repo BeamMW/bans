@@ -65,7 +65,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
       store.dispatch(reloadAllUserInfo.request());
 
       return () => {
-        store.dispatch(reloadAllUserInfo.request());
+        setAmount(""), isShown = false
       }
     }
 

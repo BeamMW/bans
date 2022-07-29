@@ -223,7 +223,7 @@ export function* notificationFromDomainsChangesSaga(channel) {
     const { payload: {
       changesSoldDomains/* , changesGiftedDomains */
     } } = yield take(channel)
-
+    console.log("changesSoldDomains",changesSoldDomains);
     const notifications = [
       //for sold domains notifications
       ...changesSoldDomains.map(
@@ -243,7 +243,7 @@ export function* notificationFromDomainsChangesSaga(channel) {
         })
       ) */
     ];
-
+    console.log("notifications", notifications);
     //@TODO: ternary??
     yield notifications.length ? call(bulkCreateNotification, notifications) : null;
   }

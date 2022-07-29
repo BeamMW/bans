@@ -96,6 +96,10 @@ export class DomainPresenter implements IDomainPresenter {
         return !!isYourOwn;
     }
 
+    protected gracePeriod(): string {
+        return this.unixTimestamp ? moment(this.unixTimestamp).add(90, 'days').format('LL') : null;
+    }
+
     protected resolveDomainPrice(): PriceInfo {
         return this.rawDomain?.price ?? {
             aid: 0, amount: null
@@ -113,7 +117,7 @@ export class DomainPresenter implements IDomainPresenter {
                 isYourOwn: this.resolveIsYouOwn(),
                 isOnSale: !!this.rawDomain?.price,
                 price: this.resolveDomainPrice(),
-                gracePeriod: () => this.unixTimestamp ? moment(this.unixTimestamp).add(90, 'days').format('LL') : null,
+                gracePeriod: this.gracePeriod(),
             }
         } catch (e) {
             throw new DomainPresenterError(e.message)

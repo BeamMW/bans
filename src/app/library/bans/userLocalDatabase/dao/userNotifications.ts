@@ -42,6 +42,7 @@ export async function createNotification(notification: Notification): Promise<st
 }
 
 export async function bulkCreateNotification(notifications: Array<Notification>): Promise<string> {
+    console.log("notifications in bulkCreateNotification", notifications);
     return await database.notifications.bulkAdd(notifications);
 }
 

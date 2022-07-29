@@ -262,10 +262,10 @@ function* notifyChangesDomainsStateChannel(domains) {
     /* If previous domain state has not isOnSale option - obviously the domain have been transferred */
     //const changesGiftedDomains = changes.filter(domain => !domain.isOnSale && differenceByName.includes(domain.name));
 
-    /* console.log("changesSoldDomains", changesSoldDomains);
-    console.log("changesGiftedDomains", changesGiftedDomains);
+    console.log("changesSoldDomains", changesSoldDomains);
+    //console.log("changesGiftedDomains", changesGiftedDomains);
     console.log("_".repeat(20));
-    changes.length && console.log(oldDomainsState, domains); */
+    changes.length && console.log(oldDomainsState, domains);
 
     if ([...changesSoldDomains, /* ...changesGiftedDomains */].length) {
       yield put(internalChangesDomainChannel, {
