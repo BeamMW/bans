@@ -24,6 +24,7 @@ export const RegistrationHeader: React.FC<HeaderProps> = ({ search }) => {
               fontFamily: 'SFProDisplay',
               fontWeight: 700,
               lineHeight: '19px',
+              alignSelf: 'center'
             }}>
               {search}
               <Text sx={{color: 'rgba(255,255,255,0.5)'}}>.beam</Text>

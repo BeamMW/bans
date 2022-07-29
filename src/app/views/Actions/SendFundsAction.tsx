@@ -40,7 +40,16 @@ export const SendFundsAction: React.FC<SendFundsActionProps> = ({
     );
 
     return (
-        <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}} onClick={!disabled ? sendTransaction : null}>
+        <Button 
+         pallete="green"
+         style={disabled ? {opacity: "0.2"} : {}}
+         onClick={!disabled ? sendTransaction : null}
+         variant='custom' 
+         padding="10px 24px"
+         width='125px'
+         borderRadius='50px'
+         height='auto'
+         >
             {children}
         </Button>
     );

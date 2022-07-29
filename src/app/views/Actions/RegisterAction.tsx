@@ -52,11 +52,21 @@ export const RegisterAction: React.FC<RegisterActionProps> = ({
     return (
         !isPure ?
             (
-                <Button pallete="green" style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null} >
+                <Button
+                pallete="green"
+                style={disabled ? {opacity: "0.2"} : {}}
+                onClick={!disabled ? sendTransaction : null} 
+                variant='custom' 
+                padding="10px 24px"
+                width='125px'
+                borderRadius='50px'
+                height='auto'
+                color='black'
+                >
                     {children}
-                </Button >
+                </Button>
             ) : (
-                <span style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null}>
+                <span  style={disabled ? {opacity: "0.2"} : {}}  onClick={!disabled ? sendTransaction : null}>
                     {children}
                 </span>
             )
