@@ -18,6 +18,7 @@ interface SelectProps {
 }
 export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem, showSuffix }) => {
   const [show, setShow] = React.useState(false);
+  const [item, setItem] = React.useState('');
   const ref = React.useRef(null);
 
   const handleClose = () => {
@@ -29,8 +30,8 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
   return (
     <div>
     <Label>Domain</Label>
-    <CustomSelect>
-      <div className="selected" ref={ref} onClick={() => setShow(!show)}>
+    <CustomSelect ref={ref}>
+      <div className="selected" onClick={() => setShow(!show)}>
           <Paragraph sx={{
             fontSize: '16px',
             fontFamily: 'SFProDisplay',
@@ -50,7 +51,7 @@ export const Select: React.FC<SelectProps> = ({ items, setActiveItem, activeItem
             {
               items.map((item) => {
                 return (
-                  <div key={item.id} onClick={() => { setActiveItem(item); setShow(false) }}>
+                  <div key={item.id} onClick={(e) => { setActiveItem(item); setShow(false); e.stopPropagation() }}>
                   <Paragraph sx={{
                     fontSize: '16px',
                     fontFamily: 'SFProDisplay',
