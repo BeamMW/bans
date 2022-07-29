@@ -22,7 +22,6 @@ import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 import { MainViewProvider } from './contexts/Bans/MainViewProvider';
 import { ModalProvider } from './contexts/Modal/ModalProvider';
-import { Register } from '@app/views/Register/Register';
 
 const App = () => {
 
@@ -46,7 +45,6 @@ const App = () => {
                     <Route path="faq" element={<Faq />} />
                     <Route path="my-page" element={<MyPage />} />
                     <Route path="transactions" element={<Transactions />} />
-                    {/* <Route path="register" element={<Register />} /> */}
                   </Routes>
                 </BansLayout>
               </ModalProvider>
