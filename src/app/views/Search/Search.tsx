@@ -78,11 +78,11 @@ const Search: React.FC = () => {
         onChange={handleChange}
         value={search}
         maxLength={30}
-        pattern="[a-z0-9\-\_\~]"
         placeholder='Search a name'
       >
         {search ? <RemoveIcon onClick={() => setSearch('')} /> : <SearchIcon />}
       </Input>
+
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
 
       <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>

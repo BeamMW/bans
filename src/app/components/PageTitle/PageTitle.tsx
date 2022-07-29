@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { BackButton } from '../BackButton/BackButton';
 import { TitleContainer, Title, TitleChildren } from './PageTitle.style';
 
 export interface PageTitleProps {

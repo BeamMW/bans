@@ -32,7 +32,6 @@ const Container = styled.div`
   user-select: none;
 `;
 
-
 export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
@@ -81,6 +80,7 @@ export const Register: React.FC = () => {
   return (
     <>
       <Flex sx={{ justifyContent: 'center', mb: 40 }}>
+        <BackButton handler={backButtonHandler} text="back" />
       </Flex>
 
       <Container>

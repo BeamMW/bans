@@ -109,7 +109,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
         <Text>{domain.name}.beam</Text>
 
         <Flex>
-          {domain.expiresAt ? <SubText isexpired={domain.isExpired}>{
+          {domain.expiresAt ? <SubText isexpired={domain.isExpired ? domain.isExpired.toString() : ""}>{
             domain.isExpired ?
               `Paid term of usage is over. Your domain will be disconnected on ${domain.gracePeriod()}` :
               `Expires on ${domain.expiresAt}`
