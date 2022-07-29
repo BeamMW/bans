@@ -64,6 +64,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
+  const [textWidth, setTextWidth] = React.useState(0);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +72,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     let regexForDomain = /^[A-Za-z0-9]*$/;
     if (name === 'domain') {
       if (regexForDomain.test(value)) {
+        !!value && setTextWidth(getTextWidth(value, '16px Arial'/* 16 */));
         setValues({
           ...values,
           [name]: value.toLowerCase(),
@@ -114,21 +116,14 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             label='Domain*'
             name='domain'
             onChange={handleChange}
-            // defaultValue='.beam'
-            // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            //   let code;
-            //   if (e.keyCode) code = e.keyCode; // some browsers use e.keyCode
-            //   else if (e.which) code = e.which;  // others use e.which
-            //   if (e.ctrlKey || code == 46) {
-            //     event.preventDefault();
-            // }   
-            // }}
-            // autoFocus={true}
-            // onFocus={(e) => {e.target.selectionStart = 0; e.target.selectionEnd = 0 }}
             maxLength={30}
             value={values.domain}
             valid={isValid || values.domain.length === 0}
             errorMessage={'Incorrect domain'}
+            suffix={values.domain.length ? <Text id="suffix" sx={{
+              left: textWidth === 0 ? '0px' : `${textWidth}px`,
+              color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)'
+            }}>.beam</Text> : <></>}
           >
             {isValid ? <CheckedIcon /> : <></>}
           </Input>}

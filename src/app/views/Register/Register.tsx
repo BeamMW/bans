@@ -15,10 +15,12 @@ import { RegistrationHeader } from "@app/components/RegistrationHeader/Registrat
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import Plus from '@app/assets/icons/blue-plus.svg';
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDomains } from "@app/store/BansStore/selectors";
 import useCalculateDomainPrice from "@app/hooks/useCalculateDomainPrice";
+import { PageHeader } from "@app/components/PageHeader/PageHeader";
+import LogoIcon from "@app/assets/icons/logo.svg";
 
 const Container = styled.div`
   min-width: 630px;
@@ -36,6 +38,7 @@ export const Register: React.FC = () => {
   const TRANSACTION_ID = "DOMAIN_REGISTER";
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
@@ -83,6 +86,13 @@ export const Register: React.FC = () => {
         <BackButton handler={backButtonHandler} text="back" />
       </Flex>
 
+     {
+      location.pathname != '/'  && (
+        <Flex sx={{ justifyContent: 'center', mt: 35, mb: 35 }}>
+          <PageHeader icon={LogoIcon} title='Beam Anonymous Name Service' />
+        </Flex>
+      )
+     }
       <Container>
         <Box>
           <RegistrationHeader search={domainName} />
