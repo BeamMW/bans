@@ -17,6 +17,7 @@ import Renew from '@app/assets/icons/renew.svg';
 import Sell from '@app/assets/icons/sell.svg';
 import TransferIcon from '@app/assets/icons/gift.svg';
 import { PopupItem } from '@app/components/Popup/Popup.styles';
+import FadeIn from 'react-fade-in';
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -41,16 +42,16 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
           </Button>
         </Flex>
         <Popup isVisible={showPopup}>
-          <PopupItem onClick={(event) => open(event)("modal-renew")({domain: domain, })(hideTip)}>
-            <Renew width={20}/>
+          <PopupItem onClick={(event) => open(event)("modal-renew")({ domain: domain, })(hideTip)}>
+            <Renew width={20} />
             renew subscription
           </PopupItem>
-          <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain, domainsToSell: domainsToSell})(hideTip) }>
-            <Sell width={20}/>
+          <PopupItem onClick={(event) => open(event)("modal-sell")({ domain: domain, domainsToSell: domainsToSell })(hideTip)}>
+            <Sell width={20} />
             sell
           </PopupItem>
-          <PopupItem onClick={(event) => open(event)("modal-transfer")({domain: domain})(hideTip) }>
-            <TransferIcon width={20}/>
+          <PopupItem onClick={(event) => open(event)("modal-transfer")({ domain: domain })(hideTip)}>
+            <TransferIcon width={20} />
             transfer
           </PopupItem>
         </Popup>
@@ -81,7 +82,9 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
 
   return (
     <>
-      {rows}
+      <FadeIn>
+        {rows}
+      </FadeIn>
       <ModalManager />
       <RightSideModalManager />
     </>

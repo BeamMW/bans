@@ -45,7 +45,7 @@ const button: ThemeUIStyleObject = {
 
   color: "#333",
   //border: 1,
-  borderRadius:"19px",
+  borderRadius: "19px",
 
   fontWeight: "bold",
 
@@ -115,7 +115,7 @@ const formBase: ThemeUIStyleObject = {
   flexShrink: 0,
   //padding: 2,
   fontSize: 3,
-  color:'#333'
+  color: '#333'
 };
 
 const formCell: ThemeUIStyleObject = {
@@ -154,6 +154,10 @@ const bgColor = Utils.getStyles().background_main;
 
 const windowGradient: ThemeUIStyleObject = {
   //background: bgColor,
+}
+
+const transition = {
+  transition: "opacity 5.5s",
 }
 
 const theme: Theme = {
@@ -315,13 +319,13 @@ const theme: Theme = {
 
   grids: {
     bansLayout: {
-      gridTemplateColumns: "2fr 1fr", 
+      gridTemplateColumns: "2fr 1fr",
       gridTemplateRows: "repeat(2, 1fr)",
       gridColumnGap: "20px",
       gridRowGap: "0"
     },
     navigationLayout: {
-      gridTemplateColumns: "3fr 1fr", 
+      gridTemplateColumns: "3fr 1fr",
       gridTemplateRows: "1fr",
       gridColumnGap: "20px",
       gridRowGap: "0"
@@ -336,7 +340,7 @@ const theme: Theme = {
 
       borderColor: "none",
       bg: "#ffffff0a",
-      
+
       "> h2": {
         display: "flex",
         justifyContent: "space-between",
@@ -547,8 +551,15 @@ const theme: Theme = {
     card: {
       flexDirection: 'column',
     },
-    container: {
-    }
+    containerSearchTransition: {
+      ...transition,
+      opacity: 1,
+    },
+    containerSearchTransitionHide: {
+      ...transition,
+      opacity: 0,
+      pointerEvents: "none",
+    },
   },
 
   styles: {

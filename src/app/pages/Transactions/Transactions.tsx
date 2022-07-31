@@ -8,15 +8,18 @@ import { Decimal } from "@app/library/base/Decimal";
 import { GROTHS_IN_BEAM } from "@app/constants";
 import { useSelector } from "react-redux";
 import { selectFundsTotal } from "@app/store/BansStore/selectors";
+import FadeIn from 'react-fade-in';
 
 const Transactions: React.FC = () => {
   const total = useSelector(selectFundsTotal());
 
   return (
     <>
-      <PageTitle title="BANS' transactions"/>
+      <PageTitle title="BANS' transactions" />
       <Balance balance={total ? total.toString() : "0"} />
-      <MyTransactions/>
+      <FadeIn>
+        <MyTransactions />
+      </FadeIn>
     </>
   );
 }
