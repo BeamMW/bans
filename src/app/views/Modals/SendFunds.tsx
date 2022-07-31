@@ -19,6 +19,7 @@ import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { measureText, getTextWidth } from "@app/library/base/appUtils";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { useDebounce } from '@app/hooks/useDebounce';
 
 interface SendFundsProps {
   isShown: boolean;
@@ -65,7 +66,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
-
+  const debouncedValue = useDebounce(values.domain, 100)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
@@ -91,7 +92,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   const beamPrice = useSelector(selectRate());
 
-  useFetchDomainAndConvert(values.domain).then(domain => {
+  useFetchDomainAndConvert(debouncedValue).then(domain => {
     setIsValid(domain && !domain.isAvailable && !domain.isYourOwn);
     setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
