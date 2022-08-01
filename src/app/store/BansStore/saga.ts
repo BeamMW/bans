@@ -17,7 +17,6 @@ import { getDomainPresentedData } from '@app/library/bans/DomainPresenter';
 import { getBansApi } from '@app/utils/getBansApi';
 import { eventChannel, END, channel, Channel } from 'redux-saga'
 import { notificationFromDomainsChangesSaga, notificationFromTransferredFundsSaga } from '../NotificationsStore/saga';
-import { omitDeep } from '@app/utils/helpers';
 
 export function* handleParams(payload: any) {
   yield put(actions.setAppParams(payload));
@@ -372,7 +371,7 @@ export function* loadPublicKeySaga(
       store.dispatch(actions.loadAllFavoritesDomains.request()); */
     }
 
-  } catch (e) {
+  } catch (e) { 
     console.log(e);
     yield put(actions.loadPublicKey.failure(e))
   }
