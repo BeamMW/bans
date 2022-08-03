@@ -48,7 +48,7 @@ const App = () => {
                   </Routes>
                 </BansLayout>
               </ModalProvider>
-              <TransactionMonitor transactions={[]} showStatusBlock={false} />
+              <TransactionMonitor transactions={[]} showStatusBlock={true} />
             </TransactionProvider>
           </MainViewProvider>
         </BansApiProvider>

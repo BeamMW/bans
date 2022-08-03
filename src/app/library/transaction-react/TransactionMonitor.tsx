@@ -4,8 +4,7 @@ import { Flex, Box, Text } from 'theme-ui';
 import { TransactionProgressDonut } from './TransactionProgressDonut';
 
 export const TransactionMonitor: React.FC<{ transactions: any, showStatusBlock: boolean }> = ({ transactions, showStatusBlock = false }) => {
-  //const { provider } = useLiquity();
-  const [transactionState, setTransactionState] = useTransactionState();
+  const [transactionsState, setTransactionState] = useTransactionState();
 
   transactions = transactions || [transactionState]
 

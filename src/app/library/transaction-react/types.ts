@@ -44,16 +44,14 @@ type TransactionCompleted = {
   id: string;
 };
 
-export type TransactionState = [
-  (| TransactionIdle
+export type TransactionState = TransactionIdle
     | TransactionPending
     | TransactionRegistering
     | TransactionFailed
     | TransactionWaitingForApproval
     | TransactionCancelled
     | TransactionWaitingForConfirmations
-    | TransactionCompleted ) & {action?: string}
-  ];
+    | TransactionCompleted;
 
 export type TransactionFunction = (
   overrides?/* : EthersTransactionOverrides */,

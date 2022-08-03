@@ -1,17 +1,17 @@
 import { useCallback } from "react";
 import { useTransactionState } from "./context/TransactionContext";
 import { TransactionState } from "./types";
-import { Transaction } from '@core/types';
+import { Transaction } from '@app/library/base/transaction/types';
 
 
 export const useTransactionFunction = (
     id: string,
     send/* : TransactionFunction */
   ): [sendTransaction: () => Promise<void>, transactionState: TransactionState] => {
-    const [transactionState, setTransactionState] = useTransactionState();
+    const [transactionsState, setTransactionsState] = useTransactionState();
   
     const sendTransaction = useCallback(async () => {
-      setTransactionState({ type: "waitingForApproval", id });
+      setTransactionsState({ type: "waitingForApproval", id });
   
       try {
         /**
@@ -19,18 +19,19 @@ export const useTransactionFunction = (
          */
         const tx/* : return promise function */ = await send();
 
-        setTransactionState({
+        setTransactionsState({
           type: "waitingForConfirmation",
           id,
           tx
         });
+
       } catch (error) {
         /* if (hasMessage(error) && error.message.includes("User denied transaction signature")) {
           setTransactionState({ type: "cancelled", id });
         } else { */
           console.log("useTransactionFunction", error.message, error);
   
-          setTransactionState({
+          setTransactionsState({
             type: "failed",
             id,
             error: new Error(`Failed to send transaction (${error.message ?? 'try again'})`)
