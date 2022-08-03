@@ -19,7 +19,7 @@ import { useLocation } from 'react-router-dom';
 import { Container, Flex } from 'theme-ui';
 
 
-const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
+const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorites' }];
 
 const MyPage = () => {
   let { state } = useLocation();
