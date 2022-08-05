@@ -87,7 +87,7 @@ const Search: React.FC = () => {
 
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
 
-      <FadeIn>
+      <FadeIn transitionDuration={1000}>
 
         <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>
           <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
