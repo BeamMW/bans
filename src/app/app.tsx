@@ -51,7 +51,7 @@ const App = () => {
                   </Routes>
                 </BansLayout>
               </ModalProvider>
-              <TransactionMonitor shaderTransactions={transactions} showStatusBlock={true} />
+              <TransactionMonitor shaderTransactions={transactions} showStatusBlock={false} />
             </TransactionProvider>
           </MainViewProvider>
         </BansApiProvider>
