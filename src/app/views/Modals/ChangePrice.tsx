@@ -20,6 +20,7 @@ import BeamIcon from '@app/assets/icons/beam.svg';
 import ArrowRightBlack from '@app/assets/icons/arrow-right-black.svg'
 import _ from "lodash";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 
 interface ChangePriceProps {
@@ -34,7 +35,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "DOMAIN_ADJUSTE_SALE";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setDomainPrice} for ${domain.beautyName}`;
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 

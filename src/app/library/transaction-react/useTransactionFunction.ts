@@ -2,16 +2,19 @@ import { useCallback } from "react";
 import { useTransactionState } from "./context/TransactionContext";
 import { TransactionState } from "./types";
 import { Transaction } from '@app/library/base/transaction/types';
+import { TransactionsBatch } from "./context/TransactionProvider";
+import { delay } from "../base/appUtils";
 
 
 export const useTransactionFunction = (
     id: string,
     send/* : TransactionFunction */
-  ): [sendTransaction: () => Promise<void>, transactionState: TransactionState] => {
-    const [transactionsState, setTransactionsState] = useTransactionState();
+  ): [sendTransaction: () => Promise<void>] => {
+    const {transactionsState,setTransactionState} = useTransactionState();
   
     const sendTransaction = useCallback(async () => {
-      setTransactionsState({ type: "waitingForApproval", id });
+      console.log(`%c calling useTransactionFunction with id:${id}`, "background: #222; color: pink");
+      setTransactionState({ type: "waitingForApproval", id });
   
       try {
         /**
@@ -19,7 +22,7 @@ export const useTransactionFunction = (
          */
         const tx/* : return promise function */ = await send();
 
-        setTransactionsState({
+        setTransactionState({
           type: "waitingForConfirmation",
           id,
           tx
@@ -29,9 +32,10 @@ export const useTransactionFunction = (
         /* if (hasMessage(error) && error.message.includes("User denied transaction signature")) {
           setTransactionState({ type: "cancelled", id });
         } else { */
+
           console.log("useTransactionFunction", error.message, error);
   
-          setTransactionsState({
+          setTransactionState({
             type: "failed",
             id,
             error: new Error(`Failed to send transaction (${error.message ?? 'try again'})`)
@@ -40,5 +44,5 @@ export const useTransactionFunction = (
       }
     }, [send, id, setTransactionState]);
   
-    return [sendTransaction, transactionState];
+    return [sendTransaction];
   };

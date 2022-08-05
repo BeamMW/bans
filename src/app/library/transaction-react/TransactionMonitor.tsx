@@ -1,165 +1,222 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTransactionState } from "./context/TransactionContext";
 import { Flex, Box, Text } from 'theme-ui';
 import { TransactionProgressDonut } from './TransactionProgressDonut';
+import { TransactionState } from "./types";
 
-export const TransactionMonitor: React.FC<{ transactions: any, showStatusBlock: boolean }> = ({ transactions, showStatusBlock = false }) => {
-  const [transactionsState, setTransactionState] = useTransactionState();
-
-  transactions = transactions || [transactionState]
-
-
-  const id = transactionState.type !== "idle" ? transactionState.id : undefined;
-  const tx = transactionState.type === "waitingForConfirmation" ? transactionState.tx : undefined;
+export const TransactionMonitor/* : React.FC<{ shaderTransactions: any, showStatusBlock: boolean }> */ = ({ shaderTransactions, showStatusBlock = false }) => {
+  const { transactionsState, setTransactionState } = useTransactionState();
+  const [areTransactionsToShow, setAreTransactionsToShow] = useState<boolean>(false);
 
   useEffect(() => {
-    if (id && tx) {
-      let cancelled = false;
-      let finished = false;
 
-      //const txHash = tx.rawSentTransaction.hash;
+    transactionsState.forEach((transactionUiId: string, transactionState) => {
 
-      const waitForConfirmation = async () => {
-        try {
-          const receipt = await tx/* .waitForReceipt */();
-          const txHash = receipt.txId;
+      const id = transactionState.type !== "idle" ? transactionUiId : null;
+      const tx = transactionState.type === "waitingForConfirmation" ? transactionState.tx : null;
 
-          if (cancelled) {
-            return;
-          }
+      if (id && tx) {
 
-          const confirmations = receipt.confirmations;
-          const blockNumber = receipt.height && confirmations ? receipt.height + confirmations - 1 : ":(";
+        const waitForConfirmation = async () => {
 
-          console.log(`Block #${blockNumber} ${confirmations ?? ";("}-confirms tx ${txHash}`);
-          console.log(`Finish monitoring tx ${txHash}`);
+          //console.log(`%c waitForConfirmation calling for id:${id} and  transaction current status: ${transactionState.type}`, 'background: #222; color: #bada55');
 
-          finished = true;
+          //set transaction pending status
+          setTransactionState({
+            type: "pending",
+            id
+          });
 
-          if (receipt.status_string === "completed") {
-            console.log(receipt);
+          let cancelled = false;
+          let finished = false;
 
-            setTransactionState({
-              type: "completed",
-              id
-            });
-
-            console.log("complete test log!");
-          } else {
-            //const reason = await tryToGetRevertReason(provider, receipt.rawReceipt);
+          try {
+            const receipt = await tx();
+            const txHash = receipt.txId;
 
             if (cancelled) {
               return;
             }
 
-            console.error(`Tx  failed`,);
+            const confirmations = receipt.confirmations;
+            const blockNumber = receipt.height && confirmations ? receipt.height + confirmations - 1 : ":(";
 
-            /* if (reason) {
-              console.error(`Revert reason: ${reason}`);
-            } */
+            console.log(`Block #${blockNumber} ${confirmations ?? ";("}-confirms tx ${txHash}`);
+            console.log(`Finish monitoring tx ${txHash}`);
+
+            finished = true;
+
+            if (receipt.status_string === "completed") {
+              console.log(receipt);
+
+              setTransactionState({
+                type: "completed",
+                id
+              });
+
+            } else {
+              //const reason = await tryToGetRevertReason(provider, receipt.rawReceipt);
+
+              if (cancelled) {
+                return;
+              }
+
+              console.error(`Tx  failed`,);
+
+              /* if (reason) {
+                console.error(`Revert reason: ${reason}`);
+              } */
+
+              setTransactionState({
+                type: "failed",
+                id,
+                error: new Error(/* reason ? `Reverted: ${reason}` :  */"Failed")
+              });
+            }
+
+            //console.log(`%c waitForConfirmation complete with id:${id}`, 'background: #222; color: #185fbe');
+          } catch (rawError) {
+
+            if (cancelled) {
+              return;
+            }
+
+            finished = true;
+
+            /*  if (rawError instanceof EthersTransactionCancelledError) {
+               console.log(`Cancelled tx ${txHash}`);
+               setTransactionState({ type: "cancelled", id });
+             } else { */
+            console.error(`Failed to get receipt for tx ` /* ${txHash} */);
+            console.error(rawError);
 
             setTransactionState({
               type: "failed",
               id,
-              error: new Error(/* reason ? `Reverted: ${reason}` :  */"Failed")
+              error: new Error("Failed")
             });
-          }
-        } catch (rawError) {
-          if (cancelled) {
-            return;
+            /* } */
           }
 
-          finished = true;
+          if (!finished) {
+            console.log("finish manually for id:" + id);
+            setTransactionState({ type: "idle", id: id });
+            cancelled = true;
+          }
 
-          /*  if (rawError instanceof EthersTransactionCancelledError) {
-             console.log(`Cancelled tx ${txHash}`);
-             setTransactionState({ type: "cancelled", id });
-           } else { */
-          console.error(`Failed to get receipt for tx ` /* ${txHash} */);
-          console.error(rawError);
+        };
 
-          setTransactionState({
-            type: "failed",
-            id,
-            error: new Error("Failed")
-          });
-          /* } */
-        }
-      };
+        //console.log(`Start monitoring tx ${txHash}`);
+        waitForConfirmation();
+      }
 
-      //console.log(`Start monitoring tx ${txHash}`);
-      waitForConfirmation();
-
-      return () => {
-        if (!finished) {
-          setTransactionState({ type: "idle" });
-          //console.log(`Cancel monitoring tx ${txHash}`);
-          cancelled = true;
-        }
-      };
-    }
-  }, [/* provider, */ id, tx, setTransactionState]);
+    });
+  }, [transactionsState]);
 
   useEffect(() => {
-    if (
-      transactionState.type === "completed" ||
-      transactionState.type === "failed" ||
-      transactionState.type === "cancelled"
-    ) {
-      let cancelled = false;
+    let cancelled = false;
 
-      setTimeout(() => {
-        if (!cancelled) {
-          setTransactionState({ type: "idle" });
-        }
-      }, 5000);
+    transactionsState.forEach((transactionUiId: string, transactionState: TransactionState) => {
+      if (
+        transactionState.type === "completed" ||
+        transactionState.type === "failed" ||
+        transactionState.type === "cancelled"
+      ) {
 
-      return () => {
-        cancelled = true;
-      };
+        setTimeout(() => {
+          if (!cancelled) {
+            //console.log(`%c setTransactionState with id: ${transactionUiId} to idle`, 'background: #222; color: red');
+            setTransactionState({ type: "idle", id: transactionUiId });
+          }
+        }, 1000);
+
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+
+  }, [JSON.stringify(transactionsState)]);
+
+  useEffect(() => {
+    transactionsState.values().map((transactionState) => {
+      if (transactionState.type !== "idle" && transactionState.type !== "waitingForApproval") {
+        setAreTransactionsToShow(true);
+        return;
+      }
+    });
+
+    return () => {
+      setAreTransactionsToShow(false);
     }
-  }, [transactionState.type, setTransactionState, id]);
+  }, [JSON.stringify(transactionsState)]);
 
-  if (transactionState.type === "idle" || transactionState.type === "waitingForApproval") {
-    return null;
-  }
+  if (showStatusBlock && areTransactionsToShow) {
+    const transactions: Array<TransactionState> = transactionsState.values().filter(
+      transaction => !["waitingForApproval", "idle"].includes(transaction.type)
+    );
 
-  if (showStatusBlock)
     return (
       <Flex
         sx={{
-          alignItems: "center",
-          bg:
-            transactionState.type === "completed"
-              ? "success"
-              : transactionState.type === "cancelled"
-                ? "warning"
-                : transactionState.type === "failed"
-                  ? "danger"
-                  : "primary",
-          p: 3,
-          pl: 4,
+          flexDirection: "column",
           position: "fixed",
-          width: "100vw",
+          width: "350px",
           bottom: 0,
-          overflow: "hidden"
+          left: 0,
+          overflow: "hidden",
+          zIndex: 9999,
         }}
       >
-        <Box sx={{ mr: 3, width: "40px", height: "40px" }}>
-          <TransactionProgressDonut state={transactionState.type} />
-        </Box>
+        {
+          transactions.length ? transactions.map((transactionState) => {
+            return (
+              <>
+                <React.Fragment key={transactionState.id}>
+                  <Flex
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      background: "#110c54",
+                      borderRadius: "10px",
+                      bg:
+                        ["cancelled", "failed"].includes(transactionState.type)
+                          ? "danger"
+                          : "transactionBg",
+                      mt: 1,
+                      p: 3,
+                      pl: 4,
+                    }}
+                  >
+                    <Box sx={{ mr: 3, width: "28px", height: "28px" }}>
+                      <TransactionProgressDonut state={transactionState.type} />
+                    </Box>
 
-        <Text sx={{ fontSize: 3, color: "white", bg: "transaction" }}>
-          {["waitingForConfirmation", "pending", "registering"].includes(transactionState.type)
-            ? `Waiting for confirmation (${transactionState.id})`
-            : transactionState.type === "cancelled"
-              ? `Cancelled  (${transactionState.id})`
-              : transactionState.type === "failed"
-                ? transactionState.error.message
-                : `Confirmed  (${transactionState.id})`}
-        </Text>
+                    <Flex sx={{flexDirection:"column"}}>
+                      <Text sx={{ fontSize: 0, color: "white", bg: "transaction", mb:"1" }}>
+                        {["waitingForConfirmation", "pending", "registering"].includes(transactionState.type)
+                          ? "Waiting for confirmation"
+                          : transactionState.type === "cancelled"
+                            ? "Cancelled"
+                            : transactionState.type === "failed"
+                              ? "Failed"
+                              : "Confirmed"}
+                      </Text>
+
+                      <Text sx={{ fontSize: 0, color: "white", bg: "transaction" }}>
+                        {transactionState.type === "failed" ? transactionState.error.message : `${transactionState.id}`}
+                      </Text>
+                    </Flex>
+
+                  </Flex>
+                </React.Fragment>
+              </>
+            );
+          }) : <></>}
       </Flex>
     );
+  }
 
   return <></>;
 

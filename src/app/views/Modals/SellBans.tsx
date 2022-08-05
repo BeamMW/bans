@@ -18,6 +18,7 @@ import Sell from '@app/assets/icons/send.svg';
 import BeamIcon from '@app/assets/icons/beam.svg';
 import _ from 'lodash';
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -33,7 +34,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "DOMAIN_SELLING";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setDomainPrice} for ${domain.beautyName}`;
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
   const [activeItem, _setActiveItem] = React.useState<DomainPresenterType>(domain);
@@ -65,7 +66,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
       store.dispatch(reloadAllUserInfo.request());
 
       return () => {
-        setAmount(""), isShown = false
+        closeModal = false, isShown = false
       }
     }
 

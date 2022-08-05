@@ -2,10 +2,19 @@ import { useTransactionState } from "./context/TransactionContext";
 import { TransactionState } from "./types";
 
 export const useCurrentTransactionState = (myId: string | RegExp): TransactionState => {
-    const [transactionState] = useTransactionState();
+  const {transactionsState} = useTransactionState();
+  const keys = transactionsState.keys();
 
-    return transactionState.type !== "idle" &&
-      (typeof myId === "string" ? transactionState.id === myId : (myId instanceof RegExp ? transactionState.id.match(myId) : null))
-      ? transactionState
-      : { type: "idle" };
-  };
+  const currentStateId = keys.find(
+    transactionUiId =>
+      (typeof myId === "string" ? transactionUiId === myId : (myId instanceof RegExp ? transactionUiId.match(myId) : null))
+        ? transactionUiId : null
+  )
+
+  if(typeof currentStateId === "undefined")
+    return { type: "idle" };
+
+  const transaction = transactionsState.getValue(currentStateId);
+
+  return transaction.type !== "idle" ? transaction : { type: "idle" };
+};

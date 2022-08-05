@@ -16,6 +16,7 @@ import Renew from '@app/assets/icons/renew-blue.svg';
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import useCalculateDomainPrice from "@app/hooks/useCalculateDomainPrice";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 interface RenewModalProps {
   isShown: boolean;
   closeModal?: (...args) => void;
@@ -29,7 +30,7 @@ export const RenewModal: React.FC<RenewModalProps> = ({ isShown, closeModal }) =
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "DOMAIN_EXTENDED";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setExtendDomain} for ${domain.beautyName}`;
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);

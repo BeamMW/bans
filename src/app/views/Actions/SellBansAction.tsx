@@ -38,8 +38,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
             case "removeBansFromSale":
                 {
                     return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: 0 });
-                }
-                
+                }       
         }
     }
 
