@@ -13,6 +13,7 @@ import { DomainPresenterType } from '@app/library/bans/DomainPresenter';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import store from 'index';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
+import { ShaderTransactionComments } from '@app/library/bans/types';
 
 interface TranferProps {
   isShown: boolean;
@@ -26,7 +27,7 @@ export const Transfer: React.FC<TranferProps> = ({ isShown, closeModal }) => {
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "DOMAIN_TRANSFERRING";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setDomainOwner} for ${domain.beautyName}`;
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 

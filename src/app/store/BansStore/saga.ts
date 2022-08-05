@@ -328,6 +328,7 @@ export function* loadContractInfoSaga(
     )) as any; /* ManagerViewData */
 
     const contract = managerViewParams.contracts.find(item => item.cid === BANS_CID);
+    
     if (contract) {
       yield put(actions.loadContractInfo.success(contract /* .Height */));
     }

@@ -1,8 +1,3 @@
-/* type SentTransaction = SentLiquityTransaction<
-  TransactionResponse,
-  LiquityReceipt<TransactionReceipt>
->; */
-
 type TransactionIdle = {
   type: 'idle';
 };
@@ -36,7 +31,7 @@ type TransactionCancelled = {
 type TransactionWaitingForConfirmations = {
   type: 'waitingForConfirmation';
   id: string;
-  tx: any /* SentTransaction */;
+  tx: any /* Promise<any> SentTransaction */;
 };
 
 type TransactionCompleted = {
@@ -44,16 +39,14 @@ type TransactionCompleted = {
   id: string;
 };
 
-export type TransactionState = [
-  (| TransactionIdle
+export type TransactionState = TransactionIdle
     | TransactionPending
     | TransactionRegistering
     | TransactionFailed
     | TransactionWaitingForApproval
     | TransactionCancelled
     | TransactionWaitingForConfirmations
-    | TransactionCompleted ) & {action?: string}
-  ];
+    | TransactionCompleted;
 
 export type TransactionFunction = (
   overrides?/* : EthersTransactionOverrides */,

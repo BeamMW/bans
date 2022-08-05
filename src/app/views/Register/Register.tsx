@@ -21,6 +21,7 @@ import { selectUserDomains } from "@app/store/BansStore/selectors";
 import useCalculateDomainPrice from "@app/hooks/useCalculateDomainPrice";
 import { PageHeader } from "@app/components/PageHeader/PageHeader";
 import LogoIcon from "@app/assets/icons/logo.svg";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 const Container = styled.div`
   min-width: 630px;
@@ -35,7 +36,9 @@ const Container = styled.div`
 `;
 
 export const Register: React.FC = () => {
-  const TRANSACTION_ID = "DOMAIN_REGISTER";
+  const { foundDomain, setFoundDomain, setCurrentView } = useMainView();
+
+  const TRANSACTION_ID = `${ShaderTransactionComments.setRegisterDomain} for ${foundDomain.beautyName}`;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,7 +47,6 @@ export const Register: React.FC = () => {
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   const [period, setPeriod] = useState<number>(1);
-  const { foundDomain, setFoundDomain, setCurrentView } = useMainView();
 
   const backButtonHandler = () => setCurrentView("REGISTER_CLOSED");
 
@@ -110,7 +112,7 @@ export const Register: React.FC = () => {
                     <LoadingOverlay />
                   </Flex> :
                   <RegisterAction
-                    transactionId={"DOMAIN_REGISTER"}
+                    transactionId={TRANSACTION_ID}
                     change={foundDomain.isOnSale ? "buyDomain" : "registerDomain"}
                     period={period}
                     domain={foundDomain}

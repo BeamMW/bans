@@ -4,6 +4,7 @@ import moment from 'moment';
 export type DomainPresenterType = {
     rawDomain: RawDomainType;
     name: string;
+    beautyName: string;
     expiresAt: any;
     isExpired: any;
     isAvailable: boolean;
@@ -108,9 +109,12 @@ export class DomainPresenter implements IDomainPresenter {
 
     public getDomainPresenterData(): DomainPresenterType {
         try {
+            const name = DomainPresenterValidator.checkIsValidNameAndReturn(this.rawDomain.searchName);
+            
             return {
                 rawDomain: this.rawDomain,
-                name: DomainPresenterValidator.checkIsValidNameAndReturn(this.rawDomain.searchName),
+                name: name,
+                beautyName: name + '.beam',
                 expiresAt: this.domainExpireTimeConverter(),
                 isExpired: this.domainIsExpireTimeConverter(),
                 isAvailable: this.resolveIsAvailable(),

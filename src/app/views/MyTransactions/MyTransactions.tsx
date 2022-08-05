@@ -21,6 +21,7 @@ import SaleIcon from '@app/assets/icons/sell.svg';
 import EmptyPage from "../EmptyPage/EmptyPage";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { RenewModal } from "../Modals/RenewModal";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 interface RightSideProps {
   domain: DomainPresenterType;
@@ -31,7 +32,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds }) => {
   
   //@TODO:temp solution
   //const TRANSACTION_ID = `WITHDRAW FROM ${domain.name.toUpperCase()}.beam`
-  const TRANSACTION_ID = "WITHDRAW ALL";
+  const TRANSACTION_ID = `${ShaderTransactionComments.receiveVaultAnon} from ${domain.beautyName}`;
   
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });

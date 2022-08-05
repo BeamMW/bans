@@ -14,13 +14,14 @@ import { IsTransactionPending } from "@app/library/transaction-react/IsTransacti
 import store from "index";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import { LoadingOverlay } from "../LoadingOverlay";
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 interface BalanceProps {
   balance: string
 }
 export const Balance: React.FC<BalanceProps> = ({ balance}) => {
 
-  const TRANSACTION_ID = "WITHDRAW ALL";
+  const TRANSACTION_ID = `${ShaderTransactionComments.receiveVaultAnon}`;
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });

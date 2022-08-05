@@ -16,6 +16,7 @@ import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import { useSelector } from 'react-redux';
 import { selectUserDomains } from '@app/store/BansStore/selectors';
 import { useNavigate } from 'react-router-dom';
+import { ShaderTransactionComments } from '@app/library/bans/types';
 
 interface ResultForSaleProps {
   isShown: boolean;
@@ -23,17 +24,17 @@ interface ResultForSaleProps {
 }
 export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) => {
 
-  if(!isShown) return <></>;
+  if (!isShown) return <></>;
 
-  const { close, data: {domain: domain} }: {close: any, data: {domain: DomainPresenterType}} = useModalContext();
+  const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
 
   closeModal = closeModal ?? close;
 
-  if(!domain) return <></>;
+  if (!domain) return <></>;
 
   const navigate = useNavigate();
 
-  const TRANSACTION_ID = "DOMAIN_BUYING";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setBuyDomain} ${domain.beautyName}`;
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
@@ -41,7 +42,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   const userBans: Array<any> = useSelector(selectUserDomains());
 
   useEffect(() => {
-    if(!userBans.length) {
+    if (!userBans.length) {
       if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
         //if user has not any domains we redirets user to my-page empty
         navigate("my-page"), closeModal(null);
@@ -51,7 +52,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
         closeModal(null);
       }
     }
-    
+
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
       store.dispatch(reloadAllUserInfo.request());
 
@@ -66,8 +67,8 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
     <Modal isShown={isShown} header="Attention">
       <>
         <Box>
-          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
-          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color: '#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{ fontWeight: 700 }}>{domain.expiresAt}.</Text> </Paragraph>
+          <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color: '#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
         </Box>
 
         <ButtonContainer>

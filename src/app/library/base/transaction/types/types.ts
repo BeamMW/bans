@@ -1,5 +1,6 @@
 type TransactionIdle = {
     type: 'idle';
+    id?: string;
 };
 
 type TransactionPending = {

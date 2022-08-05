@@ -15,7 +15,7 @@ const colors = {
   primary: "transparent"/* baseColors.blue */,
   secondary: baseColors.purple,
   accent: baseColors.cyan,
-
+  transactionBg: "#0d1537",
   success: baseColors.green,
   warning: baseColors.yellow,
   danger: baseColors.red,

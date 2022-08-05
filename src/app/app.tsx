@@ -22,8 +22,11 @@ import './styles.css';
 import { BansApiProvider } from './contexts/Bans/BansApiProvider';
 import { MainViewProvider } from './contexts/Bans/MainViewProvider';
 import { ModalProvider } from './contexts/Modal/ModalProvider';
+import { selectTransactions } from './store/SharedStore/selectors';
 
 const App = () => {
+
+  const transactions = useSelector(selectTransactions());
 
   useEffect(() => {
     window.process = {
@@ -48,7 +51,7 @@ const App = () => {
                   </Routes>
                 </BansLayout>
               </ModalProvider>
-              <TransactionMonitor transactions={[]} showStatusBlock={false} />
+              <TransactionMonitor shaderTransactions={transactions} showStatusBlock={false} />
             </TransactionProvider>
           </MainViewProvider>
         </BansApiProvider>

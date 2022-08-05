@@ -16,6 +16,7 @@ import { selectUserDomains } from '@app/store/BansStore/selectors';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 import store from 'index';
 import { useNavigate } from 'react-router-dom';
+import { ShaderTransactionComments } from '@app/library/bans/types';
 
 interface ResultForSaleProps {
   isShown: boolean;
@@ -32,7 +33,7 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
 
   if (!foundDomain) return <></>;
 
-  const TRANSACTION_ID = "DOMAIN_BUYING";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setBuyDomain} ${foundDomain.beautyName}`;
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
