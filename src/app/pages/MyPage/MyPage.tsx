@@ -66,7 +66,7 @@ const MyPage = () => {
   }, [userBans, favoriteBans])
 
   //@TODO: move to hook!
-  const regexp = `/${ShaderTransactionComments.setDomainPrice}|${ShaderTransactionComments.setRegisterDomain}/`
+  const regexp = `${ShaderTransactionComments.setDomainPrice}|${ShaderTransactionComments.setRegisterDomain}`
 
   const TRANSACTION_ID = new RegExp(regexp, "i");
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
