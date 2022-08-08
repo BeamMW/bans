@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Flex, Text } from "theme-ui";
 import Input from "@app/components/Input";
 import { Modal } from "@app/components/Modals/Modal";
@@ -19,6 +19,8 @@ import CheckedIcon from '@app/assets/icons/checked.svg';
 import _ from "lodash";
 import { measureText, getTextWidth } from "@app/library/base/appUtils";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { useDebounce } from '@app/hooks/useDebounce';
+import { ShaderTransactionComments } from "@app/library/bans/types";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -41,17 +43,18 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "SEND_FUNDS";
+  const TRANSACTION_ID = ShaderTransactionComments.sendVaultAnon;
+  const [transactionId, setTransactionId] = useState<string>(TRANSACTION_ID);
 
-  const transactionState = useCurrentTransactionState(TRANSACTION_ID);
+  const transactionState = useCurrentTransactionState(transactionId);
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+    if (transactionState.id === transactionId && transactionState.type === "waitingForConfirmation") {
       setIsButtonDisabled(true)
       closeModal(null);
     }
 
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+    if (transactionState.id === transactionId && transactionState.type === "completed") {
       return () => {
         //store.dispatch()
       }
@@ -65,7 +68,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
   const [isValid, setIsValid] = React.useState<boolean>(false);
   const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
-
+  const debouncedValue = useDebounce(values.domain, 100)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
@@ -73,6 +76,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
     if (name === 'domain') {
       if (regexForDomain.test(value)) {
         !!value && setTextWidth(getTextWidth(value, '16px Arial'/* 16 */));
+        setTransactionId(`${TRANSACTION_ID} to ${value}`);
         setValues({
           ...values,
           [name]: value.toLowerCase(),
@@ -91,7 +95,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
 
   const beamPrice = useSelector(selectRate());
 
-  useFetchDomainAndConvert(values.domain).then(domain => {
+  useFetchDomainAndConvert(debouncedValue).then(domain => {
     setIsValid(domain && !domain.isAvailable && !domain.isYourOwn);
     setIsButtonDisabled(isValid && values.amount ? false : true);
     setDomain(domain);
@@ -148,7 +152,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
         <ButtonContainer>
           <CloseBtn toggle={closeModal} />
           <SendFundsAction
-            transactionId={TRANSACTION_ID}
+            transactionId={transactionId}
             change={"sendFunds"}
             domain={domain}
             amount={!!values.amount ? +values.amount : 0}

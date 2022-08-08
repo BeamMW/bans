@@ -12,7 +12,8 @@ const strokeWidth = 10;
 const circularProgressbarStyle = {
     strokeLinecap: "butt",
     pathColor: "white",
-    trailColor: "rgba(255, 255, 255, 0.33)"
+    trailColor: "rgba(255, 255, 255, 0.33)",
+    strokeWidth: "50"
   };
 
 const slowProgress = {
@@ -40,6 +41,11 @@ export const TransactionProgressDonut: React.FC<TransactionProgressDonutProps> =
             setTimeout(() => setValue(maxValue), 40);
         } else {
             setTimeout(() => setValue(maxValue * 0.67), 20);
+        }
+
+        return () => {
+            state = false;
+            setValue(0);
         }
     }, [state]);
 

@@ -17,9 +17,10 @@ import { useCurrentTransactionState } from '@app/library/transaction-react/useCu
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useLocation } from 'react-router-dom';
 import { Container, Flex } from 'theme-ui';
+import { ShaderTransactionComments } from '@app/library/bans/types';
 
 
-const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorite' }];
+const tabs = [{ id: 1, name: 'All' }, { id: 2, name: 'Favorites' }];
 
 const MyPage = () => {
   let { state } = useLocation();
@@ -37,7 +38,7 @@ const MyPage = () => {
   const { view } = useMainView();
 
 
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const [, forceUpdate] = useReducer(p => !p, false);
 
   const favoriteBans = useSelector(selectFavoritesDomains());
   const userBans = useSelector(selectUserDomains());
@@ -57,16 +58,17 @@ const MyPage = () => {
   //@TODO:refactor as well
   useEffect(() => {
     !!domains && forceUpdate();
-
+    
     active === 1 && setDomains(userBans);
     active === 2 && setDomains(favoriteBans);
 
     setIsLoaded(!!domains);
-  }, [/* active,  */userBans, favoriteBans])
-
+  }, [userBans, favoriteBans])
 
   //@TODO: move to hook!
-  const TRANSACTION_ID = new RegExp(/BUYING|REGISTER/, "i");
+  const regexp = `${ShaderTransactionComments.setDomainPrice}|${ShaderTransactionComments.setRegisterDomain}`
+
+  const TRANSACTION_ID = new RegExp(regexp, "i");
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
   const emptyText = useMemo(() => {

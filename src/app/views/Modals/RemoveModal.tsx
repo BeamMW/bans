@@ -12,6 +12,7 @@ import { IsTransactionPending } from '@app/library/transaction-react/IsTransacti
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { reloadAllUserInfo } from '@app/store/BansStore/actions';
 import RemoveBlueIcon from '@app/assets/icons/remove-blue.svg';
+import { ShaderTransactionComments } from '@app/library/bans/types';
 
 interface RemoveProps {
   isShown: boolean;
@@ -25,7 +26,7 @@ export const RemoveModal: React.FC<RemoveProps> = ({ isShown, closeModal }) => {
 
   closeModal = closeModal ?? close;
 
-  const TRANSACTION_ID = "DOMAIN_REMOVE_FROM_SALE";
+  const TRANSACTION_ID = `${ShaderTransactionComments.setDomainPrice} for ${domain.beautyName}`;
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 

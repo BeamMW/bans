@@ -21,6 +21,7 @@ import useOnClickOutside from '@app/hooks/outsideClickHandlers/useOnClickOutside
 import SendGreenIcon from '@app/assets/icons/send-green.svg';
 import Heart from '@app/assets/icons/heart.svg';
 import Dots from '@app/assets/icons/dots.svg';
+import FadeIn from 'react-fade-in';
 
 import { PopupItem } from "@app/components/Popup/Popup.styles";
 
@@ -74,8 +75,8 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
         </Flex>
         <Popup isVisible={showPopup[domain.name]}>
           <PopupItem ref={ref}>
-              <Heart />
-              remove from favorites
+            <Heart />
+            remove from favorites
           </PopupItem>
         </Popup>
       </Container>
@@ -104,13 +105,13 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
       favoriteDomains.map((domain, i) => (
         <React.Fragment key={i}>
           <SplitContainer key={i} leftWeight={8} rightWeight={4} handleClick={
-              domain && !domain.isYourOwn && domain.isOnSale ?
-                (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
-                (
-                  domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
-                    setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
-                  } : null
-                )}>
+            domain && !domain.isYourOwn && domain.isOnSale ?
+              (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
+              (
+                domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
+                  setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
+                } : null
+              )}>
             <Box>
               <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
             </Box>
@@ -122,7 +123,9 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
 
   return (
     isFavoriteLoaded ? <>
-      {rows}
+      <FadeIn>
+        {rows}
+      </FadeIn>
       <ModalManager />
     </> : <LoadingOverlay />
   );

@@ -8,7 +8,7 @@ export enum DIRECTIONS {
   BOTTOM ='bottom',
   LEFT = 'left'
 }
-interface TooltipProps {
+export interface TooltipProps {
   direction?: DIRECTIONS,
   content: string
   delay?: number,

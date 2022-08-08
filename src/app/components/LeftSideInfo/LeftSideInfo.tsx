@@ -75,7 +75,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             }}>
               {
                 domain.isYourOwn ?
-                  "your already own" :
+                  "your domain" :
                   (
                     domain.isAvailable && !domain.isOnSale ?
                       "available" :

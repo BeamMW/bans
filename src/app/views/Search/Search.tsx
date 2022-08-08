@@ -16,11 +16,12 @@ import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import Notifications from '@app/views/Notifications/Notifications';
 import { useDebounce } from '@app/hooks/useDebounce';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
+import FadeIn from 'react-fade-in';
 
 
 const Search: React.FC = () => {
   const { foundDomain, setFoundDomain } = useMainView();
-  const [ buttonDisabled, setButtonDisabled ] = React.useState(false); 
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
   const [isValid, setIsValid] = useState(true);
   const [search, setSearch] = useState(foundDomain ? foundDomain.name : "");
   const [isLoading, setIsLoading] = useState(false);
@@ -49,9 +50,9 @@ const Search: React.FC = () => {
     });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    /* if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
+    if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
       return false;
-    }; */
+    };
 
     setSearch(e.target.value.toLocaleLowerCase());
   }
@@ -70,6 +71,7 @@ const Search: React.FC = () => {
     }
 
   }, [transactionState]);
+
   return (
     <Container>
       <Input
@@ -85,15 +87,18 @@ const Search: React.FC = () => {
 
       {search || foundDomain ? <SearchResult search={search} isValid={isValid} isLoading={isLoading} /> : <></>}
 
-      <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>
-        <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
-        <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)} disabled={buttonDisabled}>
-          <Sell />
-          send funds to the BANS
-        </Button>
-      </Flex>
+      <FadeIn transitionDuration={1000}>
 
-      <Notifications />
+        <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: "20px" }}>
+          <Text sx={{ display: 'inline-block', my: '30px' }}>or</Text>
+          <Button onClick={(event) => open(event)("modal-send-funds")(null)(null)} disabled={buttonDisabled}>
+            <Sell />
+            send funds to the BANS
+          </Button>
+        </Flex>
+
+        <Notifications />
+      </FadeIn>
 
     </Container>
   );
