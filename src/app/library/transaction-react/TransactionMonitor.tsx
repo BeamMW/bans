@@ -180,21 +180,26 @@ export const TransactionMonitor/* : React.FC<{ shaderTransactions: any, showStat
                       justifyContent: "flex-start",
                       background: "#110c54",
                       borderRadius: "10px",
+                      opacity: 0.8,
                       bg:
                         ["cancelled", "failed"].includes(transactionState.type)
                           ? "danger"
                           : "transactionBg",
-                      mt: 1,
+                      my: 1,
+                      mx: 1,
                       p: 3,
                       pl: 4,
                     }}
                   >
-                    <Box sx={{ mr: 3, width: "28px", height: "28px" }}>
-                      <TransactionProgressDonut state={transactionState.type} />
-                    </Box>
+                    {
+                      !["failed", "cancelled"].includes(transactionState.type) ? <Box sx={{ mr: 3, width: "28px", height: "28px" }}>
+                        <TransactionProgressDonut state={transactionState.type} />
+                      </Box> : <></>
+                    }
 
-                    <Flex sx={{flexDirection:"column"}}>
-                      <Text sx={{ fontSize: 0, color: "white", bg: "transaction", mb:"1" }}>
+
+                    <Flex sx={{ flexDirection: "column" }}>
+                      <Text sx={{ fontSize: 0, color: "white", bg: "transaction", mb: "1" }}>
                         {["waitingForConfirmation", "pending", "registering"].includes(transactionState.type)
                           ? "Waiting for confirmation"
                           : transactionState.type === "cancelled"

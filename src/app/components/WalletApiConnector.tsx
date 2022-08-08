@@ -6,7 +6,6 @@ import UtilsShader from '../library/base/shader/utilsShader';
 import { setSystemState } from '@app/store/SharedStore//actions';
 import { selectIsLoaded } from '@app/store/SharedStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import { isObject } from "formik";
 import { setTransactionsRequest } from '@app/store/SharedStore/actions';
 import { Loader } from './BeamLoader';
 import Window from "./Window";
@@ -20,6 +19,7 @@ import { observeDatabaseChanges, userDatabase } from "@app/library/bans/userLoca
 import { selectRate } from "@app/store/BansStore/selectors";
 import { BANS_CID } from "@app/constants";
 import { reinitNotifications, updateNotifications } from "@app/store/NotificationsStore/actions";
+import _ from "lodash";
 
 const shadersData = Array.from([
   ["bans", BANS_CID, "./bansAppShader.wasm", 0],
@@ -36,7 +36,7 @@ const walletEventhandler = ({ walletEventPayload }) => {
           break;
 
         case 'ev_txs_changed':
-          isObject(walletEventPayload.result) &&
+          _.isObject(walletEventPayload.result) &&
             walletEventPayload.result &&
             store.dispatch(setTransactionsRequest(walletEventPayload.result.txs));
 

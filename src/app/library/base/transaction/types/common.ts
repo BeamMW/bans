@@ -1,4 +1,4 @@
-import { Contract } from "@library/base/contract/types/types";
+import { Contract } from "@library/base/shader";
 
 export enum TxStatusString {
     IN_PROGRESS = 'in progress',

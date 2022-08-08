@@ -24,10 +24,10 @@ export function* handleParams(payload: any) {
 }
 
 const fetchBansFromShader = async (bans: Array<string>) => {
-  const bandApiMethods: any/* ShaderActions */ = getBansApi();
+  const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
   return Promise.all(await bans.map(async (domain) => {
-    const response = await bandApiMethods.managerViewName({ name: domain });
+    const response = await bansApiMethods.managerViewName({ name: domain });
     return { ...response, ...{ searchName: domain } };
   }, []));
 }
@@ -37,18 +37,18 @@ export function* loadParamsSaga(
   action: ReturnType<typeof actions.loadAppParams.request>,
 ): Generator {
   try {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+    const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
 
     /* const resultUserViewParams = yield call(
-      bandApiMethods.managerViewDomain
+      bansApiMethods.managerViewDomain
     );
 
     yield put(actions.loadAppParams.success(resultUserViewParams)); */
 
     const state = (yield select()) as { bans; shared };
 
-    if (!state.shared.isLoaded && _.isEmpty(bandApiMethods)) {
+    if (!state.shared.isLoaded && _.isEmpty(bansApiMethods)) {
       yield null;
     }
 
@@ -158,10 +158,10 @@ export function* loadUserViewSaga(
   action: ReturnType<typeof actions.loadUserView.request>
 ) {
   try {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+    const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
     const resultUserViewParams = yield call(
-      bandApiMethods.userView
+      bansApiMethods.userView
     );
 
     const domains = "domains" in resultUserViewParams ? resultUserViewParams.domains : [];
@@ -321,10 +321,10 @@ export function* loadContractInfoSaga(
   action: ReturnType<typeof actions.loadContractInfo.request>,
 ): Generator {
   try {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+    const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
     const managerViewParams = (yield call(
-      bandApiMethods.managerView,
+      bansApiMethods.managerView,
     )) as any; /* ManagerViewData */
 
     const contract = managerViewParams.contracts.find(item => item.cid === BANS_CID);
@@ -342,9 +342,9 @@ export function* loadRate() {
   const FETCH_INTERVAL = 5000;
 
   try {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+    const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
-    const { price } = yield call(bandApiMethods.managerViewParams);
+    const { price } = yield call(bansApiMethods.managerViewParams);
     yield put(actions.loadRate.success(price));
 
     setTimeout(
@@ -361,9 +361,9 @@ export function* loadPublicKeySaga(
   action: ReturnType<typeof actions.loadPublicKey.request>,
 ): Generator {
   try {
-    const bandApiMethods: any/* ShaderActions */ = getBansApi();
+    const bansApiMethods: any/* ShaderActions */ = getBansApi();
 
-    const response = yield call(bandApiMethods.userMyKey);
+    const response = yield call(bansApiMethods.userMyKey);
 
     if (response) {
 
