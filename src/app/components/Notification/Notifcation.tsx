@@ -21,7 +21,7 @@ export const Notification = ({ notification, text, handler, closeHandler = null,
   }
 
   return (
-    <SplitContainer passKey={passKey} styles={{ background: "rgb(9 19 30)", /* position: "absolute", */ maxWidth: "800px", minWidth: '650px'/* , marginTop: 10 * passKey */ }} leftWeight={5} rightWeight={7} height="59px" key={passKey}>
+    <SplitContainer passKey={passKey} styles={{ background: "rgba(0, 246, 210, 0.1)", /* position: "absolute", */ maxWidth: "800px", minWidth: '650px'/* , marginTop: 10 * passKey */ }} leftWeight={5} rightWeight={7} height="59px" key={passKey}>
       <Flex sx={{ lineHeight: '19px' }}>
         <Text sx={{whiteSpace:'nowrap'}}>{text}</Text>
       </Flex>

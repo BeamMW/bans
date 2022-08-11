@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Text, Divider, Paragraph, Box } from 'theme-ui';
+import { Text, Divider, Paragraph, Link } from 'theme-ui';
 
 import Minus from "@app/assets/icons/minus.svg";
 import Plus from "@app/assets/icons/plus.svg";
 const Data = [
   {
     question: 'How to purchase a Beam Anonymous Naming Service (BANS) domain?',
-    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Follow this guide ______Link_____</Paragraph>
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>Follow this guide <Link variant='link' target="_blank" href="https://beamx.gitbook.io/dappnet-user-guide/beam-anonymous-naming-service-bans">https://beamx.gitbook.io/dappnet-user-guide/beam-anonymous-naming-service-bans</Link></Paragraph>
   },
   {
     question: 'How to send funds to a user’s BANS domain?',
