@@ -102,7 +102,7 @@ export const WalletApiConnectorProvider: React.FC<{
   }
 
   if (currentStatic.current.currentHeight && currentStatic.current.currentStateTimestamp) {
-    const releseHeight = 444159;
+    const releseHeight = 1896183;
     const countdownUnix = ((releseHeight - currentStatic.current.currentHeight) * 60 + currentStatic.current.currentStateTimestamp) * 1000;
 
     return <Countdown
