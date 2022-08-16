@@ -69,6 +69,12 @@ export const WalletApiConnectorProvider: React.FC<{
           isAuthorized,
         };
 
+        if(!localStorage.getItem("is_enter_first_time") || !JSON.parse(localStorage.getItem("is_enter_first_time"))) {
+          localStorage.setItem("is_enter_first_time", JSON.stringify(true));
+          setConfetti(true);
+          setConfettiRun(true);
+        }
+
         let timeout = setTimeout(() => {
           setConfetti(false);
         }, 3000);
@@ -76,6 +82,9 @@ export const WalletApiConnectorProvider: React.FC<{
         let timeoutForRun = setTimeout(() => {
           setConfettiRun(false);
         }, 8000);
+
+        clearTimeout(timeout);
+        clearTimeout(timeoutForRun);
 
 
         return <>
