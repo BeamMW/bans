@@ -3,6 +3,7 @@ import { getGlobalApiProviderValue } from '@app/contexts/Bans/BansApiProvider';
 import methods from '@app/library/bans/methods';
 import ShaderApi from '@app/library/base/api/ShaderApi';
 import { getBansApi } from '@app/utils/getBansApi';
+import store from 'index';
 import {
   call,
   take,
@@ -20,7 +21,7 @@ function* sharedSaga() {
   yield takeEvery(actions.setTransactionsRequest, function* (action): Generator {
     try {
       const updatedTransactions = action.payload;
-      
+
       //console.log("Transaction update: ", updatedTransactions);
 
       yield put(actions.setTransactionsSuccess(updatedTransactions));
@@ -28,6 +29,20 @@ function* sharedSaga() {
     } catch (e) {
       console.log(e)
       yield put(actions.setTransactionsFailure(e));
+    }
+  });
+
+  yield takeEvery(actions.setSystemState, function* (): Generator {
+    try {
+      const state = (yield select()) as { bans; shared };
+
+      if (!state.shared.isLoaded && !!state.shared.systemState.current_height) {
+        console.log("setIsLoaded");
+        store.dispatch(actions.setIsLoaded(true));
+      }
+      
+    } catch (e) {
+      console.log(e);
     }
   });
 }

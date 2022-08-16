@@ -11,8 +11,8 @@ export const Loader: React.FC<{}> = () => {
 
     return (
         <Flex sx={{ alignItems: "center", justifyContent: "center", flexDirection: "column", height: "-webkit-fill-available" }}>
-            <Box sx={{textAlign:"center", width:"300px", /* height:"300px" */}}>
-                <SvgLoader style={{marginBottom:"20px"}} />
+            <Box sx={{ textAlign: "center", width: "300px", /* height:"300px" */ }}>
+                <SvgLoader style={{ marginBottom: "20px" }} />
                 <Text sx={{
                     color: "#ababab",
                     fontSize: "10px",
