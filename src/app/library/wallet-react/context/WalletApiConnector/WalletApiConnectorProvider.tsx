@@ -28,6 +28,7 @@ export const WalletApiConnectorProvider: React.FC<{
   const { current_height: currentHeight, current_state_timestamp: currentStateTimestamp } = useSelector(selectSystemState());
   const { width, height } = useWindowSize()
   const [confetti, setConfetti] = useState<boolean>(false);
+  const [confettiRun, setConfettiRun] = useState<boolean>(false);
 
   useEffect(() => {
     if (!currentStatic.current?.currentHeight)
@@ -68,9 +69,13 @@ export const WalletApiConnectorProvider: React.FC<{
           isAuthorized,
         };
 
-        timeout = setTimeout(() => {
+        let timeout = setTimeout(() => {
           setConfetti(false);
         }, 3000);
+
+        let timeoutForRun = setTimeout(() => {
+          setConfettiRun(false);
+        }, 8000);
 
 
         return <>
@@ -79,7 +84,7 @@ export const WalletApiConnectorProvider: React.FC<{
             height={height - 50}
             gravity={0.35}
             numberOfPieces={confetti ? 333 : 0}
-            onConfettiComplete={()=>console.log("congratulation!")}
+            run={confettiRun}
           />
           <WalletApiConnectorContext.Provider value={provider}>{children}</WalletApiConnectorContext.Provider>
         </>
@@ -87,6 +92,7 @@ export const WalletApiConnectorProvider: React.FC<{
 
     } else {
       setConfetti(true)
+      setConfettiRun(true)
 
       // Render a countdown
       return <>
