@@ -58,18 +58,12 @@ export function* loadParamsSaga(
       store.dispatch(actions.loadContractInfo.request());
     }
 
-
-
     Array.isArray(state.bans.userView.domains) && !state.bans.userView.domains.length &&
       store.dispatch(actions.loadUserView.request());
 
     Array.isArray(state.bans.allFavoritesDomains) && !state.bans.allFavoritesDomains.length &&
       store.dispatch(actions.loadAllFavoritesDomains.request());
-
-    if (!state.shared.isLoaded) {
-      store.dispatch(setIsLoaded(true));
-    }
-
+    
   } catch (e) {
     console.log(e);
     yield put(actions.loadAppParams.failure(e));

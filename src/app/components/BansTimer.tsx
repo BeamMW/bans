@@ -1,6 +1,8 @@
 import { styled } from "@linaria/react";
 import React, { useEffect } from "react"
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Container, Flex, Text } from 'theme-ui';
+import SvgLoaderStatic from '@app/assets/icons/bans-loading-static.svg';
+import { min } from "moment";
 
 
 const ListItem = styled.div`
@@ -56,66 +58,75 @@ const DotsSeperator = styled.span`
     text-align: center;
     color: #00F6D2;
 `
-export const BansTimer: React.FC<{}> = () => {
+export const BansTimer: React.FC<any> = ({ days, hours, minutes, seconds }) => {
 
-    useEffect(() => {
-        //loader logic
-    }, [])
+  useEffect(() => {
+    //loader logic
+  }, [])
 
-    return (
-        <Flex sx={{ 
+  return (
+    <>
+      <Flex sx={{height:"100%", flexDirection: "column", justifyContent: "center"}}>
+        <Flex sx={{
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
           height: "210px",
           width: '630px',
           background: 'linear-gradient(180deg, rgba(11, 204, 247, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%)',
-          margin: '40px auto',
-          borderRadius:'10px',
-          }}>
-            <Box sx={{textAlign:"center", px: '50px'}} >
-                <Text sx={{
-                    color: "#fff",
-                    fontSize: "24px",
-                    lineHeight: '29px',
-                    fontStyle: "italic",
-                    width: "100%",
-                    textAlign: "center"
-                }}>BANS sale starts soon</Text>
+          margin: '0 auto',
+          borderRadius: '10px',
+        }}>
+          <Box sx={{ textAlign: "center", px: '50px' }} >
+            <Text sx={{
+              color: "#fff",
+              fontSize: "24px",
+              lineHeight: '29px',
+              fontStyle: "italic",
+              width: "100%",
+              textAlign: "center"
+            }}>BANS sale starts soon</Text>
 
-<Box sx={{ mt: 5 }}>
-    <ul>
-      <ListItem>
-        <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
-          <p id="days" className="date_container">5</p>
-          <span className="list-first-item">days</span>
-        </Box>
-        </ListItem>
-        <DotsSeperator>:</DotsSeperator>
-      <ListItem>
-        <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
-          <p id="days" className="date_container">23</p>
-          <span className="list-second-item">hours</span>
-        </Box>
-        </ListItem>
-        <DotsSeperator>:</DotsSeperator>
-      <ListItem>
-        <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
-          <p id="days" className="date_container">17</p>
-          <span className="list-third-item">minutes</span>
-        </Box>
-        </ListItem>
-        <DotsSeperator>:</DotsSeperator>
-      <ListItem>
-        <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
-          <p id="days" className="date_container">56</p>
-          <span className="list-fourth-item">seconds</span>
-        </Box>
-      </ListItem>
-    </ul>
-  </Box>
+            <Box sx={{ mt: 5 }}>
+              <ul>
+                <ListItem>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <p id="days" className="date_container">{days}</p>
+                    <span className="list-first-item">days</span>
+                  </Box>
+                </ListItem>
+                <DotsSeperator>:</DotsSeperator>
+                <ListItem>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <p id="days" className="date_container">{hours}</p>
+                    <span className="list-second-item">hours</span>
+                  </Box>
+                </ListItem>
+                <DotsSeperator>:</DotsSeperator>
+                <ListItem>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <p id="days" className="date_container">{minutes}</p>
+                    <span className="list-third-item">minutes</span>
+                  </Box>
+                </ListItem>
+                <DotsSeperator>:</DotsSeperator>
+                <ListItem>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <p id="days" className="date_container">{seconds}</p>
+                    <span className="list-fourth-item">seconds</span>
+                  </Box>
+                </ListItem>
+              </ul>
             </Box>
+          </Box>
         </Flex>
-    );
+        <Flex sx={{ alignItems: "center", justifyContent: "end", flexDirection: "column", height: "auto", margin: "40px auto" }}>
+          <Box sx={{ textAlign: "center", width: "300px", /* height:"300px" */ }}>
+            <SvgLoaderStatic style={{ marginBottom: "20px" }} />
+          </Box>
+        </Flex>
+      </Flex>
+    </>
+  );
 }
 
