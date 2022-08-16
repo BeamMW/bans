@@ -106,7 +106,7 @@ export const WalletApiConnectorProvider: React.FC<{
     const countdownUnix = ((releseHeight - currentStatic.current.currentHeight) * 60 + currentStatic.current.currentStateTimestamp) * 1000;
 
     return <Countdown
-      date={countdownUnix}
+      date={/* countdownUnix */new Date("Tue Aug 16 2022 19:56:48 GMT+0000")}
       renderer={countdownRenderer}
     />
 
