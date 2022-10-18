@@ -36,6 +36,7 @@ const Input = styled.input`
   }
 `;
 
+
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -103,7 +104,6 @@ export const SelectWithInput: React.FC<SelectWithInputProps> = ({ items, setActi
 
   return (
     <div>
-    <Label>{label}</Label>
     <CustomSelect>
     <Container>
       <Input onChange={(e) => searchItems(e.target.value)} value={activeItem}/>

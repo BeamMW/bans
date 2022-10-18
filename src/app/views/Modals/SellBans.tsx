@@ -19,6 +19,7 @@ import BeamIcon from '@app/assets/icons/beam.svg';
 import _ from 'lodash';
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
 import { ShaderTransactionComments } from "@app/library/bans/types";
+import { SelectWithAssetInput } from "@app/components/SelectWithAssetInput/SelectWithAssetInput";
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -82,6 +83,9 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             <Text>{`Already on sale for ${activeItem.price.amount}!`}</Text>
           </Flex> : <></>
         }
+        <Box sx={{mb: '30px'}}>
+          <SelectWithAssetInput label='Amount*' color='blue' showConvertedToUsd={false} />
+        </Box>
 
         <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} showSuffix={true} />
 

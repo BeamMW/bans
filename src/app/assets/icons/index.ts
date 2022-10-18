@@ -16,6 +16,12 @@ import SearchIcon from './search.svg';
 import UserIcon from './user.svg';
 import RecieveIcon from './recieve.svg';
 import GiftIcon from './gift.svg';
+import NphIcon from './nph.svg';
+import BeamIcon from './beam.svg';
+import BeamxIcon from './beamx.svg';
+import BtcIcon from './btc.svg';
+import BchIcon from './bch.svg';
+import WbtcIcon from './wbtc.svg';
 
 export {
   ActionsIcon,
@@ -35,5 +41,11 @@ export {
   SearchIcon,
   UserIcon,
   RecieveIcon,
-  GiftIcon
+  GiftIcon,
+  NphIcon,
+  BeamIcon,
+  BeamxIcon,
+  BtcIcon,
+  BchIcon,
+  WbtcIcon
 }
