@@ -12,5 +12,6 @@ To launch the dapp:
 ```
 todo:
 
+- dont send TICOs to the BEAMX DAO
 - change used CA to "TICO" with ID 9
 - graphics
