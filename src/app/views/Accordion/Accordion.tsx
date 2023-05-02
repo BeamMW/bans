@@ -61,6 +61,12 @@ E.g., if your BANS domain is set to expire on January 1st, 2023, your grace peri
     answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>
       All profits are stored in the BeamX DAO treasury and under the governance of $BEAMX token holders.
     </Paragraph>
+  },
+  {
+    question: 'Do I understand what any of this means?',
+    answer: <Paragraph variant='block' sx={{color: '#8897A8'}}>
+            No
+            </Paragraph>
   }
 ];
 

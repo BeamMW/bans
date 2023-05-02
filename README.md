@@ -11,3 +11,6 @@ To launch the dapp:
   yarn start
 ```
 todo:
+
+- change used CA to "TICO" with ID 9
+- graphics
