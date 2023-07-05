@@ -1,9 +1,8 @@
 import { all, fork } from 'redux-saga/effects';
-import bansSaga from '@app/store/BansStore/saga';
-import sharedSaga from '@app/store/SharedStore/saga';
-import notificationsSaga from './NotificationsStore/saga';
+import sharedSaga from '@app/shared/store/saga';
+import mainSaga from '@app/containers/Main/store/saga';
 
-const allSagas = [sharedSaga, bansSaga, notificationsSaga];
+const allSagas = [sharedSaga, mainSaga];
 
 export default function* appSagas() {
   yield all(allSagas.map(fork));

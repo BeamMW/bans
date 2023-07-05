@@ -1,38 +1,27 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "typeRoots": [
       "node_modules/@types",
       "node_modules/web-ext-types",
       "./src/@types"
     ],
-    "declaration": false,
     "types": ["node"],
     "baseUrl": "src/",
     "paths": {
       "@app/*": ["app/*"],
       "@core/*": ["app/core/*"],
-      "@library/*": ["app/library/*"],
       "@model/*": ["app/model/*"],
       "@uikit": ["app/uikit"],
       "@uikit/*": ["app/uikit/*"],
       "@pages/*": ["app/pages/*"],
       "@state/*": ["app/state/*"],
-      "@assets/*": ["assets/*"]
     }
   },
-  "include": ["**/*", "node_modules"],
+  "include": ["**/*"],
   "exclude": ["node_modules"]
 }

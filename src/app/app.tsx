@@ -1,64 +1,77 @@
 import React, { useEffect } from 'react';
+import { ROUTES } from '@app/shared/constants';
+import { css } from '@linaria/core';
 
+import { actions as sharedActions, selectors as sharedSelectors } from '@app/shared/store';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useNavigate, useRoutes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { MainContainer } from './containers/Main';
+import { ToastContainer } from 'react-toastify';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import './styles';
-import { WalletApiConnector } from './components/WalletApiConnector';
-import { ThemeProvider } from '@theme-ui/core';
-import theme from '@app/theme';
-import { RouterLink } from '@app/components/RouterLink';
-import { TransactionProvider } from '@app/library/transaction-react/context/TransactionProvider';
-import { TransactionMonitor } from './library/transaction-react/TransactionMonitor';
 
+const trackStyle = css`
+  z-index: 999;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.2);
+`;
 
-import { BansLayout } from './components/BansLayout/BansLayout';
-import Main from './pages/Main/Main';
-import Faq from './pages/Faq/Faq';
-import MyPage from './pages/MyPage/MyPage';
-import Transactions from './pages/Transactions/Transactions';
-import './styles.css';
-import { BansApiProvider } from './contexts/Bans/BansApiProvider';
-import { MainViewProvider } from './contexts/Bans/MainViewProvider';
-import { ModalProvider } from './contexts/Modal/ModalProvider';
-import { selectTransactions } from './store/SharedStore/selectors';
+const routes = [
+  {
+    path: '/',
+    element: <></>,
+  },
+  {
+    path: `${ROUTES.MAIN.BASE}/*`,
+    element: <MainContainer />,
+  }
+];
 
 const App = () => {
-
-  const transactions = useSelector(selectTransactions());
+  const dispatch = useDispatch();
+  const content = useRoutes(routes);
+  const navigate = useNavigate();
+  const navigateURL = useSelector(sharedSelectors.selectRouterLink());
 
   useEffect(() => {
-    window.process = {
-      ...window.process,
-    };
-  }, []);
+    if (navigateURL) {
+      navigate(navigateURL);
+      dispatch(sharedActions.navigate(''));
+    }
+  }, [navigateURL, dispatch, navigate]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <WalletApiConnector>
-        <BansApiProvider>
-          <MainViewProvider>
-            <TransactionProvider>
-              <ModalProvider>
-                <BansLayout>
-                  <Routes>
-                    <Route index element={<Main />} />
-                    <Route path="/" element={<Main />} />
-                    <Route path="faq" element={<Faq />} />
-                    <Route path="my-page" element={<MyPage />} />
-                    <Route path="transactions" element={<Transactions />} />
-                  </Routes>
-                </BansLayout>
-              </ModalProvider>
-              <TransactionMonitor shaderTransactions={transactions} showStatusBlock={false} />
-            </TransactionProvider>
-          </MainViewProvider>
-        </BansApiProvider>
-      </WalletApiConnector>
-    </ThemeProvider>
+    <Scrollbars
+        renderThumbVertical={(props) => <div {...props} className={trackStyle} />}
+      >
+      {content}
+      <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          closeButton={false}
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable={false}
+          pauseOnHover={false}
+          icon={false}
+          toastStyle={{
+            textAlign: 'center',
+            background: '#22536C',
+            color: 'white',
+            width: '90%',
+            margin: '0 auto 36px',
+            borderRadius: '10px',
+          }}
+        />
+    </Scrollbars>
   );
 };
 
 export default App;
-

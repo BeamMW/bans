@@ -1,15 +1,13 @@
 import { AnyAction, combineReducers } from 'redux';
-//import { AppState } from '@app/types/interface';
-import { SharedReducer } from '@app/store/SharedStore/reducer';
-import { BansReducer } from '@app/store/BansStore/reducer';
-import { NotificationsReducer } from '@app/store/NotificationsStore/reducer';
+import { AppState } from '@app/shared/interface';
+import { SharedReducer } from '@app/shared/store/reducer';
+import { MainReducer } from '@app/containers/Main/store/reducer';
 
 export default () => {
   const appReducer = combineReducers({
     shared: SharedReducer,
-    bans: BansReducer,
-    notifications: NotificationsReducer,
+    main: MainReducer,
   });
 
-  return (state: /* AppState */any | undefined, action: AnyAction) => appReducer(state, action);
+  return (state: AppState | undefined, action: AnyAction) => appReducer(state, action);
 };
