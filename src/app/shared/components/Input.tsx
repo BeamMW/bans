@@ -3,15 +3,19 @@ import { styled } from '@linaria/react';
 import Button from '@app/shared/components/Button';
 
 import { css } from '@linaria/core';
+import { Rate } from '@app/shared/components/index';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   valid?: boolean;
-  variant?: 'regular' | 'gray' | 'amount' | 'proposal';
+  variant?: 'regular' | 'gray' | 'amount' | 'proposal' | 'modalInput';
   pallete?: 'purple' | 'blue' | 'white';
   margin?: 'none' | 'large';
   children?: React.ReactNode;
   errorMessage?: string;
+  rate?: string;
+  info?: string;
+  suffix?: React.ReactNode;
 
 }
 
@@ -98,13 +102,6 @@ const InputMainStyled = styled(InputGrayStyled)<InputProps>`
   }
 `;
 
-const menuEyeStyle = css`
-  position: absolute;
-  z-index: 3;
-  top: 12px;
-  right: 12px;
-  margin: 0;
-`;
 const LabelStyled = styled.div<InputProps>`
   text-align: start;
   margin-bottom: 10px;
@@ -141,7 +138,11 @@ const IconContainer = styled.div`
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({
-    label, valid = true, variant = 'regular', margin = 'none', pallete, className, errorMessage, children, ...rest
+    label, valid = true, variant = 'regular', margin = 'none', pallete, className, errorMessage, children,
+    suffix,
+    info,
+    rate,
+    ...rest
   }, ref) => {
     const InputComponent = {
       regular: InputRegularStyled,
@@ -151,17 +152,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       modalInput: InputMainStyled,
     }[variant];
 
-    const [inputVisible, setInputVisible] = useState(false);
-    const [inputValue, setInputValue] = useState(rest.value ?? '');
-
-    const inputHandler = (e) => {
-      if (rest?.onChange) rest?.onChange(e);
-      setInputValue(e.target.value);
-    };
-
     return (
       <ContainerStyled className={className} margin={margin}>
         {!!label && <LabelStyled valid={valid}>{label}</LabelStyled>}
+
         {
               !!children && (
               <IconContainer>
@@ -169,15 +163,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               </IconContainer>
               )
           }
-        <InputComponent
-          ref={ref}
-          valid={valid}
-          pallete={pallete}
-          {...rest}
-          type={inputVisible ? 'text' : rest.type}
-          className={!valid ? 'invalid' : ''}
-          onChange={inputHandler}
-        />
+        <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+        {!!suffix && suffix }
+        {!!info && <InfoStyled>{info}</InfoStyled>}
+        {(rate || rate === '') && <Rate value={parseFloat(rate)} />}
         <ErrorStyled>{!valid ? errorMessage : ''}</ErrorStyled>
       </ContainerStyled>
     );

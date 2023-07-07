@@ -12,12 +12,11 @@ const initialState: SharedStateType = {
   systemState: {
     current_height: 0,
   },
-  isLoaded: false
+  isLoaded: false,
 };
 
 const reducer = createReducer<SharedStateType, Action>(initialState)
   .handleAction(actions.navigate, (state, action) => produce(state, (nexState) => {
     nexState.routerLink = action.payload;
   }))
-
 export { reducer as SharedReducer };

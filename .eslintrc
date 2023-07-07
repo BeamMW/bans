@@ -23,6 +23,7 @@
     "react/no-array-index-key": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "max-classes-per-file": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

@@ -16,8 +16,8 @@ export function remoteEventChannel() {
   return eventChannel((emitter) => {
     Utils.initialize({
       appname: 'BEAM Bans',
-      min_api_version: '7.2',
-      headless: false,
+      min_api_version: '6.2',
+      headless: true,
       apiResultHandler: (error, result, full) => {
         console.log('api result data: ', result, full);
         if (!result.error) {
@@ -32,6 +32,7 @@ export function remoteEventChannel() {
           (error, result, full) => {
             if (result) {
               store.dispatch(mainActions.loadParams.request(bytes));
+              store.dispatch(mainActions.loadRate.request());
             }
           },
         );
@@ -55,7 +56,7 @@ function* sharedSaga() {
       switch (payload.id) {
         case 'ev_system_state':
           store.dispatch(setSystemState(payload.result));
-
+          store.dispatch(mainActions.loadParams.request(null));
           break;
         default:
           break;

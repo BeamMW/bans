@@ -18,6 +18,26 @@ css`
       --color-disabled: #8da1ad;
     }
 
+    @font-face {
+      font-family: 'SFProDisplay';
+      src: url('./assets/fonts/SF-Pro-Display-Regular.otf');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'SFProDisplay';
+      src: url('./assets/fonts/SF-Pro-Display-RegularItalic.otf');
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    @font-face {
+      font-family: 'SFProDisplay';
+      src: url('./assets/fonts/SF-Pro-Display-Bold.otf');
+      font-weight: 700;
+      font-style: normal;
+    }
+
     * {
       box-sizing: border-box;
       outline: none;
@@ -63,8 +83,3 @@ css`
     }
   }
 `;
-
-
-
-
-

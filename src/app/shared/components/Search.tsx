@@ -4,7 +4,7 @@ import { Input, SearchResult } from '@app/shared/components/index';
 import { styled } from '@linaria/react';
 import {useDispatch, useSelector} from 'react-redux';
 import { actions } from '@app/containers/Main/store';
-import {selectIsValid, selectSearchDomain} from "@app/containers/Main/store/selectors";
+import {selectIsAvailable, selectSearchDomain} from "@app/containers/Main/store/selectors";
 
 const Container = styled.div`
 display: flex;
@@ -14,7 +14,7 @@ display: flex;
 function Search() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
-  const isValid = useSelector(selectIsValid());
+  const isValid = useSelector(selectIsAvailable());
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {
       return false;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@linaria/react';
 import {
-  Emblem, Header, Menu, Window,
+  Emblem, Header, Menu, SendBlock, Window,
 } from '@app/shared/components';
 import Search from '@app/shared/components/Search';
 
@@ -20,6 +20,7 @@ const MainPage: React.FC = () => (
     </Header>
     <Emblem />
     <Search />
+    <SendBlock />
     <Container />
   </Window>
 );
