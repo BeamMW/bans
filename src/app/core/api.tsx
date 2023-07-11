@@ -1,7 +1,7 @@
 import Utils from '@core/utils.js';
 import { IUserUpdate, IUserViewPrePhase } from '@app/shared/interface/Request';
-import {IPayRequest} from "@app/shared/interface/RequestType";
-import {toGroths} from "@core/appUtils";
+import { IPayRequest, IRegistrDomain } from '@app/shared/interface/RequestType';
+import { toGroths } from '@core/appUtils';
 
 const dappnet = '560881a267df92b45d48a1dc6495fdd29b37878e1040b22b1c4f1ea13b467dc9';
 const mainnet = 'ec160307c43bc3fc0c3a52d3e3d3dfd8101593e8cec7a907fc42c9f103aabbae';
@@ -20,7 +20,7 @@ export function onMakeTx(err, sres, full, params: { id: number, vote: number } =
 export function ViewParams<T = any>(payload): Promise<T> {
   return new Promise((resolve, reject) => {
     Utils.invokeContract(
-      `role=manager, action=view, cid=${CID}`,
+      `role=manager, action=view_params, cid=${CID}`,
       (error, result, full) => {
         if (!error) {
           resolve(result.res);
@@ -91,6 +91,17 @@ export function payDomain<T = any>({ domain, amount } : IPayRequest): Promise<T>
   return new Promise((resolve, reject) => {
     Utils.invokeContract(
       `role=manager, action=pay, name=${domain}, amount=${toGroths(+amount)}, cid=${CID}`,
+      (error, result, full) => {
+        onMakeTx(error, result, full);
+      },
+    );
+  });
+}
+export function registrDomain<T = any>({ domain, period } : IRegistrDomain): Promise<T> {
+  console.log(domain);
+  return new Promise((resolve, reject) => {
+    Utils.invokeContract(
+      `role=user, action=domain_register, name=${domain}, period=${period}, cid=${CID}`,
       (error, result, full) => {
         onMakeTx(error, result, full);
       },

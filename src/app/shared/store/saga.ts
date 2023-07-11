@@ -1,16 +1,11 @@
 import {
-  call, take, fork, takeLatest, put, select,
+  call, take
 } from 'redux-saga/effects';
 
 import { eventChannel, END } from 'redux-saga';
-import { actions } from '@app/shared/store/index';
 import { actions as mainActions } from '@app/containers/Main/store/index';
-import { navigate, setSystemState } from '@app/shared/store/actions';
 import Utils from '@core/utils.js';
-import { loadParamsSaga } from '@app/containers/Main/store/saga';
 import store from '../../../index';
-import { SharedStateType } from '../interface';
-import {loadParams, LoadParams} from "@app/containers/Main/store/actions";
 
 export function remoteEventChannel() {
   return eventChannel((emitter) => {

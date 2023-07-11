@@ -10,15 +10,29 @@ export interface MainStateType {
   userData: IUserData | null,
   allDomains: IDomains[] | null,
   isAvailable: string | null,
-  assetPrice: number
+  assetPrice: number,
+  params: IParams | null,
+  registrationName: string | null,
 }
 export interface IUserData {
   anon:[],
   domains: IDomains[],
   raw:[]
 }
+export interface PriceInfo {
+  aid: number,
+  amount: number
+}
 export interface IDomains {
   hExpire : number,
   key: string,
   name: string
+}
+
+export interface IParams {
+  ['dao-vault']: string,
+  h0: number,
+  oracle: string,
+  price: string,
+  vault: string,
 }

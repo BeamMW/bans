@@ -60,3 +60,22 @@ export function toGroths(value: number): number {
 export function getSign(positive: boolean): string {
   return positive ? '+ ' : '- ';
 }
+
+export function beamNamePrice(name: string, currentPriceBeam): number {
+  if (name.length >= 5) {
+    return 10 * currentPriceBeam;
+  } else if (name.length === 4) {
+    return 120 / currentPriceBeam;
+  } else if (name.length === 3) {
+    return 320 * currentPriceBeam;
+  }
+}
+export const copyToClipboard = (value: string) => {
+  const textField = document.createElement('textarea');
+  textField.innerText = value;
+  document.body.appendChild(textField);
+  textField.select();
+  document.execCommand('copy');
+  textField.remove();
+};
+

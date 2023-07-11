@@ -19,4 +19,7 @@ const reducer = createReducer<SharedStateType, Action>(initialState)
   .handleAction(actions.navigate, (state, action) => produce(state, (nexState) => {
     nexState.routerLink = action.payload;
   }))
+    .handleAction(actions.setIsLoaded, (state, action) => produce(state, (nexState) => {
+    nexState.isLoaded = action.payload;
+  }))
 export { reducer as SharedReducer };

@@ -9,6 +9,11 @@ export { default as Favorites } from './Favorites';
 export { default as SendBlock } from './SendBlock';
 export { default as SendModal } from './SendModal';
 export { default as Rate } from './Rate';
+export { default as Registration } from './Registration';
+export { default as RegistrationPeriod } from './RegistrationPeriod';
+export { default as RegistrationPrice } from './RegistrationsPrice';
+export { default as Amount } from './Amount';
+export { default as PKeyModal } from './PKeyModal';
 export { Modal } from './Modal';
 
 // export { default as Input } from './Input';

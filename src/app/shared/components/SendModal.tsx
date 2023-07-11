@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from '@app/shared/components/Modal';
 import { Input } from '@app/shared/components/index';
-import { IconBeam, IconChecked } from '@app/shared/icons';
+import {IconBeam, IconChecked, IconSendBlack} from '@app/shared/icons';
 import { payDomain } from '@core/api';
 import { ROUTES } from '@app/shared/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -82,7 +82,7 @@ function SendModal({ isShown, onClose }:SendModalProps) {
   };
 
   return (
-    <Modal isShown={isShown} onClose={onClose} actionButton={sendPay} labelAction="send" header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bans domain">
+    <Modal isShown={isShown} onClose={onClose} actionButton={sendPay} labelAction="send" icon={IconSendBlack} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bans domain">
       <>
         <Input
           variant="modalInput"

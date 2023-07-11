@@ -9,13 +9,13 @@ import {
   GetUserKey, GetView, SearchDomain, UserView, ViewName, ViewParams,
 } from '@core/api';
 import {
-  loadParams, LoadParams, setAllDomains, setPkey, setIsAvailable, setUserData,
+  loadParams, LoadParams, setAllDomains, setPkey, setIsAvailable, setUserData, setParams, setRegistrationName,
 } from '@app/containers/Main/store/actions';
-import { IDomains, IUserData } from '@app/shared/interface';
+import { IDomains, IParams, IUserData } from '@app/shared/interface';
 import { calcRelayerFee } from '@core/appUtils';
+import { CURRENCIES } from '@app/shared/constants/common';
 import { actions } from '.';
 import store from '../../../../index';
-import {CURRENCIES} from "@app/shared/constants/common";
 
 const FETCH_INTERVAL = 5000;
 const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
@@ -26,10 +26,11 @@ export function* loadParamsSaga(
   action: ReturnType<typeof actions.loadParams.request>,
 ): Generator {
   try {
-    // const pkey = yield call(GetUserKey, action.payload ? action.payload : null);
     const params = yield call(ViewParams, action.payload ? action.payload : null);
     console.log(params);
-    // yield put(setPkey(pkey as string));
+    yield put(setParams(params as IParams));
+    const pkey = yield call(GetUserKey, null);
+    yield put(setPkey(pkey.key as string));
     // const userData = yield call(UserView as any);
     // yield put(setUserData(userData as IUserData));
     const allDomains = yield call(SearchDomain);
@@ -53,6 +54,7 @@ export function* getDomainName(action: ReturnType<typeof actions.getDomainName.r
       yield put(setIsAvailable('not available'));
     } else {
       yield put(setIsAvailable('available'));
+      yield put(setRegistrationName(action.payload as string));
     }
   } catch (e) {
     yield put(actions.getDomainName.failure(e));

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 import ReactDOM from 'react-dom';
 
 import { ButtonContainer } from '@app/shared/components/Modal/ButtonContainer';
@@ -18,8 +18,9 @@ export interface ModalProps {
   subHeader?: string;
   width?: string;
   onClose?: () => void;
-  actionButton?: () => void;
-  labelAction?: string
+  actionButton?: () => void | MouseEventHandler<Element>;
+  labelAction?: string;
+  icon?: React.FC;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -31,6 +32,7 @@ export const Modal: FC<ModalProps> = ({
   children,
   actionButton,
   labelAction,
+  icon,
 }) => {
   const modal = (
     <Wrapper>
@@ -54,7 +56,7 @@ export const Modal: FC<ModalProps> = ({
         { children }
         <ButtonContainer>
           <Button variant="ghost" icon={IconRemove} onClick={onClose}>close</Button>
-          <Button icon={IconSendBlack} onClick={actionButton}>{labelAction || 'action'}</Button>
+          <Button icon={icon} onClick={actionButton}>{labelAction || 'action'}</Button>
         </ButtonContainer>
       </ModalContent>
     </Wrapper>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Favorites, SplitContainer } from '@app/shared/components/index';
+import { Button, Favorites, SplitContainer } from '@app/shared/components/index';
 import { styled } from '@linaria/react';
 import { selectSearchDomain } from '@app/containers/Main/store/selectors';
 import { useSelector } from 'react-redux';
+import { ROUTES } from '@app/shared/constants';
 
 export interface SearchResultProps {
   isValid?: string;
@@ -101,6 +102,10 @@ const Available = styled.div<SearchResultProps>`
 
 const SearchResult: React.FC<SearchResultProps> = ({ search, isValid }: SearchResultProps) => {
   const beam = '.beam';
+  const navigate = useNavigate();
+  const navigateToRegistration = () => {
+    navigate(ROUTES.MAIN.REG_PAGE);
+  };
   return (
     <Container>
       {
@@ -119,9 +124,11 @@ const SearchResult: React.FC<SearchResultProps> = ({ search, isValid }: SearchRe
           </DomainContainer>
           <RightSide>
             <Favorites />
-            <Available isValid={isValid}>
-              {isValid}
-            </Available>
+            {isValid !== 'available' ? (
+              <Available isValid={isValid}>
+                {isValid}
+              </Available>
+            ) : <Button variant="link" style={{ marginLeft: '10px' }} onClick={navigateToRegistration}>{isValid}</Button>}
           </RightSide>
         </SearchContainer>
       </ResultContainer>
