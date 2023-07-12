@@ -3,7 +3,8 @@ import { styled } from '@linaria/react';
 import { useSelector } from 'react-redux';
 import { Rate } from '@app/shared/components/index';
 import { IconBeam } from '@app/shared/icons';
-import {css} from '@linaria/core';
+import { css } from '@linaria/core';
+import { truncate } from '@core/appUtils';
 
 interface AmountProps {
   size: string,
@@ -50,7 +51,7 @@ const Text = styled.span`
 `;
 const styleRate = css`
 margin-left: 0px ;
-`
+`;
 const UsdEqualizer: React.FC<{ equalizer: any }> = ({ equalizer }) => (
   <Flex sx={{
     px: '20px', opacity: 0.5, fontSize: '14px', fontWeight: '300',
@@ -74,7 +75,7 @@ const Amount: React.FC<AmountProps> = ({ size, value, showConvertedToUsd = false
       <IconBeam />
       <Section>
         <Text variant="text" className="text">
-          { value }
+          { value.toFixed(2) }
           {' '}
           BEAM
         </Text>
