@@ -1,4 +1,4 @@
-import {GROTHS_IN_BEAM} from "@app/shared/constants/common";
+import { GROTHS_IN_BEAM, LENGTH_MAX } from '@app/shared/constants/common';
 
 export function isNumeric(value: any): boolean {
   return !isNaN(value - parseFloat(value));
@@ -15,7 +15,17 @@ export function measureText(str, fontSize = 10) {
     .map((c) => (c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg))
     .reduce((cur, acc) => acc + cur) * fontSize;
 }
+export function truncate(value: string, len = LENGTH_MAX): string {
+  if (!value) {
+    return '';
+  }
 
+  if (value.length <= len) {
+    return value;
+  }
+
+  return `${value.slice(0, len)}…`;
+}
 export function getTextWidth(text:string, font:string) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
@@ -61,14 +71,16 @@ export function getSign(positive: boolean): string {
   return positive ? '+ ' : '- ';
 }
 
-export function beamNamePrice(name: string, currentPriceBeam): number {
+export function beamNamePrice(name: string, currentPriceBeam) {
+  let beamPrice = '0';
   if (name.length >= 5) {
-    return 10 * currentPriceBeam;
-  } else if (name.length === 4) {
-    return 120 / currentPriceBeam;
-  } else if (name.length === 3) {
-    return 320 * currentPriceBeam;
+    beamPrice = truncate((10 / currentPriceBeam).toString());
+  } if (name.length === 4) {
+    beamPrice = truncate((120 / currentPriceBeam).toString());
+  } if (name.length === 3) {
+    beamPrice = truncate((320 / currentPriceBeam).toString());
   }
+  return beamPrice;
 }
 export const copyToClipboard = (value: string) => {
   const textField = document.createElement('textarea');
@@ -78,4 +90,3 @@ export const copyToClipboard = (value: string) => {
   document.execCommand('copy');
   textField.remove();
 };
-

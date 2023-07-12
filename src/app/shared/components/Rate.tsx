@@ -9,9 +9,7 @@ interface Props {
   value: number;
   income?: boolean;
   groths?: boolean;
-  className?: string;
-  selectedCurrencyId?: string;
-}
+  className?: string;}
 
 const Ratetyled = styled.div`
   text-align: start;
@@ -23,7 +21,7 @@ const Ratetyled = styled.div`
 `;
 
 const Rate: React.FC<Props> = ({
-  value, income, groths, className, selectedCurrencyId = 'beam',
+  value, income, groths, className,
 }) => {
   const rate = useSelector(selectRate());
   const sign = income ? getSign(income) : '';
@@ -31,7 +29,8 @@ const Rate: React.FC<Props> = ({
   return (
     <Ratetyled className={className}>
       {sign}
-      {toUSD(amount, rate ? rate[selectedCurrencyId].usd : 0)}
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {toUSD(amount, rate || 0)}
     </Ratetyled>
   );
 };

@@ -3,7 +3,7 @@ import { styled } from '@linaria/react';
 import { PriceInfo } from '@app/shared/interface';
 import { Amount } from '@app/shared/components/index';
 import {beamNamePrice} from '@core/appUtils';
-import {selectCurrentPrice} from '@app/containers/Main/store/selectors';
+import {selectCurrentPrice, selectRate} from '@app/containers/Main/store/selectors';
 import {useSelector} from 'react-redux';
 
 interface PriceProps {
@@ -19,7 +19,7 @@ const Container = styled.div`
 `;
 
 const RegistrationPrice: React.FC<PriceProps> = ({ price, period,name }) => {
-  const currentPrice = useSelector(selectCurrentPrice());
+  const currentPrice = useSelector(selectRate());
   const computedPrice = beamNamePrice(name, currentPrice) * period;
 
   return (

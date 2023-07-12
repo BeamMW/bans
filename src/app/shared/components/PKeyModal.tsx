@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectPublicKey } from '@app/containers/Main/store/selectors';
 import { styled } from '@linaria/react';
 import { Button } from '@app/shared/components/index';
-import {IconCopy, IconCopyBlue} from '@app/shared/icons';
+import { IconCopy, IconCopyBlue } from '@app/shared/icons';
 import { copyToClipboard } from '@core/appUtils';
 import icon from '*.svg';
 

@@ -2,7 +2,7 @@ import { createAsyncAction, createAction } from 'typesafe-actions';
 import {IDomains, IParams, IUserData} from '@app/shared/interface';
 import { MainActionTypes } from '@app/containers/Main/store/constants';
 
-export const loadSomeData = createAction('@@MAIN/SET_BRIDGE_TRANSACTIONS')<any>();
+export const setRate = createAction(MainActionTypes.SET_RATE)<number>();
 export const setPkey = createAction(MainActionTypes.SET_USER_PKEY)<string>();
 export const setUserData = createAction(MainActionTypes.SET_USER_DATA)<IUserData>();
 export const setAllDomains = createAction(MainActionTypes.SET_ALL_DOMAINS)<IDomains[]>();

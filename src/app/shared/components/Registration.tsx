@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { styled } from '@linaria/react';
 import {
   Favorites, RegistrationPrice, RegistrationPeriod, Button,
@@ -9,7 +9,7 @@ import { registrDomain } from '@core/api';
 import { IRegistrDomain } from '@app/shared/interface/RequestType';
 
 interface RegistrationsProps {
-    domain: string,
+  domain: string,
 }
 
 const Container = styled.div`
@@ -92,8 +92,13 @@ const Description = styled.span`
 
 const ButtonContainer = styled(DescriptionContainer)``;
 const Registration:React.FC<RegistrationsProps> = ({ domain }) => {
+  const initialState = {
+    domain,
+    period: 1,
+  };
   const beam = '.beam';
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
+  const [regData, setRegdata] = useState<IRegistrDomain>(initialState);
   const now = moment().format('LL');
   const till = useMemo(
     () =>
@@ -103,10 +108,8 @@ const Registration:React.FC<RegistrationsProps> = ({ domain }) => {
   );
 
   const onRegistration = () => {
-    registrDomain({
-      domain,
-      period,
-    });
+    console.log({ domain, period });
+    registrDomain({ domain, period });
   };
   return (
     <Container>

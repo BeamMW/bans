@@ -9,7 +9,7 @@ import {
   GetUserKey, GetView, SearchDomain, UserView, ViewName, ViewParams,
 } from '@core/api';
 import {
-  loadParams, LoadParams, setAllDomains, setPkey, setIsAvailable, setUserData, setParams, setRegistrationName,
+  loadParams, LoadParams, setAllDomains, setPkey, setIsAvailable, setUserData, setParams, setRegistrationName, setRate,
 } from '@app/containers/Main/store/actions';
 import { IDomains, IParams, IUserData } from '@app/shared/interface';
 import { calcRelayerFee } from '@core/appUtils';
@@ -28,6 +28,7 @@ export function* loadParamsSaga(
   try {
     const params = yield call(ViewParams, action.payload ? action.payload : null);
     console.log(params);
+    yield put(setRate(params.price));
     yield put(setParams(params as IParams));
     const pkey = yield call(GetUserKey, null);
     yield put(setPkey(pkey.key as string));
