@@ -13,7 +13,7 @@ function RegPage() {
         <Menu />
       </Header>
       <Emblem />
-      <Registration domain={name} />
+      <Registration nameDomain={name} />
     </Window>
   );
 }

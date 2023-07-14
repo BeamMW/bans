@@ -6,10 +6,19 @@ import { ROUTES } from '@app/shared/constants';
 // import { LoadFromContract } from '@core/api';
 import { selectIsLoaded } from '@app/shared/store/selectors';
 import {
-  GetUserKey, GetView, SearchDomain, UserView, ViewName, ViewParams,
+  GetUserKey, GetView, SearchDomain, UserDomain, UserView, ViewName, ViewParams,
 } from '@core/api';
 import {
-  loadParams, LoadParams, setAllDomains, setPkey, setIsAvailable, setUserData, setParams, setRegistrationName, setRate,
+  loadParams,
+  LoadParams,
+  setAllDomains,
+  setPkey,
+  setIsAvailable,
+  setUserData,
+  setParams,
+  setRegistrationName,
+  setRate,
+  setUserDomains,
 } from '@app/containers/Main/store/actions';
 import { IDomains, IParams, IUserData } from '@app/shared/interface';
 import { calcRelayerFee } from '@core/appUtils';
@@ -32,8 +41,8 @@ export function* loadParamsSaga(
     yield put(setParams(params as IParams));
     const pkey = yield call(GetUserKey, null);
     yield put(setPkey(pkey.key as string));
-    // const userData = yield call(UserView as any);
-    // yield put(setUserData(userData as IUserData));
+    const userDomains = yield call(UserDomain, pkey.key as string);
+    yield put(setUserDomains(userDomains as IDomains[]));
     const allDomains = yield call(SearchDomain);
     yield put(actions.setAllDomains(allDomains as IDomains[]));
     const isLoaded = yield select(selectIsLoaded());

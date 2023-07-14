@@ -14,12 +14,15 @@ export { default as RegistrationPeriod } from './RegistrationPeriod';
 export { default as RegistrationPrice } from './RegistrationsPrice';
 export { default as Amount } from './Amount';
 export { default as PKeyModal } from './PKeyModal';
+export { default as SellModal } from './SellModal';
+export * from './PageTitle/PageTitle';
 export { Modal } from './Modal';
-
+export { default as Popup } from './Popup/Popup';
+export * from './Select/Select';
 // export { default as Input } from './Input';
 // export { default as BackButton } from './BackButton';
 // export { default as Footer } from './Footer';
-// export { default as Section } from './Section';
+export { default as Section } from './Section';
 // export { default as Select } from './Select';
 // export { default as Angle } from './Angle';
 // export { default as Title } from './Title';

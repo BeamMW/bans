@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@linaria/react';
 
-import { AngleSmallUpIcon } from '@app/shared/icons';
+import { IconDots } from '@app/shared/icons';
 
 interface AngleProps {
   value?: number;
@@ -27,7 +27,7 @@ const ContainerStyled = styled.div<AngleProps>`
 
 const Angle: React.FC<AngleProps> = ({ value = 0, margin = 0, className }) => (
   <ContainerStyled value={value} margin={margin} className={className}>
-    <AngleSmallUpIcon />
+    <IconDots />
   </ContainerStyled>
 );
 

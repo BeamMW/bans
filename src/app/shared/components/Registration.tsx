@@ -1,29 +1,38 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { styled } from '@linaria/react';
+import { css } from '@linaria/core';
 import {
   Favorites, RegistrationPrice, RegistrationPeriod, Button,
 } from '@app/shared/components/index';
-import { IconPlus, IconRegistration } from '@app/shared/icons';
+import {
+  IconRegistration, IconRemove, IconRenew, IconRenewBlue,
+} from '@app/shared/icons';
 import moment from 'moment';
-import { registrDomain } from '@core/api';
-import { IRegistrDomain } from '@app/shared/interface/RequestType';
+import { extendDomain, registrDomain } from '@core/api';
+import { IDomains } from '@app/shared/interface';
 
 interface RegistrationsProps {
-  domain: string,
+  nameDomain?: string,
+  isRenew?: boolean,
+  domain?: IDomains,
+  onClose?: ()=> void
 }
 
-const Container = styled.div`
+const containerStyle = css`
   display: flex;
   flex-direction: column;
   max-width: 630px;
   width: 100%;
-  height: 326px;
+  //height: 326px;
   border-radius: 10px;
   border: 1px solid #000;
   background: rgba(255,255,255, .1);
   padding: 1.875rem 1.25rem 2.5rem 1.25rem;
   justify-items: center;
 `;
+const fragmentStyle = css`
+`;
+
 const RowContainer = styled.div`
   display: flex;
   position: relative;
@@ -91,31 +100,35 @@ const Description = styled.span`
   line-height: normal;`;
 
 const ButtonContainer = styled(DescriptionContainer)``;
-const Registration:React.FC<RegistrationsProps> = ({ domain }) => {
-  const initialState = {
-    domain,
-    period: 1,
-  };
+const Registration:React.FC<RegistrationsProps> = ({
+  nameDomain, isRenew, domain, onClose,
+}) => {
   const beam = '.beam';
   const [period, setPeriod] = useState<number>(1/* selectedDomain.alreadyexistingperiod */);
-  const [regData, setRegdata] = useState<IRegistrDomain>(initialState);
-  const now = moment().format('LL');
-  const till = useMemo(
-    () =>
-    // if (foundDomain.expiresAt) return foundDomain.expiresAt;
-      moment().add(period, 'years').format('LL'),
-    [period],
-  );
+  const now = !isRenew ? moment().format('LL') : 'Current subscribe period';
+  const till: string = useMemo(() => {
+    //   TODO: Calculated and to format
+    if (isRenew) {
+      return `Current subscribe period + ${period} years`;
+    }
+    moment()
+      .add(period, 'years')
+      .format('LL');
+  }, [period]);
 
   const onRegistration = () => {
-    console.log({ domain, period });
-    registrDomain({ domain, period });
+    if (isRenew) {
+      extendDomain({
+        domain: domain.name,
+        period,
+      });
+    } else { registrDomain({ domain: nameDomain, period }); }
   };
   return (
-    <Container>
+    <div className={isRenew ? fragmentStyle : containerStyle}>
       <RowContainer>
         <DomainWrapper>
-          <DomainName>{domain}</DomainName>
+          <DomainName>{isRenew ? domain.name : nameDomain}</DomainName>
           <Domain>{beam}</Domain>
         </DomainWrapper>
         <FavoriteContainer>
@@ -136,18 +149,26 @@ const Registration:React.FC<RegistrationsProps> = ({ domain }) => {
           Registration price
         </Title>
         <RegistrationContainer>
-          <RegistrationPrice period={period} name={domain} />
+          <RegistrationPrice period={period} name={isRenew ? domain.name : nameDomain} />
         </RegistrationContainer>
       </RowContainer>
       <DescriptionContainer>
         <Description>{`Current domain will be available from ${now} till ${till}.`}</Description>
       </DescriptionContainer>
-      <ButtonContainer>
-        <Button pallete="green" icon={IconRegistration} onClick={onRegistration}>
-          register
-        </Button>
-      </ButtonContainer>
-    </Container>
+      {!isRenew ? (
+        <ButtonContainer>
+          <Button pallete="green" icon={IconRegistration} onClick={onRegistration}>
+            register
+          </Button>
+        </ButtonContainer>
+      )
+        : (
+          <ButtonContainer>
+            <Button variant="ghost" icon={IconRemove} onClick={onClose}>close</Button>
+            <Button icon={IconRenewBlue} onClick={onRegistration}>renew</Button>
+          </ButtonContainer>
+        )}
+    </div>
   );
 };
 

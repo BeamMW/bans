@@ -1,1 +1,1 @@
-import { default as RegPage } from './RegPage';
+export { default as RegPage } from './RegPage';

@@ -1,0 +1,40 @@
+import React from 'react';
+import { Container } from './FilterTabs.style';
+
+interface Tabs {
+  id: number,
+  name: string,
+}
+interface FliterTabsProps {
+  tabs: Tabs[],
+  active: number,
+  setActive: (tabId: number) => void,
+  children?: React.ReactNode
+}
+
+export const FilterTabs: React.FC<FliterTabsProps> = ({
+  tabs, children, active, setActive,
+}) => (
+  <Container>
+    {
+        tabs.map((tab) => (
+          <React.Fragment key={tab.id}>
+            <div className={`tab-item ${active === tab.id ? 'tab-active' : ''}`} onClick={() => setActive(tab.id)}>
+              <div className="title">{ tab.name }</div>
+              <div
+                className={active === tab.id ? 'bottom-line' : ''}
+              />
+            </div>
+            {
+                children && (
+                  <div className="slot">
+                    { children }
+                  </div>
+                )
+              }
+
+          </React.Fragment>
+        ))
+}
+  </Container>
+);

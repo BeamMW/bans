@@ -3,7 +3,7 @@ import { ActionType, createReducer } from 'typesafe-actions';
 import { MainStateType } from '@app/shared/interface';
 // import { Decimal } from '@core/Decimal';
 import * as actions from './actions';
-import {setRate, setRegistrationName} from './actions';
+import { setRate, setRegistrationName, setUserDomains } from './actions';
 
 type Action = ActionType<typeof actions>;
 
@@ -15,7 +15,8 @@ const initialState: MainStateType = {
   assetPrice: 0,
   params: null,
   registrationName: null,
-  rate: 0
+  rate: 0,
+  userDomains: null,
 };
 
 const reducer = createReducer<any, Action>(initialState)
@@ -40,7 +41,10 @@ const reducer = createReducer<any, Action>(initialState)
   .handleAction(setRegistrationName, (state, action) => produce(state, (nextState) => {
     nextState.registrationName = action.payload;
   }))
-.handleAction(setRate, (state, action) => produce(state, (nextState) => {
+  .handleAction(setRate, (state, action) => produce(state, (nextState) => {
     nextState.rate = action.payload;
+  }))
+  .handleAction(setUserDomains, (state, action) => produce(state, (nextState) => {
+    nextState.userDomains = action.payload;
   }));
 export { reducer as MainReducer };

@@ -8,3 +8,5 @@ export const selectIsAvailable = () => createSelector(selectMain, (state) => sta
 export const selectRate = () => createSelector(selectMain, (state) => state.rate);
 export const selectRegistrationName = () => createSelector(selectMain, (state) => state.registrationName);
 export const selectPublicKey = () => createSelector(selectMain, (state) => state.pkey);
+export const selectUserDomains = () => createSelector(selectMain, (state) => state.userDomains);
+

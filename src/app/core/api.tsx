@@ -1,8 +1,8 @@
 import Utils from '@core/utils.js';
 import { IUserUpdate, IUserViewPrePhase } from '@app/shared/interface/Request';
-import { IPayRequest, IRegistrDomain } from '@app/shared/interface/RequestType';
+import { IPayRequest, IRegistrDomain, ITransferDomain } from '@app/shared/interface/RequestType';
 import { toGroths } from '@core/appUtils';
-import {IParams} from '@app/shared/interface';
+import { IParams } from '@app/shared/interface';
 
 const dappnet = '560881a267df92b45d48a1dc6495fdd29b37878e1040b22b1c4f1ea13b467dc9';
 const mainnet = 'ec160307c43bc3fc0c3a52d3e3d3dfd8101593e8cec7a907fc42c9f103aabbae';
@@ -36,13 +36,13 @@ export function ViewParams(payload): Promise<IParams> {
   });
 }
 
-export function UserView<T = any>(): Promise<T> {
+export function UserDomain<T = any>(pKey: string): Promise<T> {
   return new Promise((resolve, reject) => {
     Utils.invokeContract(
-      `role=user, action=view, cid=${CID}`,
+      `role=manager, action=view_domain, pk=${pKey}, cid=${CID}`,
       (error, result, full) => {
         if (!error) {
-          resolve(result.res);
+          resolve(result.domains);
         } else reject(error.error);
       },
     );
@@ -99,10 +99,41 @@ export function payDomain<T = any>({ domain, amount } : IPayRequest): Promise<T>
   });
 }
 export function registrDomain<T = any>({ domain, period } : IRegistrDomain): Promise<T> {
-  console.log({domain, period});
+  console.log({ domain, period });
   return new Promise((resolve, reject) => {
     Utils.invokeContract(
       `role=user, action=domain_register, name=${domain}, nPeriods=${period}, cid=${CID}`,
+      (error, result, full) => {
+        onMakeTx(error, result, full);
+      },
+    );
+  });
+}
+export function extendDomain<T = any>({ domain, period } : IRegistrDomain): Promise<T> {
+  return new Promise((resolve, reject) => {
+    Utils.invokeContract(
+      `role=user, action=domain_extend, name=${domain}, nPeriods=${period}, cid=${CID}`,
+      (error, result, full) => {
+        onMakeTx(error, result, full);
+      },
+    );
+  });
+}
+
+export function transferDomain<T = any>({ domain, pkey } : ITransferDomain): Promise<T> {
+  return new Promise((resolve, reject) => {
+    Utils.invokeContract(
+      `role=user, action=domain_set_owner, name=${domain}, pkOwner=${pkey}, cid=${CID}`,
+      (error, result, full) => {
+        onMakeTx(error, result, full);
+      },
+    );
+  });
+}
+export function toSellDomain<T = any>({ domain, pkey, amount }): Promise<T> {
+  return new Promise((resolve, reject) => {
+    Utils.invokeContract(
+      `role=user, action=domain_set_price, name=${domain.name}, amount=${toGroths(amount)} pkOwner=${pkey}, cid=${CID}`,
       (error, result, full) => {
         onMakeTx(error, result, full);
       },

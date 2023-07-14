@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from '@app/shared/components/Modal';
 import { Input } from '@app/shared/components/index';
-import {IconBeam, IconChecked, IconSendBlack} from '@app/shared/icons';
+import { IconBeam, IconChecked, IconSendBlack } from '@app/shared/icons';
 import { payDomain } from '@core/api';
 import { ROUTES } from '@app/shared/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,6 +46,7 @@ const AmountlabelContainer = styled.div`
   align-items: center;
 `;
 function SendModal({ isShown, onClose }:SendModalProps) {
+  // TODO: resolve errs
   if (!isShown) return <></>;
   const isAvailable = useSelector(selectIsAvailable());
   const isValid = isAvailable === 'not available';

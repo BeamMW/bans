@@ -9,6 +9,8 @@ export const setAllDomains = createAction(MainActionTypes.SET_ALL_DOMAINS)<IDoma
 export const setIsAvailable = createAction(MainActionTypes.SET_AVAILABLE)<string>();
 export const setParams = createAction(MainActionTypes.SET_PARAMS)<IParams>();
 export const setRegistrationName = createAction(MainActionTypes.SET_REGISTRATION_NAME)<string>();
+export const setUserDomains = createAction(MainActionTypes.SET_USER_DOMAINS)<IDomains[]>();
+
 
 export const loadParams = createAsyncAction(
   MainActionTypes.LOAD_PARAMS,

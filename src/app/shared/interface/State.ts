@@ -13,7 +13,8 @@ export interface MainStateType {
   assetPrice: number,
   params: IParams | null,
   registrationName: string | null,
-  rate: number
+  rate: number,
+  userDomains: IDomains[] | null
 }
 export interface IUserData {
   anon:[],

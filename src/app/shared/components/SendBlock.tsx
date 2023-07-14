@@ -12,6 +12,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 1.875rem;
+  transition: margin-right 2s cubic-bezier(0, 0, 1, 1) 50ms;
 `;
 const ButtonWrapper = styled.div`
 width: 100%;

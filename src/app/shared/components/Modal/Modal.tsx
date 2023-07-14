@@ -21,6 +21,7 @@ export interface ModalProps {
   actionButton?: () => void | MouseEventHandler<Element>;
   labelAction?: string;
   icon?: React.FC;
+  isFooter?: boolean;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -33,6 +34,7 @@ export const Modal: FC<ModalProps> = ({
   actionButton,
   labelAction,
   icon,
+  isFooter = true,
 }) => {
   const modal = (
     <Wrapper>
@@ -54,10 +56,12 @@ export const Modal: FC<ModalProps> = ({
                         }
         </Box>
         { children }
-        <ButtonContainer>
-          <Button variant="ghost" icon={IconRemove} onClick={onClose}>close</Button>
-          <Button icon={icon} onClick={actionButton}>{labelAction || 'action'}</Button>
-        </ButtonContainer>
+        {isFooter ? (
+          <ButtonContainer>
+            <Button variant="ghost" icon={IconRemove} onClick={onClose}>close</Button>
+            <Button icon={icon} onClick={actionButton}>{labelAction || 'action'}</Button>
+          </ButtonContainer>
+        ) : null}
       </ModalContent>
     </Wrapper>
   );

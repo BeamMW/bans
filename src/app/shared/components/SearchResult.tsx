@@ -90,7 +90,7 @@ const RightSide = styled.div`
   align-items: center;
 `;
 const Available = styled.div<SearchResultProps>`
-  color: ${({ isValid }) => (isValid === 'available' ? '#00F6D2' : '#FF746B')};;
+  color: ${({ isValid }) => (isValid === 'available' ? '#00F6D2' : '#FF746B')};
   text-align: center;
   font-size: 0.875rem;
   font-family: 'SFProDisplay', sans-serif;

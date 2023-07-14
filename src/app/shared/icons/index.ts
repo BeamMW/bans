@@ -18,6 +18,14 @@ import IconMinus from './year-minus.svg';
 import IconRegistration from './plus.svg';
 import IconCopy from './copy.svg';
 import IconCopyBlue from './copy-blue.svg';
+import IconDots from './dots.svg';
+import IconRenew from './renew.svg';
+import IconRenewBlue from './renew-blue.svg';
+import IconSell from './sell.svg';
+import IconTransfer from './transfer.svg';
+import IconEmptyPage from './empty-page.svg';
+import IconTransferBlack from './arrow-right-black.svg';
+import IconArrowDown from './arrow-down.svg'
 
 export {
   IconLogo,
@@ -39,5 +47,13 @@ export {
   IconMinus,
   IconRegistration,
   IconCopy,
-    IconCopyBlue
+  IconCopyBlue,
+  IconDots,
+  IconRenew,
+  IconRenewBlue,
+  IconSell,
+  IconTransfer,
+  IconEmptyPage,
+  IconTransferBlack,
+  IconArrowDown
 };
