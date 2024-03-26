@@ -3,7 +3,7 @@
 
 Front end for the Beam Anonymous Name Service decentralized application.
 
-BANS allows users to purchage domains on Beam blockchain. Those domains can then be used to send funds in a completely private and confiential manner. 
+BANS allows users to purchase domains on Beam. Those domains can then be used to send funds in a completely private and confidential manner. 
 
 Follow the [Developing Beam dApp UI](https://beam.mw/en/docs/dev/developing-beam-dapp-ui) guide to get started with Beam Decentralized Application development
 
