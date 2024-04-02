@@ -73,7 +73,7 @@ const MyPage = () => {
     if ((!domains || !domains.length) && (transactionState.type === "waitingForConfirmation" || transactionState.type === "completed") && transactionState.id.match(TRANSACTION_ID))
       return "The BANS will appear on the page as soon as the transaction is completed.";
 
-    return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorites domains" : null);
+    return active == 1 ? "You do not hold any domains" : (active == 2 ? "You do not have any favorite domains" : null);
   }, [domains, active, transactionState])
 
   // TODO: add condition when there is no domains and for that case not show filterTabs
