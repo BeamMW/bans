@@ -67,7 +67,7 @@ export const WalletApiConnector = ({ children }) => {
     if (!isAuthorized) {
       try {
         Utils.initialize({
-          "appname": "BEAM DAO BANS APP",
+          "appname": "BEAMX DAO BANS DAPP",
           "min_api_version": "6.3",
           "headless": false,
           "apiResultHandler": (error, result, full) => {
