@@ -77,7 +77,7 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
                   }
                   {
                     foundDomain && foundDomain.isYourOwn && (
-                      <SubText sx={{ fontSize: '14px', px: 4 }}>Your are already own the domain</SubText>
+                      <SubText sx={{ fontSize: '14px', px: 4 }}>You already own the domain</SubText>
                     )
                   }
                 </Flex>
