@@ -31,7 +31,7 @@ const Notifications: React.FC = () => {
             return `Your Domain ${notification.notifyData.domain.name}.beam has been sold`
 
         if (notification.type === NotificationType.transferred)
-            return `Your Received a ${BeamDappConnector.grothToBeam(notification.notifyData.transfer.amount)} BEAM transrfer to ${notification.notifyData.transfer.domain}.beam`
+            return `Your Received a ${BeamDappConnector.grothToBeam(notification.notifyData.transfer.amount)} BEAM transfer to ${notification.notifyData.transfer.domain}.beam`
 
         if (notification.type === NotificationType.gifted)
             return `Domain ${notification.notifyData.domain.name}.beam has been transferred to you`
