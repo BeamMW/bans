@@ -73,7 +73,16 @@ export const AssetSelector: React.FC<AssetSelectorProps> = ({
     <div ref={ref} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
       <Trigger type="button" onClick={() => setOpen(!open)}>
         <span className="trigger-icon">{icon ?? <AssetIcon asset_id={selectedAsset.asset_id} />}</span>
-        <Text sx={{ marginTop: '1px' }}>
+        <Text
+          as="span"
+          sx={{
+            m: 0,
+            lineHeight: '20px',
+            fontSize: '14px',
+            display: 'inline-flex',
+            alignItems: 'center',
+          }}
+        >
           {assetDisplayWithId(selectedAsset.asset_id, selectedAsset.parsedMetadata)}
         </Text>
         <span className="trigger-arrow">

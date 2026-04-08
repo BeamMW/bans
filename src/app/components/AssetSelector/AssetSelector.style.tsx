@@ -30,10 +30,19 @@ export const Trigger = styled.button`
   }
 
   .trigger-arrow {
-    width: 8px;
-    height: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 20px;
     flex-shrink: 0;
     margin-left: 2px;
+
+    svg {
+      display: block;
+      width: 8px;
+      height: auto;
+    }
   }
 `;
 
