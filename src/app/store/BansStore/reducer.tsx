@@ -28,6 +28,7 @@ const initialState = {
     domains: [],
     funds: {
       total: 0,
+      byAsset: {} as Record<number, number>,
       revenue: [],
       transferred: [],
     }

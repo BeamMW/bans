@@ -52,7 +52,7 @@ export const Amount: React.FC<AmountProps> = ({ size, value, showConvertedToUsd 
       }
   }
 
-  const beamPrice = useSelector(selectRate());
+  const beamPrice = useSelector(selectRate);
   const usdConvertedPrice = showConvertedToUsd ? beamPrice.mul(Decimal.from(value).toString()).prettify(2) : null;
 
   return (

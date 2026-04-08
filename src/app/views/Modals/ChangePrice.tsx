@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, Flex, Text } from "theme-ui";
+import { Box, Text } from "theme-ui";
 import store from "index";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
@@ -11,15 +11,16 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { useCurrentTransactionState } from "@app/library/transaction-react/useCurrentTransactionState";
 import { IsTransactionPending } from "@app/library/transaction-react/IsTransactionStatus";
 import { SellBansAction } from "@app/views/Actions/SellBansAction";
-import { GROTHS_IN_BEAM } from "@app/constants";
 import { Decimal } from "@app/library/base/Decimal";
 import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
-import BeamIcon from '@app/assets/icons/beam.svg';
+import { AssetSelector } from '@app/components/AssetSelector';
+import { useWalletAssetsForSelector } from '@app/hooks/useWalletAssetsForSelector';
 import ArrowRightBlack from '@app/assets/icons/arrow-right-black.svg'
 import _ from "lodash";
 import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import BeamDappConnector from "@core/BeamDappConnector.js";
 
 
 interface ChangePriceProps {
@@ -28,6 +29,8 @@ interface ChangePriceProps {
 }
 
 export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal }) => {
+  const walletAssets = useWalletAssetsForSelector();
+
   if (!isShown) return <></>;
 
   const { close, data: { domain: domain } }: { close: any, data: { domain: DomainPresenterType } } = useModalContext();
@@ -51,7 +54,8 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
 
   }, [transactionState]);
 
-  const [amount, setAmount] = useState(+(domain.price.amount / GROTHS_IN_BEAM));
+  const [amount, setAmount] = useState(+BeamDappConnector.grothToBeam(domain.price.amount));
+  const [aid, setAid] = useState<number>(domain.price?.aid ?? 0);
 
   const handlePriceChange = (e) => {
     const { value } = e.target;
@@ -59,7 +63,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
     amountHandler(value, (value) => setAmount(value))
   }
   const header = `Change price for ${domain.name}.beam domain`;
-  const beamPrice = useSelector(selectRate());
+  const beamPrice = useSelector(selectRate);
 
   return (
     <Modal isShown={isShown} header={header} width={'450px'}>
@@ -68,7 +72,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
           <Text variant="subHeader">Current price</Text>
         </Box>
         <Box>
-          <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString(0)} size="14px" showConvertedToUsd={true} />
+          <Amount value={BeamDappConnector.grothToBeam(domain.price.amount)} size="14px" showConvertedToUsd={true} />
         </Box>
         <Box sx={{ mt: '30px' }}>
           <Input
@@ -80,9 +84,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             value={amount}
             info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
           >
-            <Flex sx={{ justifyContent: 'center' }}>
-              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
-            </Flex>
+            <AssetSelector value={aid} onChange={setAid} assets={walletAssets} />
           </Input>
         </Box>
         <ButtonContainer>
@@ -91,6 +93,7 @@ export const ChangePrice: React.FC<ChangePriceProps> = ({ isShown, closeModal })
             transactionId={TRANSACTION_ID}
             change={"adjustSellingBans"}
             amount={+amount}
+            aid={aid}
             domain={domain}
             disabled={Decimal.from(+amount).isZero  || isTransactionPending}
           >

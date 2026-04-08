@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { styled } from '@linaria/react';
-import Utils from '@app/library/base/utils.js';
+import BeamDappConnector from '@core/BeamDappConnector.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 //import { selectAppParams, selectIsModerator, selectPopupsState } from '@app/containers/Main/store/selectors';
@@ -35,7 +35,7 @@ const Window: React.FC<WindowProps> = ({
   return (
     <>
       {/* <Container bgColor={Utils.getStyles().background_main} ref={rootRef}> */}
-      <Container variant="window" sx={(theme) => ({background: Utils.isWeb() ?  'layout.window.background' : 'transparent'})}>
+      <Container variant="window" sx={(theme) => ({background: BeamDappConnector.isWeb() ?  'layout.window.background' : 'transparent'})}>
           {/* {appParams.is_admin || isModerator ? null : null} */}
         {children}
       </Container>

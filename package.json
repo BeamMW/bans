@@ -9,8 +9,9 @@
     "preinstall": "npx npm-force-resolutions",
     "watch": "webpack --watch",
     "build": "webpack --config webpack.common.js",
+    "build:prod": "webpack --config webpack.prod.js",
     "start": "webpack serve --config webpack.common.js",
-    "prod": "webpack serve --config webpack.prod.js"
+    "start:prod": "webpack serve --config webpack.prod.js"
   },
   "overrides": {
     "ansi-regex": "5.0.1",

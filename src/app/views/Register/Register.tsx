@@ -54,7 +54,7 @@ export const Register: React.FC = () => {
 
   const now = moment().format("LL");
 
-  const userBans: Array<any> = useSelector(selectUserDomains());
+  const userBans: Array<any> = useSelector(selectUserDomains);
 
   const till = useMemo(() => {
     if (foundDomain.expiresAt) return foundDomain.expiresAt;

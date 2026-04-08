@@ -1,8 +1,10 @@
-import Utils from "../utils"
+import connector from "@core/connector";
 import ApiError from "./ApiError";
 import { IMethodFactory } from "./Interfaces";
 import { ShaderStore } from "./ShaderApi";
 import { MethodRoles } from "./types";
+
+let currentShaderBytesCid = null;
 
 export class MethodFactory/* <ShaderActions> */ implements IMethodFactory {
     createShaderMethod(type: string): any {
@@ -81,7 +83,7 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
         return new Promise((resolve, reject) => {
             const interval = setInterval(async () => {
                 try {
-                    let { res } = await Utils.callApiAsync('tx_status', { txId: txId, rates: false })
+                    const res = await connector.callApi('tx_status', { txId: txId, rates: false })
 
                     if (["pending", "in progress", "registering"].indexOf(res.status_string) !== -1) {
                         console.log(`${methodName ?? 'x'} pending...`);
@@ -106,8 +108,8 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
     }
 
     protected processInvokeParamsToWalletShader() {
-        if (this.cid !== Utils.currentShaderBytesCid) {
-            Utils.currentShaderBytesCid = this.cid;
+        if (this.cid !== currentShaderBytesCid) {
+            currentShaderBytesCid = this.cid;
             const shader = ShaderStore.retriveShader(this.cid);
 
             /**
@@ -125,7 +127,7 @@ export default abstract class MethodAbstract<ShaderActions> extends Callable {
 
 export class MethodReadable<ShaderActions> extends MethodAbstract<ShaderActions> {
     async callMethod<T = any>(params?: any): Promise<T> {
-        const { res: result } = await Utils.invokeContractAsync(
+        const result = await connector.invokeContract(
             this.convertContractParams(params),
             this.processInvokeParamsToWalletShader()
         );
@@ -152,7 +154,7 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
         if (!this.couldPredict)
             throw new ApiError(0, "This method couldn't be predicted in shader call!", false);
 
-        return await Utils.invokeContractAsync(
+        return await connector.invokeContract(
             this.convertContractParams(this.withPredictable()),
             this.processInvokeParamsToWalletShader()
         );
@@ -160,10 +162,22 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
 
     async callMethod<T = any>(params: object | null): Promise<T> {
         try {
-            let txId = await Utils.invokeContractAsyncAndMakeTx(
-                this.convertContractParams(params),
-                this.processInvokeParamsToWalletShader()
-            );
+            const invokeParams: any = {
+                create_tx: false,
+                args: this.convertContractParams(params),
+            };
+            const bytes = this.processInvokeParamsToWalletShader();
+            if (bytes) {
+                invokeParams.contract = bytes;
+            }
+
+            const invokeResult = await connector.callApi("invoke_contract", invokeParams);
+            if (!Array.isArray(invokeResult?.raw_data)) {
+                throw new ApiError(0, "No raw_data in invoke_contract result", true);
+            }
+
+            const txResult = await connector.callApi("process_invoke_data", { data: invokeResult.raw_data });
+            const txId = txResult?.txid;
 
             if (!txId) {
                 throw new ApiError(0, "txId do not created!", true);
@@ -175,7 +189,10 @@ export class MethodWritable<ShaderActions> extends MethodAbstract<ShaderActions>
 
         } catch (e) {
             console.log(e);
-            throw new Error(e.error);
+            if (e instanceof Error && e.message === "Request canceled by user") {
+                return undefined as unknown as T;
+            }
+            throw new Error((e as any)?.error || (e as any)?.message || String(e));
         }
     }
 }

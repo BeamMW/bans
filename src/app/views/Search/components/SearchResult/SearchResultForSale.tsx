@@ -38,7 +38,7 @@ export const SearchResultForSale: React.FC<ResultForSaleProps> = ({ domain, isSh
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
   const navigate = useNavigate();
-  const userBans: Array<any> = useSelector(selectUserDomains());
+  const userBans: Array<any> = useSelector(selectUserDomains);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {

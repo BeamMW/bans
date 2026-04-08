@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Utils from "../../library/base/utils";
+import connector from "@core/connector";
 
 interface ContainerStyleProps {
   isVisible: boolean;
@@ -11,7 +11,7 @@ export const Container = styled.div<ContainerStyleProps>`
     position: absolute;
     outline:  none;
     padding:  20px;
-    background-color: ${Utils.getStyles().background_popup};
+    background-color: ${connector.getStyles().background_popup};
     display: ${props => (props.isVisible ? "block" : "none")};
     right: 10px;
 `

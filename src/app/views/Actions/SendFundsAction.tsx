@@ -10,6 +10,7 @@ type SendFundsActionProps = {
     change: any;
     domain: DomainPresenterType;
     amount: number;
+    aid?: number;
     disabled: boolean;
 };
 
@@ -19,6 +20,7 @@ export const SendFundsAction: React.FC<SendFundsActionProps> = ({
     change,
     domain,
     amount,
+    aid = 0,
     disabled
 }) => {
 
@@ -29,7 +31,7 @@ export const SendFundsAction: React.FC<SendFundsActionProps> = ({
         switch (change) {
             case "sendFunds":
                 {
-                    return () => registeredMethods.managerPay({ name: domain.name, amount: toGroths(amount) });
+                    return () => registeredMethods.managerPay({ name: domain.name, amount: toGroths(amount), aid });
                 }
         }
     }

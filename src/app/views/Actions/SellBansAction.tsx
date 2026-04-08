@@ -10,6 +10,7 @@ type SellBansActionProps = {
     transactionId: string;
     change: any;
     amount?: number;
+    aid?: number;
     domain: DomainPresenterType;
     disabled?: boolean;
     pallete?: Pallete;
@@ -20,6 +21,7 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
     transactionId,
     change,
     amount,
+    aid = 0,
     domain,
     pallete = 'green',
     disabled = false
@@ -33,11 +35,11 @@ export const SellBansAction: React.FC<SellBansActionProps> = ({
             case "sellBans":
             case "adjustSellingBans":
                 {
-                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: toGroths(amount) });
+                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: toGroths(amount), aid });
                 }
             case "removeBansFromSale":
                 {
-                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: 0 });
+                    return () => registeredMethods.userDomainSetPrice({ name: domain.name, amount: 0, aid });
                 }
                 
         }

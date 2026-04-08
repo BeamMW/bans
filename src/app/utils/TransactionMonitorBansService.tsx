@@ -10,8 +10,8 @@ export const TransactionMonitorBansService = () => {
     const [transactionState, setTransactionState] = useTransactionState();
     const [processingTransactionIds, setProcessingTransactionIds] = useState([]);
 
-    const transactions = useSelector(selectTransactions());
-    const contractHeight = useSelector(selectContractHeight());
+    const transactions = useSelector(selectTransactions);
+    const contractHeight = useSelector(selectContractHeight);
 
     useEffect(() => {
         if(transactionState.type === "waitingForApproval" || transactionState.type === "waitingForConfirmation")

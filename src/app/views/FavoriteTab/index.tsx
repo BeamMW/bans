@@ -8,8 +8,7 @@ import { selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { Amount } from "@app/components/Amount/Amount";
-import { Decimal } from "@app/library/base/Decimal";
-import { GROTHS_IN_BEAM } from "@app/constants";
+import BeamDappConnector from "@core/BeamDappConnector.js";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { BuyBans } from "../Modals/BuyBans";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
@@ -64,7 +63,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
             </Button>
           }
           {
-            !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
+            !domain.isYourOwn && domain.isOnSale && <Amount value={BeamDappConnector.grothToBeam(domain.price.amount)} size="14px" showConvertedToUsd={true} />
           }
           <Box sx={{ position: 'relative', zIndex: 999 }}>
             <Button variant='icon' pallete='transparent' onClick={(event) => { openModal(domain.name); event.stopPropagation() }}>
@@ -84,7 +83,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
 }
 
 export const FavoriteTab = ({ domains: favoriteDomains }) => {
-  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
+  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded);
   const { open } = useModalContext();
   const { setFoundDomain, setCurrentView, view } = useMainView();
   const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);

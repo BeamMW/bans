@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer, useState, useCallback, useMemo } from "react";
-import Utils from '../library/base/utils';
+import connector from '@core/connector';
 import UtilsShader from '../library/base/shader/utilsShader';
 
 //import store from "index";
-import { setSystemState } from '@app/store/SharedStore//actions';
+import { setSystemState } from '@app/store/SharedStore/actions';
 import { selectIsLoaded } from '@app/store/SharedStore/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { isObject } from "formik";
@@ -25,20 +25,34 @@ const shadersData = Array.from([
   ["bans", BANS_CID, "./bansAppShader.wasm", 0],
 ], params => new UtilsShader(...params));
 
+const bulkShaderDownload = async (shaderList: Array<UtilsShader>) => {
+  const sortedShadersData = [...shaderList].sort((a, b) => (a.order < b.order ? 1 : -1));
+  await Promise.all(sortedShadersData.map(async (shaderData) => {
+    const bytes = await fetch(shaderData.path).then((response) => response.arrayBuffer());
+    await shaderData.prepareAndSetShaderBytes(bytes);
+  }));
+  return sortedShadersData;
+};
+
+/**
+ * Beam API v7.3: events use `{ id: "ev_*", result: {...} }`.
+ * Some transports use JSON-RPC style `{ method: "ev_*", params: {...} }`.
+ */
 const walletEventhandler = ({ walletEventPayload }) => {
   if (walletEventPayload) {
     try {
-      switch (walletEventPayload.id) {
-        case 'ev_system_state':
-          store.dispatch(setSystemState(walletEventPayload.result));
-          //store.dispatch(loadAppParams.request(null));
+      const eventId = walletEventPayload.id ?? walletEventPayload.method;
+      const payload = walletEventPayload.result ?? walletEventPayload.params;
 
+      switch (eventId) {
+        case 'ev_system_state':
+          if (payload && typeof payload === 'object') {
+            store.dispatch(setSystemState(payload));
+          }
           break;
 
         case 'ev_txs_changed':
-          isObject(walletEventPayload.result) &&
-            walletEventPayload.result &&
-            store.dispatch(setTransactionsRequest(walletEventPayload.result.txs));
+          isObject(payload) && payload && store.dispatch(setTransactionsRequest(payload.txs));
 
           break;
 
@@ -54,116 +68,83 @@ const walletEventhandler = ({ walletEventPayload }) => {
 export const WalletApiConnector = ({ children }) => {
   const dispatch = useDispatch();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const rate = useSelector(selectRate());
+  const rate = useSelector(selectRate);
 
   /**
    * Duplicate ShaderStore logic! In the future have to  resolve to keep one of shaders 'stores'
    */
   const [walletShaders, setWalletShaders] = useState<Array<UtilsShader>>(null);
 
-  const isLoaded = useSelector(selectIsLoaded());
+  const isLoaded = useSelector(selectIsLoaded);
 
   useEffect(() => {
     if (!isAuthorized) {
-      try {
-        Utils.initialize({
-          "appname": "BEAMX DAO BANS DAPP",
-          "min_api_version": "6.3",
-          "headless": false,
-          "apiResultHandler": (error, result, full) => {
-            //console.log('api result data: ', full);
-            result && walletEventhandler({ walletEventPayload: full });
+      let unsubscribe = null;
+      (async () => {
+        try {
+          await connector.connect({ headless: false });
+          unsubscribe = connector.on('apiEvent', (full) => walletEventhandler({ walletEventPayload: full }));
+
+          const downloadedShaders = await bulkShaderDownload(shadersData);
+          setIsAuthorized(true);
+
+          const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
+          downloadedShaders.forEach((shaderData) => apiShaderRegester.addShaderToStore(shaderData));
+          setWalletShaders(downloadedShaders);
+
+          if (rate.isZero) {
+            dispatch(loadRate.request());
           }
-        }, (err) => {
-          Utils.bulkShaderDownload(shadersData, (err, shadersData: Array<UtilsShader>) => {
 
-            err ? (() => { throw new err })() : setIsAuthorized(true);
-
-            const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
-
-            /**
-             * Put shadersData in ShaderStore
-             */
-            shadersData.forEach(
-              (shaderData) => apiShaderRegester.addShaderToStore(shaderData)
-            );
-
-            /**
-             * Duplicate put shaders data in wallet provider
-             */
-            setWalletShaders(shadersData)
-
-            if (rate.isZero) {
-              dispatch(loadRate.request());
-            }
-
-            Utils.callApi("ev_subunsub", {
-              /* "ev_sync_progress": true, */
-              "ev_system_state": true,
-              "ev_txs_changed": true,
-
-              //Can't use thos events due to dapp restriction??
-              /* "ev_utxos_changed": true, 
-              "ev_assets_changed": true,
-              "ev_addrs_changed": true, */
-            },
-              (error, result, full) => {
-                if (result) {
-                  store.dispatch(loadAppParams.request());
-                }
-              }
-            );
-
-            Utils.callApi("get_version", false,
-              (error, result, full) => {
-                if (error) {
-                  throw new Error("version could't fetch!");
-                }
-
-                if (result) {
-                  store.dispatch(setDappVersion(result));
-                }
-              }
-            );
-
-
-            //open and check if exists user-defined-database
-            userDatabase.openDatabase();
-            //observe user-defined -database if open
-            if (userDatabase.isOpen) {
-              observeDatabaseChanges(userDatabase, changes => {
-                changes.forEach(function (change) {
-                  if (change.table != "notifications") return;
-
-                  switch (change.type) {
-                    case 1: // CREATED
-                      store.dispatch(updateNotifications.request(change.obj));
-
-                      console.log('An object was created: ' + JSON.stringify(change));
-                      break;
-                    case 2: // UPDATED
-                      //@TODO: not optimized!
-                      store.dispatch(reinitNotifications.request(true));
-
-                      console.log('An object with key ' + change.key + ' was updated with modifications: ' + JSON.stringify(change.mods));
-                      break;
-                    case 3: // DELETED
-
-                      //@TODO: not optimized!
-                      store.dispatch(reinitNotifications.request(true));
-
-                      console.log('An object was deleted: ' + JSON.stringify(change.oldObj));
-                      break;
-                  }
-                });
-              })
-            }
+          await connector.callApi("ev_subunsub", {
+            "ev_system_state": true,
+            "ev_txs_changed": true,
           });
-          
-        });
-      } catch (e) {
-        console.log("Error has been thrown:", e);
-      }
+          try {
+            const status = await connector.callApi("wallet_status", {});
+            if (status && typeof status === "object") {
+              store.dispatch(setSystemState(status));
+            }
+          } catch (e) {
+            console.log("wallet_status failed:", e);
+          }
+          store.dispatch(loadAppParams.request());
+
+          const version = await connector.callApi("get_version", {});
+          if (version) {
+            store.dispatch(setDappVersion(version));
+          }
+
+          userDatabase.openDatabase();
+          if (userDatabase.isOpen) {
+            observeDatabaseChanges(userDatabase, changes => {
+              changes.forEach(function (change) {
+                if (change.table != "notifications") return;
+
+                switch (change.type) {
+                  case 1:
+                    store.dispatch(updateNotifications.request(change.obj));
+                    break;
+                  case 2:
+                    store.dispatch(reinitNotifications.request(true));
+                    break;
+                  case 3:
+                    store.dispatch(reinitNotifications.request(true));
+                    break;
+                }
+              });
+            })
+          }
+        } catch (e) {
+          console.log("Error has been thrown:", e);
+        }
+      })();
+
+      return () => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };
     }
   }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
 

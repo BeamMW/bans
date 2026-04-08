@@ -8,24 +8,20 @@ import Button from '@app/components/Button';
 import SearchIcon from "@app/assets/icons/search.svg";
 import RemoveIcon from "@app/assets/icons/remove.svg";
 import Sell from '@app/assets/icons/send.svg';
-import { useFetchDomainAndConvert } from '@app/hooks/useFetchDomainAndConvert';
-import { useSearchValidator } from '@app/hooks/useSearchValidator';
-import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { Notification } from '@app/components/Notification/Notifcation';
 import { useSelector } from 'react-redux';
 import { selectNotifications } from '@app/store/NotificationsStore/selectors';
 import { NotificationState, NotificationType } from '@app/library/bans/userLocalDatabase/domainObject';
-import { GROTHS_IN_BEAM } from '@app/constants';
-import { Decimal } from '@app/library/base/Decimal';
 import { deleteNotification, updateNotificationState } from '@app/library/bans/userLocalDatabase/dao/userNotifications';
 import { useNavigate } from 'react-router-dom';
+import BeamDappConnector from '@core/BeamDappConnector.js';
 
 const Notifications: React.FC = () => {
     const [notificationsList, setNotificationsList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    const notifications = useSelector(selectNotifications());
+    const notifications = useSelector(selectNotifications);
 
     const generateText = (notification) => {
         if (notification.type === NotificationType.favorites)
@@ -35,7 +31,7 @@ const Notifications: React.FC = () => {
             return `Your Domain ${notification.notifyData.domain.name}.beam has been sold`
 
         if (notification.type === NotificationType.transferred)
-            return `Your Received a ${Decimal.from(notification.notifyData.transfer.amount).div(GROTHS_IN_BEAM)} BEAM transrfer to ${notification.notifyData.transfer.domain}.beam`
+            return `Your Received a ${BeamDappConnector.grothToBeam(notification.notifyData.transfer.amount)} BEAM transrfer to ${notification.notifyData.transfer.domain}.beam`
 
         if (notification.type === NotificationType.gifted)
             return `Domain ${notification.notifyData.domain.name}.beam has been transferred to you`

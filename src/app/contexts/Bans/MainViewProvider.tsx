@@ -5,6 +5,8 @@ import React, { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MainContext } from "./BansContexts";
+import { selectPublicKey } from "@app/store/BansStore/selectors";
+import { selectSystemState } from "@app/store/SharedStore/selectors";
 
 const bansStates = {
   SEARCH: {
@@ -27,6 +29,9 @@ export const MainViewProvider: React.FC = props => {
   const { children } = props;
   const location = useLocation();
 
+  const systemState = useSelector(selectSystemState);
+  const storePublicKey = useSelector(selectPublicKey);
+
   const [foundDomain, _setFoundDomain] = useState<DomainPresenterType | null>(null);
 
   const [view, setView] = useState("SEARCH");
@@ -38,15 +43,21 @@ export const MainViewProvider: React.FC = props => {
     setView(nextView);
   }, []);
 
-  const setFoundDomain = (rawData, currentStateTimestamp, currentStateHeight, publicKey) => {
-    //const memo = useMemo(() => getDomainPresentedData(rawData), [rawData]); 
+  const setFoundDomain = useCallback((rawData, currentStateTimestamp?, currentStateHeight?, publicKey?) => {
+    const ts = currentStateTimestamp ?? systemState.current_state_timestamp;
+    const h = currentStateHeight ?? systemState.current_height;
+    const pk = publicKey ?? storePublicKey;
+    const systemClockHint = {
+      tip_height: systemState.tip_height,
+      tip_state_timestamp: systemState.tip_state_timestamp,
+    };
     _setFoundDomain(
       //@TODO: refactor this mess!
       !!rawData && /* (rawData as DomainPresenterType) */ 'searchName' in rawData ?
-        getDomainPresentedData(rawData, currentStateTimestamp, currentStateHeight, publicKey) :
-        (!!rawData && /* rawData as DomainPresenterType */ !('searchName' in rawData))  ? rawData : null
-    )
-  };
+        getDomainPresentedData(rawData as RawDomainType, ts, h, pk, systemClockHint) :
+        (!!rawData && /* rawData as DomainPresenterType */ !('searchName' in rawData)) ? rawData : null
+    );
+  }, [systemState, storePublicKey]);
 
   useEffect(() => {
     viewRef.current = view;

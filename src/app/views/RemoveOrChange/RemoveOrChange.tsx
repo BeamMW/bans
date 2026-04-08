@@ -6,10 +6,9 @@ import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { RemoveModal } from '@app/views/Modals/RemoveModal';
 import { Amount } from '@app/components/Amount/Amount';
 import { ChangePrice } from '@app/views/Modals/ChangePrice';
-import { GROTHS_IN_BEAM } from '@app/constants';
-import { Decimal } from '@app/library/base/Decimal';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import Renew from '@app/assets/icons/renew.svg';
+import BeamDappConnector from '@core/BeamDappConnector.js';
 
 import Dots from '@app/assets/icons/dots.svg';
 import ChangePriceIcon from '@app/assets/icons/edit.svg';
@@ -37,7 +36,7 @@ export const RemoveOrChange: React.FC<RemoveOrChangeProps> = ({ copyToClipboard,
         onMouseLeave={hideTip}
       >
         <Flex sx={{justifyContent: 'flex-end'}}>
-        <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString(2)} size="14px"  showConvertedToUsd={true}/>
+        <Amount value={BeamDappConnector.grothToBeam(domain.price.amount)} size="14px"  showConvertedToUsd={true}/>
           {/* <Button variant='icon' pallete='transparent' onClick={() => copyToClipboard(domain.name)}>
             <Copy />
           </Button> */}

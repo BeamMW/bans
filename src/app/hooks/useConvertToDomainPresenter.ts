@@ -6,12 +6,12 @@ import { useSelector } from "react-redux";
 export const useConvertToDomainPresenter = () => useCallback((rawDomain) => {
     const [domain, setDomain] = useState<DomainPresenterType>(null);
 
-    const publicKey = useSelector(selectPublicKey());
+    const publicKey = useSelector(selectPublicKey);
 
     const {
         current_height: currentStateHeight,
         current_state_timestamp: currentStateTimestamp
-    } = useSelector(selectSystemState());
+    } = useSelector(selectSystemState);
 
     useEffect(() => {
         if (rawDomain?.searchName || rawDomain?.name) throw new Error("Passed object should contain a name field!");

@@ -28,7 +28,7 @@ const methods: Array<IMethod<ShaderActions>> = [
     {
         role: "manager",
         action: "pay",
-        requiredParams:["amount", "name"],
+        requiredParams:["amount", "name", "aid"],
         type: "writable"
     },
     {
@@ -62,7 +62,7 @@ const methods: Array<IMethod<ShaderActions>> = [
     {
         role: "user",
         action: "domain_set_price",
-        requiredParams: ["name", "amount"],
+        requiredParams: ["name", "amount", "aid"],
         type: "writable"
     },
     {
