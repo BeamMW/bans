@@ -19,9 +19,8 @@ import { PopupItem } from '@app/components/Popup/Popup.styles';
 
 interface RightSideProps {
   domain: DomainPresenterType;
-  domainsToSell: any;
 }
-const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
+const RightSide: React.FC<RightSideProps> = ({ domain }) => {
   const [showPopup, setShowPopup] = React.useState(null);
   const { open } = useModalContext();
 
@@ -44,7 +43,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
             <Renew width={20}/>
             renew subscription
           </PopupItem>
-          <PopupItem onClick={(event) => open(event)("modal-sell")({domain: domain, domainsToSell: domainsToSell})(hideTip) }>
+          <PopupItem onClick={(event) => open(event)("modal-sell")({ domain })(hideTip) }>
             <Sell width={20}/>
             sell
           </PopupItem>
@@ -61,8 +60,6 @@ const RightSide: React.FC<RightSideProps> = ({ domain, domainsToSell }) => {
 export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props) => {
   const { domains } = props;
 
-  const domainsToSell: any = !!domains && domains.length ? domains.filter((domain, i) => !domain.isOnSale) : [];
-
   const rows =
     domains.map((domain, i) => (
       <SplitContainer key={i} leftWeight={9} rightWeight={3} styles={{
@@ -73,7 +70,7 @@ export const AllTab: React.FC<{ domains: Array<DomainPresenterType> }> = (props)
         {
           domain.isOnSale ?
             <RemoveOrChange copyToClipboard={copyToClipboard} domains={domains} domain={domain} /> :
-            <RightSide domain={domain} domainsToSell={domainsToSell} />
+            <RightSide domain={domain} />
         }
       </SplitContainer>
     ));

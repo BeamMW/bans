@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Box, Container, Flex, Text } from "theme-ui";
 import store from "index";
 import { Modal } from "@app/components/Modals/Modal";
-import { Select } from '@app/components/Select/Select';
 import Input from "@app/components/Input";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
@@ -33,38 +32,20 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
   const walletAssets = useWalletAssetsForSelector(isShown);
   const modalCtx = useModalContext();
   const onClose = closeModal ?? modalCtx.close;
-  const data = modalCtx.data as { domain?: DomainPresenterType; domainsToSell?: DomainPresenterType[] } | null | undefined;
+  const data = modalCtx.data as { domain?: DomainPresenterType } | null | undefined;
   const domain = data?.domain;
-  const domainsToSell = data?.domainsToSell ?? [];
 
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
-  const [activeItem, _setActiveItem] = useState<DomainPresenterType | null>(null);
   const [values, setValues] = useState(initialValues);
   const txState: any = transactionState;
 
-  const resolvedDomain = activeItem ?? domain ?? null;
-
   useEffect(() => {
     if (isShown && domain) {
-      _setActiveItem(domain);
       setValues({ ...initialValues });
     }
-    if (!isShown) {
-      _setActiveItem(null);
-    }
   }, [isShown, domain]);
-
-  const setActiveItem = (item) => {
-    !!item && _setActiveItem(item.domain);
-  }
-
-  const domainsSelect: any = domainsToSell.map((d, i) => new Object({
-    id: i,
-    name: d.name,
-    domain: d,
-  }));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -95,7 +76,7 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
 
   const beamPrice = useSelector(selectRate);
 
-  if (!isShown || !resolvedDomain) {
+  if (!isShown || !domain) {
     return null;
   }
 
@@ -103,12 +84,10 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
     <Modal isShown={isShown} header="Sell BANS" subHeader="If you want to put a BANS on sale, fill in the Amount only. The Amount can be change at any time. To sell a BANS to a particular user, you need to fill Buyer's Public Key.">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
         {
-          resolvedDomain.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
-            <Text>{`Already on sale for ${resolvedDomain.price.amount}!`}</Text>
+          domain.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
+            <Text>{`Already on sale for ${domain.price.amount}!`}</Text>
           </Flex> : <></>
         }
-
-        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={resolvedDomain} showSuffix={true} />
 
         <Box sx={{ mt: '30px' }}>
           <Input
@@ -140,8 +119,8 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
               change={"sellBans"}
               amount={values.amount ? Number(values.amount) : 0}
               aid={typeof values.aid === 'number' ? values.aid : parseInt(String(values.aid), 10) || 0}
-              domain={resolvedDomain}
-              disabled={!values.amount || Decimal.from(values.amount).isZero || resolvedDomain.isOnSale || isTransactionPending}
+              domain={domain}
+              disabled={!values.amount || Decimal.from(values.amount).isZero || domain.isOnSale || isTransactionPending}
               pallete='blue'
             >
               <Sell />
