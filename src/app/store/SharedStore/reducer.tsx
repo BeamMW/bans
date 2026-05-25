@@ -3,6 +3,7 @@ import { ActionType, createReducer } from 'typesafe-actions';
 
 import { SharedStateType } from '@app/types/interface';
 import * as actions from './actions';
+import { normalizeWalletSystemState } from './normalizeSystemState';
 
 type Action = ActionType<typeof actions>;
 
@@ -40,7 +41,10 @@ const reducer = createReducer<SharedStateType, Action>(initialState)
     nextState.isLoaded = action.payload;
   }))
   .handleAction(actions.setSystemState, (state, action) => produce(state, (nextState) => {
-    nextState.systemState = action.payload;
+    nextState.systemState = normalizeWalletSystemState({
+      ...nextState.systemState,
+      ...(action.payload && typeof action.payload === 'object' ? action.payload : {}),
+    });
   }));
 
 export { reducer as SharedReducer };

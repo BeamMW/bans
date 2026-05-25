@@ -1,5 +1,4 @@
-import React from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback } from "react";
 import Skeleton from 'react-loading-skeleton';
 import { Paragraph, Flex } from "theme-ui";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
@@ -11,6 +10,7 @@ import { SearchResultForSale } from "./SearchResultForSale";
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { SubText } from './SearchResult.styles';
+import { useBuyDomainTransaction } from '@app/hooks/useBuyDomainTransaction';
 
 export interface SearchResultProps {
   isValid: boolean;
@@ -19,12 +19,14 @@ export interface SearchResultProps {
 };
 
 export const SearchResult: React.FC<SearchResultProps> = (props) => {
-  const navigate = useNavigate();
-
-  const { setCurrentView, foundDomain, setFoundDomain } = useMainView();
+  const { setCurrentView, foundDomain } = useMainView();
   const { isShown, toggle } = useModal();
   const { search, isValid, isLoading } = props;
   const { isAvailable, expiresAt, isYourOwn } = foundDomain ?? { isAvailable: true, expireBlock: 0, isYourOwn: false };
+
+  const [sendBuy] = useBuyDomainTransaction(
+    foundDomain?.isOnSale && !foundDomain?.isYourOwn ? foundDomain : undefined,
+  );
 
   const showBorder = (isYourOwn || isAvailable) && isValid;
 
@@ -32,8 +34,15 @@ export const SearchResult: React.FC<SearchResultProps> = (props) => {
     isValid && isAvailable && !foundDomain.isYourOwn && !foundDomain.isOnSale && setCurrentView("REGISTER_DOMAIN");
   }
 
+  /** Attention modal + renew copy only when paid term is still active (`isExpired === false`). */
+  const handleOnSaleRowClick = useCallback(() => {
+    if (!foundDomain?.isOnSale || foundDomain.isYourOwn) return;
+    if (foundDomain.isExpired === false) toggle();
+    else void sendBuy();
+  }, [foundDomain, toggle, sendBuy]);
+
   const searchResult = (
-    <SplitContainer styles={{ maxWidth: '650px', margin:'0 auto' }}  leftWeight={7} rightWeight={5} border={showBorder} handleClick={foundDomain && foundDomain.isOnSale ? () => toggle() : proceedWithDomainHandler}>
+    <SplitContainer styles={{ maxWidth: '650px', margin:'0 auto' }}  leftWeight={7} rightWeight={5} border={showBorder} handleClick={foundDomain && foundDomain.isOnSale && !foundDomain.isYourOwn ? handleOnSaleRowClick : proceedWithDomainHandler}>
       <SearchResultLeft domain={foundDomain} value={search} expiresAt={expiresAt} isAvailable={isAvailable} isValid={isValid} />
       <SearchResultRight search={search} domain={foundDomain} isAvailable={isAvailable} isValid={isValid} />
     </SplitContainer>

@@ -1,15 +1,18 @@
 import React from "react";
 import { useTransactionFunction } from "@app/library/transaction-react/useTransactionFunction";
-import { useBansApi, useMainView } from "@app/contexts/Bans/BansContexts";
+import { useBansApi } from "@app/contexts/Bans/BansContexts";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { toGroths } from "@app/library/base/appUtils";
+
+export type ReceiveListEntry = { pk: string; aid: number };
 
 type WithdrawActionProps = {
     transactionId: string;
     change: any;
     domain?: DomainPresenterType;
     amount?: number;
-    pkKeys?: Array<string>
+    /** Pairs for receive_list: key_N + aid_N per vault output (BEAM is aid 0). */
+    receiveListEntries?: ReceiveListEntry[];
     disabled?: boolean;
 };
 
@@ -19,7 +22,7 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
     change,
     domain,
     amount = 0,
-    pkKeys = [],
+    receiveListEntries = [],
     disabled = false
 }) => {
 
@@ -34,10 +37,18 @@ export const WithdrawAction: React.FC<WithdrawActionProps> = ({
                 }
             case "withdrawFromDomain":
                 {
-                    if(!pkKeys.length) return;
+                    if (!receiveListEntries.length) return;
 
-                    const preparedKeys = pkKeys.reduce((map, key, index) => ({...map, [`key_${index + 1}`] : key}), {})
-                    return () => registeredMethods.userReceiveList(preparedKeys);
+                    const prepared = receiveListEntries.reduce(
+                        (acc, { pk, aid }, index) => {
+                            const n = index + 1;
+                            acc[`key_${n}`] = pk;
+                            acc[`aid_${n}`] = aid;
+                            return acc;
+                        },
+                        {} as Record<string, string | number>
+                    );
+                    return () => registeredMethods.userReceiveList(prepared);
                 }
             case "withdraw":
                 {

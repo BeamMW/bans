@@ -7,6 +7,7 @@ import KeyModal from '@app/views/Modals/keyModal/KeyModal';
 import { copyToClipboard } from '@app/library/base/appUtils';
 
 import { SendFunds } from '@app/views/Modals/SendFunds';
+import { SellBansModal } from '@app/views/Modals/SellBans';
 import { useModalContext } from '@app/contexts/Modal/ModalContext';
 import { BackButton } from "@app/components/BackButton/BackButton";
 
@@ -140,6 +141,7 @@ const Tabs:FC = () => {
   </TabsContainer>
   <KeyModal isShown={isShown} toggle={toggle} copyToClipboard={copyToClipboard}/>
   <SendFunds isShown={current == "modal-send-funds"} />
+  <SellBansModal isShown={current == "modal-sell"} />
   </>
   )
 }

@@ -15,7 +15,7 @@ interface KeyModalProps {
   copyToClipboard: (pKey: string) => void;
 }
 const KeyModal:FC<KeyModalProps> = ({isShown, toggle, copyToClipboard}) => {
-  const publicKey = useSelector(selectPublicKey())
+  const publicKey = useSelector(selectPublicKey)
 
   const handleConfirm: React.MouseEventHandler = async () => {
     await copyToClipboard(publicKey);

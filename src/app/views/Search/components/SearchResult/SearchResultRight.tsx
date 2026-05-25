@@ -6,8 +6,7 @@ import { useIsBansFavorite } from '@app/hooks/useIsBansFavorite';
 import Button from '@app/components/Button';
 import { useHandleHeartAction } from '@app/hooks/useHandleHeartAction';
 import { Amount } from '@app/components/Amount/Amount';
-import { Decimal } from '@app/library/base/Decimal';
-import { GROTHS_IN_BEAM } from '@app/constants';
+import BeamDappConnector from '@core/BeamDappConnector.js';
 
 import Heart from '@app/assets/icons/heart.svg';
 import HeartActive from '@app/assets/icons/heart-active.svg';
@@ -60,7 +59,7 @@ export const SearchResultRight:React.FC<SearchResultProps> = (props) => {
     <Flex sx={{ mr: 4,mt: '4px', alignItems:'center' }}>
      {
         domain && isOnSale &&
-        <Amount size='14px' value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()}/>
+        <Amount size='14px' value={BeamDappConnector.grothToBeam(domain.price.amount)}/>
      }
       {
         domain && (

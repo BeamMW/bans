@@ -123,6 +123,27 @@ const IconContainer = styled.div`
  padding-right: 15px;
 `
 
+const InputRow = styled.div`
+  position: relative;
+  height: 45px;
+`
+
+const IconContainerCentered = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 15px;
+  pointer-events: none;
+  & > * {
+    pointer-events: auto;
+  }
+`
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({
     label,
@@ -144,21 +165,30 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       modalInput: InputMainStyled,
     }[variant];
 
+    const isModalInputWithIcon = variant === 'modalInput' && !!children;
+
     return (
       <ContainerStyled className={className} margin={margin}>
         {!!label && <LabelStyled valid={valid}>{label}</LabelStyled>}
 
-        {
-          !!children && (
-            <IconContainer>
-              { children }
-            </IconContainer>
-          )
-        }
-        <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+        {isModalInputWithIcon ? (
+          <InputRow>
+            <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+            <IconContainerCentered>{children}</IconContainerCentered>
+          </InputRow>
+        ) : (
+          <>
+            {!!children && (
+              <IconContainer>
+                { children }
+              </IconContainer>
+            )}
+            <InputComponent ref={ref} valid={valid} pallete={pallete} {...rest} />
+          </>
+        )}
         {!!suffix && suffix }
         {!!info && <InfoStyled>{info}</InfoStyled>}
-          {<ErrorStyled>{!valid ? errorMessage : ''}</ErrorStyled>}
+        {<ErrorStyled>{!valid ? errorMessage : ''}</ErrorStyled>}
       </ContainerStyled>
     );
   },

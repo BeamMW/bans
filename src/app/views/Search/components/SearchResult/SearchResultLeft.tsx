@@ -54,10 +54,10 @@ export const SearchResultLeft: React.FC<SearchResultLeftProps> = (props) => {
           )}
       </Flex>
       {!isAvailable && isValid && (
-        <SubText>Expires on {expiresAt}</SubText>
+        <SubText>{domain?.isExpired === true ? 'Expired on' : 'Expires on'} {expiresAt}</SubText>
       )}
       {domain && domain.isOnSale && (
-        <SubText>Expires on {expiresAt}</SubText>
+        <SubText>{domain?.isExpired === true ? 'Expired on' : 'Expires on'} {expiresAt}</SubText>
       )}
     </Flex>
   )

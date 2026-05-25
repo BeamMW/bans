@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState, useCallback, useMemo } from "react";
-import Utils from '@library/base/utils';
+import connector from '@core/connector';
 import UtilsShader from '@library/base/shader/utilsShader';
 
 //import store from "index";
@@ -42,6 +42,15 @@ const walletEventhandler = ({ walletEventPayload }) => {
     }
 }
 
+const bulkShaderDownload = async (shaderList: Array<UtilsShader>) => {
+    const sortedShadersData = [...shaderList].sort((a, b) => (a.order < b.order ? 1 : -1));
+    await Promise.all(sortedShadersData.map(async (shaderData) => {
+        const bytes = await fetch(shaderData.path).then((response) => response.arrayBuffer());
+        await shaderData.prepareAndSetShaderBytes(bytes);
+    }));
+    return sortedShadersData;
+};
+
 export const WalletApiConnectorLayer = ({ shadersData, setIsLoaded, children, }) => {
     const dispatch = useDispatch();
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
@@ -58,95 +67,40 @@ export const WalletApiConnectorLayer = ({ shadersData, setIsLoaded, children, })
 
     useEffect(() => {
         if (!isAuthorized) {
-            try {
-                Utils.initialize({
-                    "appname": "BEAM DAO BANS APP",
-                    "min_api_version": "6.3",
-                    "headless": false,
-                    "apiResultHandler": (error, result, full) => {
-                        console.log('api result data: ', full);
-                        result && walletEventhandler({ walletEventPayload: full });
-                    }
-                }, (err) => {
-                    Utils.bulkShaderDownload(shadersData, (err, shadersData: Array<UtilsShader>) => {
+            let unsubscribe = null;
+            (async () => {
+                try {
+                    await connector.connect({ headless: false });
+                    unsubscribe = connector.on('apiEvent', (full) => walletEventhandler({ walletEventPayload: full }));
+                    const downloadedShaders = await bulkShaderDownload(shadersData);
 
-                        err ? (() => { throw new err })() : setIsAuthorized(true);
+                    setIsAuthorized(true);
+                    const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
+                    downloadedShaders.forEach((shaderData) => apiShaderRegester.addShaderToStore(shaderData));
 
-                        const apiShaderRegester: ShaderStore = ShaderApi.useShaderStore;
-
-                        /**
-                         * Put shadersData in ShaderStore
-                         */
-                        shadersData.forEach(
-                            (shaderData) => apiShaderRegester.addShaderToStore(shaderData)
-                        );
-
-                        Utils.callApi("ev_subunsub", {
-                            /* "ev_sync_progress": true, */
-                            "ev_system_state": true,
-                            "ev_txs_changed": true,
-
-                            //Can't use thos events due to dapp restriction??
-                            /* "ev_utxos_changed": true, 
-                            "ev_assets_changed": true,
-                            "ev_addrs_changed": true, */
-                        },
-                            (error, result, full) => {
-                                if (result) {
-                                    //store.dispatch(loadAppParams.request(bytes));
-                                }
-                            }
-                        );
-
-                        Utils.callApi("get_version", false,
-                            (error, result, full) => {
-                                if (error) {
-                                    throw new Error("version could't fetch!");
-                                }
-
-                                if (result) {
-                                    //store.dispatch(setDappVersion(result));
-                                }
-                            }
-                        );
-
-                        Utils.callApi("create_address", {
-                            "type": "regular_new",
-                            "expiration": "auto",
-                            "comment": "Beam BANS",
-                            "new_style_regular": true
-                        },
-                            (error, result, full) => {
-                                if (error) {
-                                    throw new Error("version could't fetch!");
-                                }
-
-                                if (result) {
-                                    console.log("create_address", result);
-                                }
-                            }
-                        );
-
-                        Utils.callApi("addr_list", {
-                            "own": true
-                        },
-                            (error, result, full) => {
-                                if (error) {
-                                    throw new Error("version could't fetch!");
-                                }
-
-                                if (result) {
-                                    console.log("create_address", result);
-                                }
-                            }
-                        );
+                    await connector.callApi("ev_subunsub", {
+                        "ev_system_state": true,
+                        "ev_txs_changed": true,
                     });
 
+                    await connector.callApi("get_version", {});
+                    await connector.callApi("create_address", {
+                        "type": "regular_new",
+                        "expiration": "auto",
+                        "comment": "Beam BANS",
+                        "new_style_regular": true
+                    });
+                    await connector.callApi("addr_list", { "own": true });
+                } catch (e) {
+                    console.log("Error has been thrown:", e);
+                }
+            })();
 
-                });
-            } catch (e) {
-                console.log("Error has been thrown:", e);
-            }
+            return () => {
+                if (unsubscribe) {
+                    unsubscribe();
+                }
+            };
         }
     }, [isAuthorized, isLoaded]/* do not use [] cause halt infinite loop */);
 

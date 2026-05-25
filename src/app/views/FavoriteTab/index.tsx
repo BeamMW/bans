@@ -8,11 +8,12 @@ import { selectIsFavoriteLoaded } from "@app/store/BansStore/selectors";
 import { LoadingOverlay } from "@app/components/LoadingOverlay";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import { Amount } from "@app/components/Amount/Amount";
-import { Decimal } from "@app/library/base/Decimal";
-import { GROTHS_IN_BEAM } from "@app/constants";
+import BeamDappConnector from "@core/BeamDappConnector.js";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { BuyBans } from "../Modals/BuyBans";
 import { useMainView } from "@app/contexts/Bans/BansContexts";
+import { useBuyDomainTransaction } from "@app/hooks/useBuyDomainTransaction";
+import { useFavoriteDomainBuyingEffects } from "@app/hooks/useFavoriteDomainBuyingEffects";
 import Button from "@app/components/Button";
 import { Popup } from "@app/components/Popup/Popup";
 import { useHandleHeartAction } from "@app/hooks/useHandleHeartAction";
@@ -27,6 +28,64 @@ import { PopupItem } from "@app/components/Popup/Popup.styles";
 interface IPopup {
   [id: string]: boolean
 }
+
+const FavoriteDomainRow: React.FC<{
+  domain: DomainPresenterType;
+  showPopup: IPopup;
+  setShowPopup: (data: IPopup) => void;
+  openPopup: (id: string) => void;
+  suggestedSendFundsDomains: Array<DomainPresenterType>;
+  setFoundDomain: (d: DomainPresenterType) => void;
+  setCurrentView: (v: string) => void;
+}> = ({
+  domain,
+  showPopup,
+  setShowPopup,
+  openPopup,
+  suggestedSendFundsDomains,
+  setFoundDomain,
+  setCurrentView,
+}) => {
+  const { open } = useModalContext();
+  const [sendBuy] = useBuyDomainTransaction(
+    !domain.isYourOwn && domain.isOnSale ? domain : undefined,
+  );
+
+  const handleRowClick = (event: React.MouseEvent) => {
+    if (!domain.isYourOwn && domain.isOnSale) {
+      if (domain.isExpired === false) {
+        open(event)("modal-search-result-for-sale")({ domain })(null);
+      } else {
+        void sendBuy();
+      }
+      return;
+    }
+    if (!domain.isYourOwn && !domain.isOnSale && domain.isAvailable) {
+      setFoundDomain(domain);
+      setCurrentView("REGISTER_FAVORITES_DOMAIN");
+    }
+  };
+
+  return (
+    <SplitContainer
+      leftWeight={8}
+      rightWeight={4}
+      handleClick={handleRowClick}
+    >
+      <Box>
+        <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
+      </Box>
+      <RightSide
+        domain={domain}
+        showPopup={showPopup}
+        openModal={openPopup}
+        setShowPopup={setShowPopup}
+        suggestedSendFundsDomains={suggestedSendFundsDomains}
+      />
+    </SplitContainer>
+  );
+};
+
 interface RightSideProps {
   domain: DomainPresenterType;
   showPopup: IPopup;
@@ -64,7 +123,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
             </Button>
           }
           {
-            !domain.isYourOwn && domain.isOnSale && <Amount value={Decimal.from(domain.price.amount / GROTHS_IN_BEAM).toString()} size="14px" showConvertedToUsd={true} />
+            !domain.isYourOwn && domain.isOnSale && <Amount value={BeamDappConnector.grothToBeam(domain.price.amount)} size="14px" showConvertedToUsd={true} />
           }
           <Box sx={{ position: 'relative', zIndex: 999 }}>
             <Button variant='icon' pallete='transparent' onClick={(event) => { openModal(domain.name); event.stopPropagation() }}>
@@ -84,9 +143,9 @@ const RightSide: React.FC<RightSideProps> = ({ domain, showPopup, openModal, set
 }
 
 export const FavoriteTab = ({ domains: favoriteDomains }) => {
-  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded());
-  const { open } = useModalContext();
-  const { setFoundDomain, setCurrentView, view } = useMainView();
+  const isFavoriteLoaded = useSelector(selectIsFavoriteLoaded);
+  const { setFoundDomain, setCurrentView } = useMainView();
+  useFavoriteDomainBuyingEffects();
   const [suggestedSendFundsDomains, setSuggestedSendFundsDomains] = useState<Array<DomainPresenterType>>([]);
 
   let [rows, setRows] = useState(null);
@@ -102,20 +161,16 @@ export const FavoriteTab = ({ domains: favoriteDomains }) => {
 
     setRows(favoriteDomains ?
       favoriteDomains.map((domain, i) => (
-        <React.Fragment key={i}>
-          <SplitContainer key={i} leftWeight={8} rightWeight={4} handleClick={
-              domain && !domain.isYourOwn && domain.isOnSale ?
-                (event) => open(event)("modal-search-result-for-sale")({ domain: domain })(null) :
-                (
-                  domain && !domain.isYourOwn && !domain.isOnSale && domain.isAvailable ? () => {
-                    setFoundDomain(domain), setCurrentView("REGISTER_FAVORITES_DOMAIN")
-                  } : null
-                )}>
-            <Box>
-              <LeftSide domain={domain} showSaleIcon={false} showBelonging={true} />
-            </Box>
-            <RightSide domain={domain} showPopup={showPopup} openModal={openPopup} setShowPopup={setShowPopup} suggestedSendFundsDomains={suggestedSendFundsDomains} />
-          </SplitContainer>
+        <React.Fragment key={domain.name ?? i}>
+          <FavoriteDomainRow
+            domain={domain}
+            showPopup={showPopup}
+            setShowPopup={setShowPopup}
+            openPopup={openPopup}
+            suggestedSendFundsDomains={suggestedSendFundsDomains}
+            setFoundDomain={setFoundDomain}
+            setCurrentView={setCurrentView}
+          />
         </React.Fragment>
       )) : <></>);
   }, [isFavoriteLoaded, favoriteDomains, showPopup])

@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from "react";
-import { Box, Flex, Text } from "theme-ui";
+import React, { useEffect } from "react";
+import { Box, Text } from "theme-ui";
 import Input from "@app/components/Input";
 import { Modal } from "@app/components/Modals/Modal";
 import { ButtonContainer } from "@app/components/ButtonsContainer/ButtonContainer";
@@ -14,11 +14,12 @@ import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { useFetchDomainAndConvert } from "@app/hooks/useFetchDomainAndConvert";
 import { SelectWithInput } from '@app/components/Select/SelectWithInput';
 import SendIcon from '@app/assets/icons/send.svg';
-import BeamIcon from '@app/assets/icons/beam.svg';
 import CheckedIcon from '@app/assets/icons/checked.svg';
-import _ from "lodash";
-import { measureText, getTextWidth } from "@app/library/base/appUtils";
-import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { AssetSelector } from '@app/components/AssetSelector';
+import { useWalletAssetsForSelector } from '@app/hooks/useWalletAssetsForSelector';
+import { getTextWidth } from "@app/library/base/appUtils";
+import { amountHandler, formatAmountInputDisplay, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { useSearchValidator } from "@app/hooks/useSearchValidator";
 
 interface SendFundsProps {
   isShown: boolean;
@@ -27,86 +28,97 @@ interface SendFundsProps {
 
 const initialValues = {
   domain: '',
-  amount: ''
+  amount: '',
+  aid: 0
 }
 
+const TRANSACTION_ID = "SEND_FUNDS";
+
 export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => {
+  const walletAssets = useWalletAssetsForSelector(isShown);
 
-  if (!isShown) return <></>;
+  const modalCtx = useModalContext();
+  const close = modalCtx?.close;
+  const passedDomain = modalCtx?.data?.domain as DomainPresenterType | undefined;
+  const suggestedDomains = modalCtx?.data?.suggestedDomains ?? [];
 
-  const { close }: { close: any } = useModalContext();
-
-  //if domain exists
-  const { data: { domain: passedDomain, suggestedDomains = [] } } = useModalContext() ?? { data: { domain: null, suggestedDomains: [] } };
-
-  closeModal = closeModal ?? close;
-
-  const TRANSACTION_ID = "SEND_FUNDS";
+  const onClose = closeModal ?? close;
 
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
 
-  useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
-      setIsButtonDisabled(true)
-      closeModal(null);
-    }
-
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
-      return () => {
-        //store.dispatch()
-      }
-    }
-
-  }, [transactionState]);
-
   const [values, setValues] = React.useState(initialValues);
-  const [domain, setDomain] = React.useState<DomainPresenterType>(passedDomain);
+  const [domain, setDomain] = React.useState<DomainPresenterType | undefined>(passedDomain);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isValid, setIsValid] = React.useState<boolean>(false);
-  const [activeItem, setActiveItem] = React.useState(domain?.name ?? '');
+  const [activeItem, setActiveItem] = React.useState(passedDomain?.name ?? '');
   const [textWidth, setTextWidth] = React.useState(0);
 
+  const beamPrice = useSelector(selectRate);
+
+  const fetchedDomain = useFetchDomainAndConvert(values.domain);
+  const isSearchValid = useSearchValidator(values.domain);
+  const domainErrorMessage = 'BANS does not exist';
+
+  useEffect(() => {
+    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
+      setIsButtonDisabled(true);
+      onClose?.(null);
+    }
+  }, [transactionState, onClose]);
+
+  useEffect(() => {
+    if (!isSearchValid) {
+      setIsValid(false);
+      setDomain(undefined);
+      return;
+    }
+
+    const d = fetchedDomain;
+    if (!d) {
+      setIsValid(false);
+      return;
+    }
+    setIsValid(!d.isAvailable);
+    setDomain(d);
+  }, [fetchedDomain, isSearchValid]);
+
+  useEffect(() => {
+    setIsButtonDisabled(!(isValid && !!values.amount));
+  }, [isValid, values.amount]);
+
+  useEffect(() => {
+    if (passedDomain?.name) {
+      setActiveItem(passedDomain.name);
+      setValues((prev) => ({ ...prev, domain: passedDomain.name }));
+      setDomain(passedDomain);
+    }
+  }, [passedDomain]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
-    let regexForDomain = /^[A-Za-z0-9]*$/;
     if (name === 'domain') {
-      if (regexForDomain.test(value)) {
-        !!value && setTextWidth(getTextWidth(value, '16px Arial'/* 16 */));
-        setValues({
-          ...values,
-          [name]: value.toLowerCase(),
-        });
-      }
+      !!value && setTextWidth(getTextWidth(value, '16px Arial'));
+      setValues({
+        ...values,
+        [name]: value.toLowerCase(),
+      });
     }
 
     if (name === 'amount') {
-      amountHandler(value, (value) => setValues({
-        ...values,
-        [name]: value,
-      }))
+      amountHandler(value, (canonical) => setValues((prev) => ({
+        ...prev,
+        [name]: canonical,
+      })))
     }
     return;
   }
 
-  const beamPrice = useSelector(selectRate());
-
-  useFetchDomainAndConvert(values.domain).then(domain => {
-    setIsValid(domain && !domain.isAvailable && !domain.isYourOwn);
-    setIsButtonDisabled(isValid && values.amount ? false : true);
-    setDomain(domain);
-  });
-
-  //first loading!
-  useEffect(() => {
-    domain && setValues({
-      ...values,
-      ["domain"]: domain.name,
-    });
-  }, [])
+  if (!isShown) {
+    return null;
+  }
 
   return (
-    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient Bans' from favorites or input Bans domain">
+    <Modal isShown={isShown} header="Send funds to the BANS" subHeader="To send assets you need to choose recipient BANS' from favorites or input BANS' domain">
       <>
         {suggestedDomains && suggestedDomains.length ?
           <SelectWithInput items={suggestedDomains} setActiveItem={setActiveItem} activeItem={activeItem} /> :
@@ -119,7 +131,7 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             maxLength={30}
             value={values.domain}
             valid={isValid || values.domain.length === 0}
-            errorMessage={'Incorrect domain'}
+            errorMessage={domainErrorMessage}
             suffix={values.domain.length ? <Text id="suffix" sx={{
               left: textWidth === 0 ? '0px' : `${textWidth}px`,
               color: isValid ? ' rgba(255,255,255,0.5)' : 'rgba(255, 98, 92, 0.5)',
@@ -136,22 +148,25 @@ export const SendFunds: React.FC<SendFundsProps> = ({ isShown, closeModal }) => 
             name='amount'
             onChange={handleChange}
             onKeyPress={keyPressAmountHandler}
-            value={values.amount}
+            value={formatAmountInputDisplay(values.amount)}
             type="text"
-            info={`${beamPrice.mul(Decimal.from(!!values.amount ? values.amount : 0).toString()).prettify(2)} USD`}
+            info={`${beamPrice.mul(Decimal.from(values.amount ? values.amount : "0").toString()).prettify(2)} USD`}
           >
-            <Flex sx={{ justifyContent: 'center' }}>
-              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
-            </Flex>
+            <AssetSelector
+              value={values.aid}
+              onChange={(aid) => setValues({ ...values, aid })}
+              assets={walletAssets}
+            />
           </Input>
         </Box>
         <ButtonContainer>
-          <CloseBtn toggle={closeModal} />
+          <CloseBtn toggle={onClose} />
           <SendFundsAction
             transactionId={TRANSACTION_ID}
             change={"sendFunds"}
             domain={domain}
-            amount={!!values.amount ? +values.amount : 0}
+            amount={values.amount ? Number(values.amount) : 0}
+            aid={typeof values.aid === 'number' ? values.aid : parseInt(String(values.aid), 10) || 0}
             disabled={isButtonDisabled}
           >
             <SendIcon />

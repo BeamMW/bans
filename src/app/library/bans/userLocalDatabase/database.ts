@@ -3,7 +3,7 @@ import { Notification } from './domainObject';
 import { FavoriteDomains } from './domainObject/FavoriteDomains';
 import { UserWallet } from './domainObject/UserWallet';
 import 'dexie-observable';
-import Utils from '../../base/utils';
+import connector from '@core/connector';
 import { BANS_CID } from '@app/constants';
 import { resolve } from 'path';
 import UtilsShader from '../../base/shader/utilsShader';
@@ -121,6 +121,16 @@ export const userDatabase = databaseInstance.userDatabase; */
  */
 
 let userDatabaseInstance = null;
+let currentShaderBytesCid = null;
+
+const bulkShaderDownload = async (shaderList: Array<UtilsShader>) => {
+    const sortedShadersData = [...shaderList].sort((a, b) => (a.order < b.order ? 1 : -1));
+    await Promise.all(sortedShadersData.map(async (shaderData) => {
+        const bytes = await fetch(shaderData.path).then((response) => response.arrayBuffer());
+        await shaderData.prepareAndSetShaderBytes(bytes);
+    }));
+    return sortedShadersData;
+};
 
 export const userDatabaseInit = (databaseName: string, uniqueDatabaseKey: string) => {
     try {
@@ -137,44 +147,27 @@ export const userDatabaseInit = (databaseName: string, uniqueDatabaseKey: string
 
 export const getUserDatabase = async () => {
     if (!userDatabaseInstance) {
+        await connector.connect({ headless: true });
+        const shadersData = Array.from([
+            ["bans", BANS_CID, "./bansAppShader.wasm", 0],
+        ], params => new UtilsShader(...params));
 
-        await Utils.initialize({
-            "appname": "BEAM DAO BANS APP",
-            "headless": true,
-            "min_api_version": "6.3",
-        }, async (err) => {
-
-            const shadersData = Array.from([
-                ["bans", BANS_CID, "./bansAppShader.wasm", 0],
-            ], params => new UtilsShader(...params));
-
-            try {
-                userDatabaseInstance = await Utils.bulkShaderDownload(
-                    shadersData,
-                    async (err, shadersData) => {
-    
-                        /**
-                         * Set current initilized cid artificialy
-                         */
-                        Utils.currentShaderBytesCid = BANS_CID;
-                        const bytes = Array.from(shadersData[0].shaderBytes);
-    
-                        const { res: { res: { key: uniqueDatabaseKey } } } = await Utils.invokeContractAsync(
-                            `cid=${BANS_CID},role=user,action=my_key`,
-                            bytes //first item in array - shader
-                        );
-
-                        const databaseName = "user-bans";
-    
-                        return userDatabaseInit(databaseName, uniqueDatabaseKey);
-    
-                    });
-            } catch(e) {
-                console.log(e);
+        try {
+            const downloadedShaders = await bulkShaderDownload(shadersData);
+            if (currentShaderBytesCid !== BANS_CID) {
+                currentShaderBytesCid = BANS_CID;
             }
-            
-
-        });
+            const bytes = Array.from(downloadedShaders[0].shaderBytes);
+            const result: any = await connector.invokeContract(
+                `cid=${BANS_CID},role=user,action=my_key`,
+                bytes
+            );
+            const uniqueDatabaseKey = result?.res?.key;
+            const databaseName = "user-bans";
+            userDatabaseInstance = userDatabaseInit(databaseName, uniqueDatabaseKey);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     return userDatabaseInstance;

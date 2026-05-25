@@ -104,8 +104,12 @@ export function* loadAllFavoritesDomainsSaga(
     const state = (yield select()) as { shared; bans };
 
     const {
-      systemState: { current_height: currentStateHeight },
-      systemState: { current_state_timestamp: currentStateTimestamp },
+      systemState: {
+        current_height: currentStateHeight,
+        current_state_timestamp: currentStateTimestamp,
+        tip_height,
+        tip_state_timestamp,
+      },
     } = state.shared;
 
     const { publicKey } = state.bans;
@@ -114,7 +118,10 @@ export function* loadAllFavoritesDomainsSaga(
     const allFavoritesDomainsPrepare = yield call(fetchBansFromShader, allFavoritesDomains.map(domain => domain.domainName))
 
     const allFavoritesDomainsToDomainPresenter = allFavoritesDomainsPrepare.map((rawDomain) =>
-      getDomainPresentedData(rawDomain, currentStateTimestamp, currentStateHeight, publicKey));
+      getDomainPresentedData(rawDomain, currentStateTimestamp, currentStateHeight, publicKey, {
+        tip_height,
+        tip_state_timestamp,
+      }));
 
     yield put(actions.loadAllFavoritesDomains.success(allFavoritesDomainsToDomainPresenter));
     yield put(actions.setIsFavoriteLoaded(true))
@@ -134,7 +141,16 @@ export function* updateSpecificFavoritesDomains(
 
     const specificFavoriteDomains: Array<string> = action.payload;
 
-    const response = yield call(loadFavoritesRequestParams);
+    const state = (yield select()) as { shared; bans };
+    const {
+      systemState: {
+        current_height: currentStateHeight,
+        current_state_timestamp: currentStateTimestamp,
+        tip_height,
+        tip_state_timestamp,
+      },
+    } = state.shared;
+    const { publicKey } = state.bans;
 
     const allFavoritesDomains = yield call(readAllFavoriteDomains);
     const updatedFavoritesDomainsPrepare = yield call(fetchBansFromShader, allFavoritesDomains.filter((bans) => {
@@ -144,7 +160,10 @@ export function* updateSpecificFavoritesDomains(
     if (!updatedFavoritesDomainsPrepare.length) return false;
 
     const updatedFavoritesBansToDomainPresenter = updatedFavoritesDomainsPrepare.map((bans) =>
-      getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey));
+      getDomainPresentedData(bans, currentStateTimestamp, currentStateHeight, publicKey, {
+        tip_height,
+        tip_state_timestamp,
+      }));
 
     yield put(actions.updateSpecificFavoritesDomains.success(updatedFavoritesBansToDomainPresenter));
   } catch (e) {
@@ -200,8 +219,12 @@ export function* setUserDomainsSaga(
     const state = (yield select()) as { shared; bans };
 
     const {
-      systemState: { current_height: currentStateHeight },
-      systemState: { current_state_timestamp: currentStateTimestamp },
+      systemState: {
+        current_height: currentStateHeight,
+        current_state_timestamp: currentStateTimestamp,
+        tip_height,
+        tip_state_timestamp,
+      },
     } = state.shared;
 
     const { publicKey } = state.bans;
@@ -210,7 +233,8 @@ export function* setUserDomainsSaga(
       { ...domain, ...{ searchName: domain.name } },
       currentStateTimestamp,
       currentStateHeight,
-      publicKey
+      publicKey,
+      { tip_height, tip_state_timestamp },
     ));
 
     //notify soldDomain channel
@@ -286,13 +310,13 @@ export function* setUserFundsSaga(
 
     if (typeof funds === "undefined") return false;
 
-    const total = [
-      ...funds.revenue,
-      ...funds.transferred
-    ].reduce(
-      (acc, current) => acc.add(current.amount)
-      , Decimal.from(0)
-    );
+    const allEntries = [...(funds.revenue || []), ...(funds.transferred || [])];
+    const byAsset: Record<number, number> = {};
+    allEntries.forEach((entry: { amount: number; aid?: number }) => {
+      const aid = entry.aid ?? 0;
+      byAsset[aid] = (byAsset[aid] || 0) + (entry.amount || 0);
+    });
+    const total = byAsset[0] ?? 0;
 
     const state = (yield select()) as { bans };
 
@@ -310,7 +334,7 @@ export function* setUserFundsSaga(
 
     }
 
-    yield put(actions.setUserFunds({ total: total, ...funds }));
+    yield put(actions.setUserFunds({ total, byAsset, ...funds }));
 
   } catch (e) {
     //console.log(e)

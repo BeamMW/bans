@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Box, Container, Flex, Text } from "theme-ui";
 import store from "index";
 import { Modal } from "@app/components/Modals/Modal";
-import { Select } from '@app/components/Select/Select';
 import Input from "@app/components/Input";
 import { CloseBtn } from "@app/components/CloseBtn/CloseBtn";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
@@ -15,9 +14,14 @@ import { selectRate } from "@app/store/BansStore/selectors";
 import { useModalContext } from "@app/contexts/Modal/ModalContext";
 import { reloadAllUserInfo } from "@app/store/BansStore/actions";
 import Sell from '@app/assets/icons/send.svg';
-import BeamIcon from '@app/assets/icons/beam.svg';
-import _ from 'lodash';
-import { amountHandler, keyPressAmountHandler } from "@app/utils/amountHandler";
+import { AssetSelector } from '@app/components/AssetSelector';
+import { useWalletAssetsForSelector } from '@app/hooks/useWalletAssetsForSelector';
+import { amountHandler, formatAmountInputDisplay, keyPressAmountHandler } from "@app/utils/amountHandler";
+
+const initialValues = {
+  amount: "",
+  aid: 0
+};
 
 interface SellBansModalProps {
   isShown: boolean;
@@ -25,64 +29,65 @@ interface SellBansModalProps {
 }
 
 export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModal }) => {
-
-  if (!isShown) return <></>;
-
-  const { close, data: { domain: domain, domainsToSell: domainsToSell = [] } }:
-    { close: any, data: { domain: DomainPresenterType, domainsToSell: Array<DomainPresenterType> } } = useModalContext();
-
-  closeModal = closeModal ?? close;
+  const walletAssets = useWalletAssetsForSelector(isShown);
+  const modalCtx = useModalContext();
+  const onClose = closeModal ?? modalCtx.close;
+  const data = modalCtx.data as { domain?: DomainPresenterType } | null | undefined;
+  const domain = data?.domain;
 
   const TRANSACTION_ID = "DOMAIN_SELLING";
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
-  const [activeItem, _setActiveItem] = React.useState<DomainPresenterType>(domain);
-  const [amount, setAmount] = useState<number | string | null>("");
+  const [values, setValues] = useState(initialValues);
+  const txState: any = transactionState;
 
-  const setActiveItem = (item) => {
-    !!item && _setActiveItem(item.domain);
-  }
-
-  const domainsSelect: any = domainsToSell.map((domain, i) => new Object({
-    id: i,
-    name: domain.name,
-    domain: domain,
-  }));
+  useEffect(() => {
+    if (isShown && domain) {
+      setValues({ ...initialValues });
+    }
+  }, [isShown, domain]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    amountHandler(value, (value) => setAmount(value))
+    amountHandler(value, (amount) => setValues((prev) => ({
+      ...prev,
+      amount,
+    })))
   }
 
   useEffect(() => {
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForApproval") {
-      closeModal(null);
+    if (!isShown) return;
+
+    if (txState.id === TRANSACTION_ID && txState.type === "waitingForApproval") {
+      onClose(null);
     }
 
-    if (transactionState.id === TRANSACTION_ID && transactionState.type === "completed") {
+    if (txState.id === TRANSACTION_ID && txState.type === "completed") {
 
       store.dispatch(reloadAllUserInfo.request());
 
       return () => {
-        setAmount(""), isShown = false
+        setValues(initialValues);
       }
     }
 
-  }, [transactionState]);
+  }, [transactionState, isShown, onClose]);
 
-  const beamPrice = useSelector(selectRate());
+  const beamPrice = useSelector(selectRate);
+
+  if (!isShown || !domain) {
+    return null;
+  }
 
   return (
     <Modal isShown={isShown} header="Sell BANS" subHeader="If you want to put a BANS on sale, fill in the Amount only. The Amount can be change at any time. To sell a BANS to a particular user, you need to fill Buyer's Public Key.">
       <Container sx={{ width: 630, padding: '40px 65px' }}>
         {
-          activeItem.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
-            <Text>{`Already on sale for ${activeItem.price.amount}!`}</Text>
+          domain.isOnSale ? <Flex sx={{ mb: 20, textAlign: "center", alignContent: "center" }}>
+            <Text>{`Already on sale for ${domain.price.amount}!`}</Text>
           </Flex> : <></>
         }
-
-        <Select items={domainsSelect} setActiveItem={setActiveItem} activeItem={activeItem} showSuffix={true} />
 
         <Box sx={{ mt: '30px' }}>
           <Input
@@ -91,28 +96,31 @@ export const SellBansModal: React.FC<SellBansModalProps> = ({ isShown, closeModa
             label='Amount'
             onChange={handleChange}
             onKeyPress={keyPressAmountHandler}
-            value={amount}
+            value={formatAmountInputDisplay(values.amount)}
             type="text"
-            info={`${beamPrice.mul(Decimal.from(!!amount ? amount : 0).toString()).prettify(2)} USD`}
+            info={`${beamPrice.mul(Decimal.from(values.amount ? values.amount : "0").toString()).prettify(2)} USD`}
           >
-            <Flex sx={{ justifyContent: 'center' }}>
-              <BeamIcon /> <Text sx={{ marginLeft: '10px', marginTop: '1px' }}>BEAM</Text>
-            </Flex>
+            <AssetSelector
+              value={values.aid}
+              onChange={(aid) => setValues((prev) => ({ ...prev, aid }))}
+              assets={walletAssets}
+            />
           </Input>
         </Box>
         <Box sx={{ my: '30px' }}>
         </Box>
         <Flex sx={{ justifyContent: 'center' }}>
           <Box sx={{ mr: '30px' }}>
-            <CloseBtn toggle={closeModal} />
+            <CloseBtn toggle={onClose} />
           </Box>
           {
             <SellBansAction
               transactionId={TRANSACTION_ID}
               change={"sellBans"}
-              amount={+amount}
-              domain={activeItem}
-              disabled={Decimal.from(+amount).isZero || activeItem.isOnSale || isTransactionPending}
+              amount={values.amount ? Number(values.amount) : 0}
+              aid={typeof values.aid === 'number' ? values.aid : parseInt(String(values.aid), 10) || 0}
+              domain={domain}
+              disabled={!values.amount || Decimal.from(values.amount).isZero || domain.isOnSale || isTransactionPending}
               pallete='blue'
             >
               <Sell />

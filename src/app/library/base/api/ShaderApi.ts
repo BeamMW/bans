@@ -1,4 +1,3 @@
-import Utils from "@library/base/utils"
 import ApiError from "./ApiError";
 import { IShaderApi } from "./Interfaces";
 import ShaderApiAbstract from "./ShaderApiAbstract";

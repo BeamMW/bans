@@ -19,6 +19,13 @@ export const useTransactionFunction = (
          */
         const tx/* : return promise function */ = await send();
 
+        // Writable shader methods resolve with undefined when the user rejects the wallet prompt
+        // (see MethodWritable.callMethod). Do not enter waitingForConfirmation without a tx callback.
+        if (tx == null) {
+          setTransactionState({ type: "idle" });
+          return;
+        }
+
         setTransactionState({
           type: "waitingForConfirmation",
           id,

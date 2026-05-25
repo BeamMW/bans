@@ -1,4 +1,4 @@
-import { GROTHS_IN_BEAM } from '@app/constants';
+import BeamDappConnector from '@core/BeamDappConnector.js';
 
 export const copyToClipboard = (value: string) => {
   let textField = document.createElement('textarea');
@@ -18,16 +18,16 @@ export function compact(value: string, stringLength: number = 5): string {
 
 const LENGTH_MAX = 8;
 
-export function truncate(value: string): string {
+export function truncate(value: string, maxLen: number = LENGTH_MAX): string {
   if (!value) {
     return '';
   }
 
-  if (value.length <= LENGTH_MAX) {
+  if (value.length <= maxLen) {
     return value;
   }
 
-  return `${value.slice(0, LENGTH_MAX)}…`;
+  return `${value.slice(0, maxLen)}…`;
 }
 
 export function toUSD(amount: number, rate: number): string {
@@ -44,11 +44,11 @@ export function toUSD(amount: number, rate: number): string {
 }
 
 export function fromGroths(value: number): number {
-  return value && value !== 0 ? value / GROTHS_IN_BEAM : 0;
+  return value && value !== 0 ? Number(BeamDappConnector.grothToBeam(value)) : 0;
 }
 
 export function toGroths(value: number): number {
-  return value > 0 ? Math.floor(value * GROTHS_IN_BEAM) : 0;
+  return value > 0 ? BeamDappConnector.beamToGroth(value) : 0;
 }
 
 export function getSign(positive: boolean): string {

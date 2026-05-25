@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Paragraph, Text } from 'theme-ui';
+import BeamDappConnector from '@core/BeamDappConnector.js';
+import { Amount } from '@app/components/Amount/Amount';
 
 import { IsTransactionPending } from '@app/library/transaction-react/IsTransactionStatus';
 import { useCurrentTransactionState } from '@app/library/transaction-react/useCurrentTransactionState';
@@ -38,7 +40,7 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
   const transactionState = useCurrentTransactionState(TRANSACTION_ID);
   const isTransactionPending = IsTransactionPending({ transactionIdPrefix: TRANSACTION_ID });
 
-  const userBans: Array<any> = useSelector(selectUserDomains());
+  const userBans: Array<any> = useSelector(selectUserDomains);
 
   useEffect(() => {
     if(!userBans.length) {
@@ -62,12 +64,20 @@ export const BuyBans: React.FC<ResultForSaleProps> = ({ isShown, closeModal }) =
 
   }, [transactionState]);
 
+  const priceAmount = domain.price?.amount != null ? BeamDappConnector.grothToBeam(domain.price.amount) : '0';
+  const priceAid = domain.price?.aid ?? 0;
+
   return (
     <Modal isShown={isShown} header="Attention">
       <>
         <Box>
           <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center',color:'#fff' }}>You are going to buy a BANS with the set expiration period - <Text sx={{fontWeight: 700}}>{domain.expiresAt}.</Text> </Paragraph>
           <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color:'#fff' }}>You will need to renew your subscription before the expiring date.</Paragraph>
+          {domain.price?.amount ? (
+            <Paragraph sx={{ fontFamily: 'SFProDisplay', textAlign: 'center', color: '#fff', mt: 2 }}>
+              Price: <Amount value={priceAmount} size="14px" /> (Asset ID: {priceAid})
+            </Paragraph>
+          ) : null}
         </Box>
 
         <ButtonContainer>

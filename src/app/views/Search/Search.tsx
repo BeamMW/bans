@@ -38,15 +38,12 @@ const Search: React.FC = () => {
     );
   }, []);
 
-  useFetchDomainAndConvert(debouncedValue)
-    .then(domain => {
-      setFoundDomain(domain);
-      domain ? setIsValid(true) : setIsValid(false);
-    })
-    .catch(err => {
-      setIsValid(false);
-      console.error
-    });
+  const fetchedDomain = useFetchDomainAndConvert(debouncedValue);
+
+  useEffect(() => {
+    setFoundDomain(fetchedDomain);
+    setIsValid(!!fetchedDomain);
+  }, [fetchedDomain, setFoundDomain]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     /* if (e.target.value.indexOf('-') != -1 || e.target.value.indexOf('_') != -1 || e.target.value.indexOf('~') != -1) {

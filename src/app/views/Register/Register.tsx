@@ -54,12 +54,36 @@ export const Register: React.FC = () => {
 
   const now = moment().format("LL");
 
-  const userBans: Array<any> = useSelector(selectUserDomains());
+  const userBans: Array<any> = useSelector(selectUserDomains);
 
+  /** Paid-through after *new* registration: `period` × ~1y contract validity — not the previous row's `expiresAt` (often past when reclaiming). */
+  const projectedRegistrationEnd = useMemo(
+    () => moment().add(period, 'years').format('LL'),
+    [period],
+  );
+
+  /**
+   * Resale buy keeps on-chain `m_hExpire`; show paid end, or grace end while in grace.
+   * Register / reclaim always shows the term being purchased (`projectedRegistrationEnd`).
+   */
   const till = useMemo(() => {
-    if (foundDomain.expiresAt) return foundDomain.expiresAt;
-    return moment().add(period, 'years').format("LL");
-  }, [period]);
+    if (foundDomain.isOnSale) {
+      if (foundDomain.isInGracePeriod && foundDomain.gracePeriod) {
+        return foundDomain.gracePeriod;
+      }
+      if (foundDomain.expiresAt && foundDomain.isExpired !== true) {
+        return foundDomain.expiresAt;
+      }
+    }
+    return projectedRegistrationEnd;
+  }, [
+    foundDomain.isOnSale,
+    foundDomain.isInGracePeriod,
+    foundDomain.gracePeriod,
+    foundDomain.expiresAt,
+    foundDomain.isExpired,
+    projectedRegistrationEnd,
+  ]);
 
   useEffect(() => {
     if (transactionState.id === TRANSACTION_ID && transactionState.type === "waitingForConfirmation") {
@@ -78,7 +102,7 @@ export const Register: React.FC = () => {
       }
     }
 
-  }, [transactionState, setCurrentView, till]);
+  }, [transactionState, setCurrentView, navigate, userBans.length]);
 
   return (
     <>

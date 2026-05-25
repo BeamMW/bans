@@ -39,8 +39,8 @@ const MyPage = () => {
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-  const favoriteBans = useSelector(selectFavoritesDomains());
-  const userBans = useSelector(selectUserDomains());
+  const favoriteBans = useSelector(selectFavoritesDomains);
+  const userBans = useSelector(selectUserDomains);
 
   //first page loading
   useEffect(() => {

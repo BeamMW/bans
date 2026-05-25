@@ -1,7 +1,11 @@
 
-//export const BANS_CID = 'a4733a5eb63b9ea8a3831d95ce26144a69e5a3fc48a881b2362be7de860f2956';
-//export const BANS_CID = 'be3a5707c08861330ea327741a50cc13cb8bc028de5338a8304d5d95a035f93d';
-export const BANS_CID = '560881a267df92b45d48a1dc6495fdd29b37878e1040b22b1c4f1ea13b467dc9';
+export const BANS_CID = 'af4550f1f8a6051ffeffea06e0cb978f8076fdfc2101d2273d4e62c86540bc5e';
 export const GROTHS_IN_BEAM = 100000000;
 export const ASSET = "BEAM";
 export const GT = "BEAMX";
+export const PALLETE_ASSETS = [
+  '#72fdff', '#2acf1d', '#ffbb54', '#d885ff', '#008eff',
+  '#ff746b', '#91e300', '#ffe75a', '#9643ff', '#395bff',
+  '#ff3b3b', '#73ff7c', '#ffa86c', '#ff3abe', '#0aaee1',
+  '#ff5200', '#6464ff', '#ff7a21', '#63afff', '#c81f68',
+];
