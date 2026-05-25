@@ -5,6 +5,7 @@ import { Flex, Text, Box } from 'theme-ui';
 import { Decimal } from '@app/library/base/Decimal';
 import { useSelector } from 'react-redux';
 import { selectRate } from '@app/store/BansStore/selectors';
+import { formatAmountInputDisplay, normalizeAmountInput } from '@app/utils/amountHandler';
 
 interface AmountProps {
   size: string,
@@ -47,19 +48,23 @@ const UsdEqualizer: React.FC<{ equalizer: any }> = ({ equalizer }) => (
 
 export const Amount: React.FC<AmountProps> = ({ size, value, showConvertedToUsd = false }) => {
   const getIconStyles = () => {
-      return {
-        'width': `${parseInt(size.substring(0, size.length-2)) + 6}px`
-      }
+    return {
+      'width': `${parseInt(size.substring(0, size.length-2)) + 6}px`
+    }
   }
 
+  const canonical = normalizeAmountInput(String(value ?? ''));
+  const displayBeam = formatAmountInputDisplay(canonical);
   const beamPrice = useSelector(selectRate);
-  const usdConvertedPrice = showConvertedToUsd ? beamPrice.mul(Decimal.from(value).toString()).prettify(2) : null;
+  const usdConvertedPrice = showConvertedToUsd
+    ? beamPrice.mul(Decimal.from(canonical === '' ? '0' : canonical).toString()).prettify(2)
+    : null;
 
   return (
     <Container size={size} showConvertedToUsd={showConvertedToUsd}>
     <Beam style={getIconStyles()} />
     <Box>
-      <Text variant='text' className='text'>{ value } BEAM</Text>
+      <Text variant='text' className="text">{displayBeam} BEAM</Text>
       {
        showConvertedToUsd && <Text variant='subText'><>{ usdConvertedPrice } USD</></Text>
       }
