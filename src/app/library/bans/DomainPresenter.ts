@@ -10,11 +10,16 @@ export const BANS_BLOCK_TIME_SECONDS = 60;
 /** Contract grace after paid period: `s_PeriodHold = 1440 * 90` blocks (~90 days at 1 block/min). */
 export const BANS_GRACE_DAYS_APPROX = 90;
 
+/** Must match `NameService::Domain::s_PeriodHold` in the BANS contract (`contract.h`). */
+export const BANS_PERIOD_HOLD_BLOCKS = 1440 * 90;
+
 export type DomainPresenterType = {
     rawDomain: RawDomainType;
     name: string;
     expiresAt: any;
     isExpired: any;
+    /** True only while wall time is after paid end and before grace deadline; see `gracePeriod` */
+    isInGracePeriod: boolean | null;
     isAvailable: boolean;
     isYourOwn: boolean;
     isOnSale: boolean;
@@ -152,12 +157,31 @@ export class DomainPresenter implements IDomainPresenter {
             null;
     }
 
-    /** True once wall time is past the paid registration end (`m_hExpire`); UI then shows grace-period copy */
-    protected domainIsExpireTimeConverter(): boolean {
+    /** True once wall time is past the paid registration end (`m_hExpire`). Stays true after grace ends. */
+    protected domainIsExpireTimeConverter(): boolean | null {
         return this.unixTimestamp != null ? moment().isAfter(moment(this.unixTimestamp)) : null;
     }
 
+    /** True only between end of paid term and end of hold/grace window (contract `s_PeriodHold` ≈ 90 days). */
+    protected domainIsInGracePeriodConverter(): boolean | null {
+        if (this.unixTimestamp == null) return null;
+        const paidEnd = moment(this.unixTimestamp);
+        const graceEnd = moment(this.unixTimestamp).add(BANS_GRACE_DAYS_APPROX, 'days');
+        const now = moment();
+        return now.isAfter(paidEnd) && now.isBefore(graceEnd);
+    }
+
+    /** Paid term and hold/grace are over — name is reclaimable; shader may still return the old owner fields. */
+    protected isPastGracePeriod(): boolean {
+        if (this.unixTimestamp == null) return false;
+        return (
+            this.domainIsExpireTimeConverter() === true &&
+            this.domainIsInGracePeriodConverter() === false
+        );
+    }
+
     protected resolveIsAvailable(): boolean {
+        if (this.isPastGracePeriod()) return true;
         return this.rawDomain?.isAvailable || !(this.rawDomain?.key && this.rawDomain?.hExpire && !this.rawDomain?.price);
     }
 
@@ -176,17 +200,48 @@ export class DomainPresenter implements IDomainPresenter {
         };
     }
 
+    /**
+     * Mirrors contract `Domain::IsExpired(h)`: `h >= m_hExpire + s_PeriodHold`.
+     * When chain height is missing, falls back to wall-clock `isPastGracePeriod()` (same window the UI already uses for reclaimability).
+     */
+    protected isContractExpiredForResale(): boolean {
+        const hExpire = toFiniteNumber(this.rawDomain?.hExpire);
+        const chainHeight = firstPositiveHeight(
+            this.currentStateHeight,
+            this.systemClockHint?.tip_height,
+        );
+
+        if (hExpire !== null && chainHeight !== null) {
+            return chainHeight >= hExpire + BANS_PERIOD_HOLD_BLOCKS;
+        }
+
+        return this.isPastGracePeriod();
+    }
+
+    /** Non-zero listing amount — matches contract “for sale” check on `m_Price.m_Amount`. */
+    protected hasActiveListPrice(): boolean {
+        const amount = toFiniteNumber(this.rawDomain?.price?.amount);
+        return amount !== null && amount > 0;
+    }
+
     public getDomainPresenterData(): DomainPresenterType {
         try {
+            const listingDead = this.hasActiveListPrice() && this.isContractExpiredForResale();
+            const isOnSale = this.hasActiveListPrice() && !this.isContractExpiredForResale();
+            const price = listingDead
+                ? { aid: 0, amount: null }
+                : this.resolveDomainPrice();
+
             return {
                 rawDomain: this.rawDomain,
                 name: DomainPresenterValidator.checkIsValidNameAndReturn(this.rawDomain.searchName),
                 expiresAt: this.domainExpireTimeConverter(),
                 isExpired: this.domainIsExpireTimeConverter(),
+                isInGracePeriod: this.domainIsInGracePeriodConverter(),
                 isAvailable: this.resolveIsAvailable(),
                 isYourOwn: this.resolveIsYouOwn(),
-                isOnSale: !!this.rawDomain?.price,
-                price: this.resolveDomainPrice(),
+                isOnSale,
+                price,
                 gracePeriod: this.gracePeriod(),
             }
         } catch (e) {

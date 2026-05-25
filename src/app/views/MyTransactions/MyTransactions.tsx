@@ -121,7 +121,7 @@ const RightSide: React.FC<RightSideProps> = ({ domain, funds, assetLabels }) => 
         ) : <></>}
       </Box>
       {
-        domain.isExpired && (
+        domain.isInGracePeriod && (
           <Button
             variant="ghostBordered"
             pallete="green"
@@ -158,9 +158,11 @@ const LeftSide: React.FC<LeftSideProps> = ({ domain }) => {
 
         <Flex>
           {domain.expiresAt ? <SubText isexpired={domain.isExpired ? domain.isExpired.toString() : ""}>{
-            domain.isExpired ?
-              `Paid term of usage is over. Your domain will be disconnected on ${domain.gracePeriod}` :
-              `Expires on ${domain.expiresAt}`
+            !domain.isExpired ?
+              `Expires on ${domain.expiresAt}` :
+              domain.isInGracePeriod ?
+                `Paid term of usage is over. Your domain will be disconnected on ${domain.gracePeriod}` :
+                `Paid term and grace period have ended.`
           }</SubText> : <></>}
         </Flex>
       </Box>

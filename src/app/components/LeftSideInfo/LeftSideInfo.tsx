@@ -1,4 +1,3 @@
-import { useIsBansFavorite } from "@app/hooks/useIsBansFavorite";
 import { DomainPresenterType } from "@app/library/bans/DomainPresenter";
 import React from "react";
 import styled from 'styled-components';
@@ -7,7 +6,6 @@ import Button from "../Button";
 import { copyToClipboard } from "@app/library/base/appUtils";
 import SaleIcon from '@app/assets/icons/sell.svg';
 import Copy from '@app/assets/icons/copy.svg';
-import moment from "moment";
 
 
 interface SubTextProps {
@@ -31,7 +29,7 @@ interface LeftSideProps {
 };
 
 export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true, showBelonging = true }) => {
-  const { name, expiresAt, isExpired, isOnSale } = domain;
+  const { name, expiresAt, isExpired, isInGracePeriod, isOnSale } = domain;
 
   return (
     <Flex sx={{ variant: 'layout.card', flexDirection: 'row' }}>
@@ -64,7 +62,9 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             <SubText isexpired={isExpired ? isExpired.toString() : ""}>{
               !isExpired ?
                 (!isOnSale || showBelonging ? `Expires on ${expiresAt}` : `This name is on sale.`) :
-                `This name is in grace period, and needs to be renewed by ${domain.gracePeriod}`
+                isInGracePeriod ?
+                  `This name is in grace period, and needs to be renewed by ${domain.gracePeriod}` :
+                  `Paid term and grace period have ended.`
             } </SubText> : <></>
           }
           {
@@ -75,7 +75,7 @@ export const LeftSide: React.FC<LeftSideProps> = ({ domain, showSaleIcon = true,
             }}>
               {
                 domain.isYourOwn ?
-                  "your already own" :
+                  "you already own" :
                   (
                     domain.isAvailable && !domain.isOnSale ?
                       "available" :
