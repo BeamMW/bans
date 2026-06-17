@@ -54,7 +54,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Set up Git
       run: git fetch --prune --unshallow
@@ -72,7 +72,7 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
     - name: Set up Node.js environment
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.node_version }}
         cache: 'npm'
@@ -109,7 +109,7 @@ jobs:
         cd ..
 
     - name: Upload .dapp file
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{ inputs.dapp_name }}.dapp
         path: ${{ inputs.dapp_name }}.dapp
