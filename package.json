@@ -11,11 +11,18 @@
     "build": "webpack --config webpack.common.js",
     "build:prod": "webpack --config webpack.prod.js",
     "start": "webpack serve --config webpack.common.js",
-    "start:prod": "webpack serve --config webpack.prod.js"
+    "start:prod": "webpack serve --config webpack.prod.js",
+    "lint": "yarn tsc --noEmit"
   },
   "overrides": {
     "ansi-regex": "5.0.1",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "serialize-javascript": "^7.0.5",
+    "micromatch": "^4.0.8",
+    "braces": "^3.0.3",
+    "json5": "^2.2.3",
+    "loader-utils": "^2.0.4",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -75,7 +82,7 @@
     "dexie-observable": "^3.0.0-beta.11",
     "dexie-react-hooks": "^1.1.1",
     "dotenv": "^16.0.0",
-    "esbuild": "^0.14.49",
+    "esbuild": "^0.25.0",
     "formik": "^2.2.9",
     "immer": "^9.0.6",
     "lodash.debounce": "^4.0.8",

@@ -16,6 +16,6 @@ Specs: https://github.com/BeamMW/bans/wiki
 
 To launch the dapp: 
 ```bash
-  yarn install
-  yarn start
+  npm install
+  npm start
 ```
