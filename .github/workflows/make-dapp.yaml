@@ -5,11 +5,11 @@ on:
     inputs:
       node_version:
         description: 'Node.js version to use'
-        default: '20'
+        default: '24'
         type: string
       build_command:
         description: 'Command to build the project'
-        default: 'yarn build:prod'
+        default: 'npm run build:prod'
         type: string
       manifest_name:
         description: 'Name of the .dapp application'
@@ -75,9 +75,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node_version }}
+        cache: 'npm'
 
     - name: Install dependencies
-      run: yarn install
+      run: npm ci
 
     - name: Build the project
       run: ${{ inputs.build_command }}
